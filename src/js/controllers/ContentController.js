@@ -13,10 +13,14 @@ angular.module('schedulerApp').controller('ContentController', ['$http', '$scope
         configs: {title: 'Przydziały', breadcrumbs: ['Strona główna', 'Przydziały']},
         config: {
           title: 'Przydział "' + extra.name + '"',
-          breadcrumbs: ['Strona główna', 'Przydziały', extra.name]
+          breadcrumbs: ['Strona główna', 'Przydziały', 'Przydział "' + extra.name + '"']
         },
         main: {title: 'Strona główna', breadcrumbs: ['Strona główna']},
-        tasks: {title: 'Zadania', breadcrumbs: ['Strona główna', 'Zadania']}
+        tasks: {title: 'Zadania', breadcrumbs: ['Strona główna', 'Zadania']},
+        task: {
+          title: 'Zadanie "' + extra.name + '"',
+          breadcrumbs: ['Strona główna', 'Zadania', 'Zadanie "' + extra.name + '"']
+        }
       };
 
       $timeout(function() {

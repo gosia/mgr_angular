@@ -1,19 +1,19 @@
 {
   "results": [
     {
-      "id": "test",
+      "id": "task1",
       "config_id": "test",
       "algorithm": "random",
       "status": "finished"
     },
     {
-      "id": "test",
+      "id": "task2",
       "config_id": "test",
       "algorithm": "random",
       "status": "not_started"
     },
     {
-      "id": "test",
+      "id": "task3",
       "config_id": "test",
       "algorithm": "random",
       "status": "processing"

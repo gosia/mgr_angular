@@ -5,7 +5,8 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
   var urls = {
     getConfigs: '/api/configs.json',
     getConfig: '/api/config.json',
-    getTasks: '/api/tasks.json'
+    getTasks: '/api/tasks.json',
+    getTask: '/api/task.json'
   };
   var service = {urls: urls};
 
@@ -19,6 +20,10 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
 
   service.getTasks = function() {
     return $http.get(service.urls.getTasks);
+  };
+
+  service.getTask = function() {
+    return $http.get(service.urls.getTask);
   };
 
   return service;

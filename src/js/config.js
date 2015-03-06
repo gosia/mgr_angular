@@ -2,7 +2,9 @@
 /*global angular */
 
 angular.module('schedulerApp')
-  .config(['$routeProvider', function($routeProvider) {
+  .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+    $locationProvider.html5Mode(true);
+
     $routeProvider
       .when('/', {
         templateUrl: '/static/templates/content/default.html'
@@ -18,6 +20,10 @@ angular.module('schedulerApp')
       .when('/tasks', {
         templateUrl: '/static/templates/content/tasks.html',
         controller: 'TasksController'
+      })
+      .when('/task/:taskId', {
+        templateUrl: '/static/templates/content/task.html',
+        controller: 'TaskController'
       })
       .otherwise({
         redirectTo: '/'

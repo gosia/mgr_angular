@@ -2,7 +2,8 @@
 /*global angular, _ */
 
 angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'Room', function(Teacher, Term, Group, Room) {
-  function Config(terms, teachers, groups, rooms) {
+  function Config(id, terms, teachers, groups, rooms) {
+    this.id = id;
     this.terms = terms;
     this.teachers = teachers;
     this.groups = groups;
@@ -22,7 +23,7 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
 
     var rooms = _.map(apiData.rooms, function(apiRoom) { return Room.init(apiRoom); });
 
-    return new Config(terms, teachers, groups, rooms);
+    return new Config(apiData.id, terms, teachers, groups, rooms);
   };
 
   return Config;
