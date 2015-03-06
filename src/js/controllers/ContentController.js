@@ -4,23 +4,30 @@
 angular.module('schedulerApp').controller('ContentController', ['$http', '$scope', '$timeout',
   function ($http, $scope, $timeout) {
 
-    var mapping = {
-      '/default': '/static/templates/content/default.html',
-      '/tasks': '/static/templates/content/tasks.html',
-      '/configs': '/static/templates/content/configs.html'
-    };
+    $scope.title = 'Strona główna';
+    $scope.breadcrumbs = ['Strona główna'];
 
-    var resetTemplate = function(url) {
+    var resetData = function(name, extra) {
+      extra = extra || {};
+      var mapping = {
+        configs: {title: 'Przydziały', breadcrumbs: ['Strona główna', 'Przydziały']},
+        config: {
+          title: 'Przydział "' + extra.name + '"',
+          breadcrumbs: ['Strona główna', 'Przydziały', extra.name]
+        },
+        main: {title: 'Strona główna', breadcrumbs: ['Strona główna']},
+        tasks: {title: 'Zadania', breadcrumbs: ['Strona główna', 'Zadania']}
+      };
+
       $timeout(function() {
-        $scope.template = mapping[url];
+        $scope.title = mapping[name].title;
+        $scope.breadcrumbs = mapping[name].breadcrumbs;
       }, 0);
     };
 
-    resetTemplate('/default');
-
-    $scope.$on('changeContent', function (event, url) {
-      console.log(url);
-      resetTemplate(url);
+    $scope.$on('changeContent', function (event, name, extra) {
+      resetData(name, extra);
     });
+
   }
 ]);

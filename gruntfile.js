@@ -51,7 +51,7 @@ module.exports = function (grunt) {
       },
       css: {
         files: ['<%= config.sassDir %>/**/*.scss'],
-        tasks: ['sass:dev', 'autoprefixer'],
+        tasks: ['sass'],
         options: { spawn: false }
       },
       images: {
@@ -80,8 +80,8 @@ module.exports = function (grunt) {
               connect().use('/static/bower_components', connect.static('./bower_components')),
               connect().use('/static/templates', connect.static('../templates')),
               connect().use('/static', connect.static('../static')),
+              connect().use('/api', connect.static('src/endpointmocks')),
               connect().use('/dist/img', connect.static('./bower_components/admin-lte/dist/img')),
-              connect().use('/endpointmocks', connect.static('endpointmocks')),
               connect.static('../templates')
             ];
           }

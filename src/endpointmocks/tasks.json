@@ -1,0 +1,25 @@
+{
+  "results": [
+    {
+      "id": "test",
+      "config_id": "test",
+      "algorithm": "random",
+      "status": "finished"
+    },
+    {
+      "id": "test",
+      "config_id": "test",
+      "algorithm": "random",
+      "status": "not_started"
+    },
+    {
+      "id": "test",
+      "config_id": "test",
+      "algorithm": "random",
+      "status": "processing"
+    }
+  ],
+  "num_start": 1,
+  "num_end": 2,
+  "num_all": 2
+}

@@ -1,4 +1,4 @@
 'use strict';
 /*global angular */
 
-angular.module('schedulerApp', []);
+angular.module('schedulerApp', ['ngRoute']);

@@ -1,0 +1,17 @@
+{
+  "results": [
+    {
+      "id": "test",
+      "year": 2015,
+      "term": "letni"
+    },
+    {
+      "id": "test1",
+      "year": 2015,
+      "term": "letni"
+    }
+  ],
+  "num_start": 1,
+  "num_end": 2,
+  "num_all": 2
+}

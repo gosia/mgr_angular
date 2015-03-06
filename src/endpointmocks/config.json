@@ -1,0 +1,76 @@
+{
+  "teachers": [
+    {
+      "id": "michaliszyn",
+      "terms": ["term1", "term2"]
+    },
+    {
+      "id": "jurkiewicz",
+      "terms": ["term1"]
+    }
+  ],
+  "terms": [
+    {
+      "id": "term1",
+      "start": {
+        "hour": 16,
+        "minute": 15
+      },
+      "end": {
+        "hour": 17,
+        "minute": 0
+      },
+      "day": 0
+    },
+    {
+      "id": "term2",
+      "start": {
+        "hour": 17,
+        "minute": 15
+      },
+      "end": {
+        "hour": 18,
+        "minute": 0
+      },
+      "day": 0
+    }
+  ],
+  "groups": [
+    {
+      "id": "group1",
+      "teachers": ["michaliszyn", "jurkiewicz"],
+      "terms": ["term1", "term2"],
+      "same_term_groups": ["group2"],
+      "diff_term_groups": ["group2"],
+      "labels": [],
+      "terms_num": 2,
+      "students_num": 18,
+      "extra": {
+        "course": "Weryfikacja informacji",
+        "group_type": "ćwiczenia"
+      }
+    },
+    {
+      "id": "group2",
+      "teachers": ["michaliszyn", "jurkiewicz"],
+      "terms": ["term1", "term2"],
+      "same_term_groups": ["group1"],
+      "diff_term_groups": ["group1"],
+      "labels": [],
+      "terms_num": 2,
+      "students_num": 18,
+      "extra": {
+        "course": "Zaawansowany kurs języka Java",
+        "group_type": "wykład"
+      }
+    }
+  ],
+  "rooms": [
+    {
+      "id": "123",
+      "terms": [],
+      "capacity": 123,
+      "labels": []
+    }
+  ]
+}

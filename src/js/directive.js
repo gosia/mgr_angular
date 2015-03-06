@@ -2,16 +2,13 @@
 /*global angular */
 
 angular.module('schedulerApp')
-  .directive('contentChange', function() {
+  .directive('contentChange', ['$location', function($location) {
     return {
       restrict: 'A',
       link: function ($scope, $element, $attr) {
-        $element.bind('click', function (elem) {
-          elem.preventDefault();
-          $scope.$root.$broadcast('changeContent', $attr.contentChange);
-          $('#main-sidebar').find('li').removeClass('active');
-          $element.addClass('active');
+        $element.bind('click', function () {
+          $location.path($attr.href);
         });
       }
     };
-  });
+  }]);
