@@ -1,8 +1,8 @@
 'use strict';
 /*global angular, _ */
 
-angular.module('schedulerApp').controller('ConfigsController', ['ApiService', '$rootScope',
-  function (ApiService, $rootScope) {
+angular.module('schedulerApp').controller('ConfigsController', ['ApiService', '$rootScope', '$scope', '$location',
+  function (ApiService, $rootScope, $scope, $location) {
     var controller = this;
 
     controller.items = [];
@@ -28,5 +28,18 @@ angular.module('schedulerApp').controller('ConfigsController', ['ApiService', '$
     };
 
     init();
+
+    var createConfig = function() {
+      ApiService
+        .createConfig($scope.newConfig.id, $scope.newConfig.year, $scope.newConfig.term)
+        .success(function(data) {
+          if (data.ok) {
+            var url = '/config/' + data.config_id;
+            $location.path(url).hash('basic');
+          }
+        });
+    };
+
+    $scope.createConfig = createConfig;
   }
 ]);

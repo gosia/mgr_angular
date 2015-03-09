@@ -8,6 +8,7 @@ angular.module('schedulerApp').factory('Term', [function() {
     this.end = end;
     this.day = day;
     this.type = 'term';
+    this.timetable = [];
   }
 
   var dayNames = {
@@ -39,6 +40,10 @@ angular.module('schedulerApp').factory('Term', [function() {
 
   Term.prototype.getLongName = function() {
     return 'Termin ' + this.id + ' (' + this.getPrettyName() + ')';
+  };
+
+  Term.prototype.setTimetable = function(timetable) {
+    this.timetable = timetable;
   };
 
   return Term;

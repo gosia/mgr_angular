@@ -16,8 +16,6 @@ angular.module('schedulerApp')
     return {
       restrict: 'AE',
       templateUrl: '/static/templates/includes/timetable.html',
-      scope: {
-        timetable: '=data'
-      }
+      scope: false
     };
   }]);

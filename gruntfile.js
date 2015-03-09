@@ -6,8 +6,9 @@
 module.exports = function (grunt) {
 
   require('time-grunt')(grunt);
-
   require('load-grunt-tasks')(grunt);
+
+  var modRewrite = require('connect-modrewrite');
 
   var config = {
     jsDir: 'src/js',
@@ -82,6 +83,8 @@ module.exports = function (grunt) {
               connect().use('/static', connect.static('../static')),
               connect().use('/api', connect.static('src/endpointmocks')),
               connect().use('/dist/img', connect.static('./bower_components/admin-lte/dist/img')),
+              connect.static('../templates'),
+              modRewrite(['^.*$ /index.html [L]']),
               connect.static('../templates')
             ];
           }

@@ -1,8 +1,8 @@
 'use strict';
 /*global angular, _ */
 
-angular.module('schedulerApp').controller('TasksListController', ['ApiService', '$scope',
-  function (ApiService, $scope) {
+angular.module('schedulerApp').controller('TasksListController', ['ApiService', '$scope', '$location',
+  function (ApiService, $scope, $location) {
     var controller = this;
 
     controller.items = [];
@@ -12,7 +12,10 @@ angular.module('schedulerApp').controller('TasksListController', ['ApiService', 
     controller.pages = 0;
     controller.activaPage = 0;
 
+    $scope.newTask = {configId: undefined, algorithm: undefined};
+
     var init = function(configId) {
+      $scope.newTask.configId = configId;
       ApiService.getTasks().success(function(data) {
         controller.items = _.filter(data.results, function(x) {
           return configId === undefined || x.config_id === configId;
@@ -27,6 +30,16 @@ angular.module('schedulerApp').controller('TasksListController', ['ApiService', 
       });
     };
 
+    var createTask = function() {
+      ApiService.createTask($scope.newTask.configId, $scope.newTask.algorithm).success(function(data) {
+        if (data.ok) {
+          var url = '/task/' + data.config_id + '/' + data.task_id;
+          $location.path(url).hash('basic');
+        }
+      });
+    };
+
     $scope.init = init;
+    $scope.createTask = createTask;
   }
 ]);

@@ -42,6 +42,7 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
 
     var timetableByRoomId = _.groupBy(timetable, function(x) { return x.room.id; });
     var timetableByGroupId = _.groupBy(timetable, function(x) { return x.group.id; });
+    var timetableByTermId = _.groupBy(timetable, function(x) { return x.term.id; });
     var timetableByTeacherId = {};
     _.each(timetable, function(x) {
       _.each(x.group.teachers, function(t) {
@@ -56,6 +57,7 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
     _.each(this.teachers, function(teacher) { teacher.setTimetable(timetableByTeacherId[teacher.id] || []); });
     _.each(this.groups, function(group) { group.setTimetable(timetableByGroupId[group.id] || []); });
     _.each(this.rooms, function(room) { room.setTimetable(timetableByRoomId[room.id] || []); });
+    _.each(this.terms, function(term) { term.setTimetable(timetableByTermId[term.id] || []); });
   };
 
   return Config;
