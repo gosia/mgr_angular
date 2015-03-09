@@ -11,4 +11,13 @@ angular.module('schedulerApp')
         });
       }
     };
+  }])
+  .directive('timetable', [function() {
+    return {
+      restrict: 'AE',
+      templateUrl: '/static/templates/includes/timetable.html',
+      scope: {
+        timetable: '=data'
+      }
+    };
   }]);

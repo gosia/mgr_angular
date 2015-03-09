@@ -1,3 +1,11 @@
 {
-  "configId": "test"
+  "id": "task1",
+  "config_id": "test",
+  "algorithm": "random",
+  "timetable": {
+    "results": {
+      "group1": [{"room": "123", "term": "term1"}],
+      "group2": [{"room": "123", "term": "term2"}]
+    }
+  }
 }

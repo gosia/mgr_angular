@@ -6,6 +6,7 @@ angular.module('schedulerApp').factory('Teacher', [function() {
     this.id = id;
     this.terms = terms;
     this.type = 'teacher';
+    this.timetable = [];
   }
 
   Teacher.init = function(apiData, termsMap) {
@@ -19,6 +20,10 @@ angular.module('schedulerApp').factory('Teacher', [function() {
 
   Teacher.prototype.getLongName = function() {
     return 'Nauczyciel ' + this.id;
+  };
+
+  Teacher.prototype.setTimetable = function(timetable) {
+    this.timetable = timetable;
   };
 
   return Teacher;

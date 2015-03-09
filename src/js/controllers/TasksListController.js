@@ -1,8 +1,8 @@
 'use strict';
 /*global angular, _ */
 
-angular.module('schedulerApp').controller('TasksListController', ['ApiService',
-  function (ApiService) {
+angular.module('schedulerApp').controller('TasksListController', ['ApiService', '$scope',
+  function (ApiService, $scope) {
     var controller = this;
 
     controller.items = [];
@@ -12,9 +12,11 @@ angular.module('schedulerApp').controller('TasksListController', ['ApiService',
     controller.pages = 0;
     controller.activaPage = 0;
 
-    var init = function() {
+    var init = function(configId) {
       ApiService.getTasks().success(function(data) {
-        controller.items = data.results;
+        controller.items = _.filter(data.results, function(x) {
+          return configId === undefined || x.config_id === configId;
+        });
         controller.numStart = data.num_start;
         controller.numEnd = data.num_end;
         controller.numAll = data.num_all;
@@ -25,6 +27,6 @@ angular.module('schedulerApp').controller('TasksListController', ['ApiService',
       });
     };
 
-    init();
+    $scope.init = init;
   }
 ]);

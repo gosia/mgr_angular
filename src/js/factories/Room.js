@@ -8,6 +8,7 @@ angular.module('schedulerApp').factory('Room', [function() {
     this.labels = labels;
     this.capacity = capacity;
     this.type = 'room';
+    this.timetable = [];
   }
 
   Room.init = function(apiData, termsMap) {
@@ -21,6 +22,10 @@ angular.module('schedulerApp').factory('Room', [function() {
 
   Room.prototype.getLongName = function() {
     return 'Sala ' + this.id;
+  };
+
+  Room.prototype.setTimetable = function(timetable) {
+    this.timetable = timetable;
   };
 
   return Room;

@@ -26,5 +26,37 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
     return new Config(apiData.id, terms, teachers, groups, rooms);
   };
 
+  Config.prototype.setTimetable = function(apiData) {
+    var termsMap = _.object(_.map(this.terms, function(term) { return [term.id, term]; }));
+    var roomsMap = _.object(_.map(this.rooms, function(room) { return [room.id, room]; }));
+    var groupsMap = _.object(_.map(this.groups, function(group) { return [group.id, group]; }));
+
+    var timetable = _.flatten(
+      _.map(apiData.results, function(vv, k) {
+        return _.map(vv, function(v){
+          return {group: groupsMap[k], term: termsMap[v.term], room: roomsMap[v.room]};
+        });
+      }),
+      true
+    );
+
+    var timetableByRoomId = _.groupBy(timetable, function(x) { return x.room.id; });
+    var timetableByGroupId = _.groupBy(timetable, function(x) { return x.group.id; });
+    var timetableByTeacherId = {};
+    _.each(timetable, function(x) {
+      _.each(x.group.teachers, function(t) {
+        if (timetableByTeacherId[t.id] === undefined) {
+          timetableByTeacherId[t.id] = [x];
+        } else {
+          timetableByTeacherId[t.id].push(x);
+        }
+      });
+    });
+
+    _.each(this.teachers, function(teacher) { teacher.setTimetable(timetableByTeacherId[teacher.id] || []); });
+    _.each(this.groups, function(group) { group.setTimetable(timetableByGroupId[group.id] || []); });
+    _.each(this.rooms, function(room) { room.setTimetable(timetableByRoomId[room.id] || []); });
+  };
+
   return Config;
 }]);

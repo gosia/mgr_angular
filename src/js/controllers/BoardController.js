@@ -7,11 +7,21 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
     $scope.activeTabI = -1;
 
     var init = function() {
-      ApiService.getConfig($routeParams.configId).success(function(data) {
+      var configId = $routeParams.configId;
+      var taskId = $routeParams.taskId;
+
+      ApiService.getConfig(configId).success(function(data) {
         $scope.config = Config.init(data);
         $.AdminLTE.boxWidget.activate();
         $scope.activeTabs = [$scope.config.teachers[0], $scope.config.groups[0], $scope.config.rooms[0]];
         changeTab(0);
+
+        if (taskId !== undefined) {
+          ApiService.getTask(taskId).success(function(data) {
+            $scope.config.setTimetable(data.timetable);
+          });
+        }
+
       });
     };
 

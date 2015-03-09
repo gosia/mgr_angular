@@ -13,6 +13,7 @@ angular.module('schedulerApp').factory('Group', [function() {
     this.teachers = teachers;
     this.extra = {course: extra.course, groupType: extra.group_type};
     this.type = 'group';
+    this.timetable = [];
   }
 
   Group.prototype.setGroupObj = function(groupsMap) {
@@ -26,6 +27,14 @@ angular.module('schedulerApp').factory('Group', [function() {
 
   Group.prototype.getLongName = function() {
     return 'Grupa ' + this.id + ' (' + this.extra.course + ', ' + this.extra.groupType +  ')';
+  };
+
+  Group.prototype.isATeacher = function(teacherId) {
+    return _.some(this.teachers, function(x) { return x.id === teacherId; });
+  };
+
+  Group.prototype.setTimetable = function(timetable) {
+    this.timetable = timetable;
   };
 
   Group.init = function(apiData, termsMap, teachersMap) {

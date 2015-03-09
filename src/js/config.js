@@ -21,7 +21,7 @@ angular.module('schedulerApp')
         templateUrl: '/static/templates/content/tasks.html',
         controller: 'TasksController'
       })
-      .when('/task/:taskId', {
+      .when('/task/:configId/:taskId', {
         templateUrl: '/static/templates/content/task.html',
         controller: 'TaskController'
       })
