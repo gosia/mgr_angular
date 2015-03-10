@@ -1,5 +1,7 @@
 {
   "id": "test",
+  "year": 2015,
+  "term": "lato",
   "teachers": [
     {
       "id": "michaliszyn",

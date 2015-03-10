@@ -1,13 +1,15 @@
 'use strict';
 /*global angular, _ */
 
-angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'Room', function(Teacher, Term, Group, Room) {
-  function Config(id, terms, teachers, groups, rooms) {
+angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'Room', 'TimeTableObj', function(Teacher, Term, Group, Room, TimeTableObj) {
+  function Config(id, terms, teachers, groups, rooms, year, term) {
     this.id = id;
     this.terms = terms;
     this.teachers = teachers;
     this.groups = groups;
     this.rooms = rooms;
+    this.year = year;
+    this.term = term;
   }
 
   Config.init = function(apiData) {
@@ -23,7 +25,7 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
 
     var rooms = _.map(apiData.rooms, function(apiRoom) { return Room.init(apiRoom); });
 
-    return new Config(apiData.id, terms, teachers, groups, rooms);
+    return new Config(apiData.id, terms, teachers, groups, rooms, apiData.year, apiData.term);
   };
 
   Config.prototype.setTimetable = function(apiData) {
@@ -34,7 +36,7 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
     var timetable = _.flatten(
       _.map(apiData.results, function(vv, k) {
         return _.map(vv, function(v){
-          return {group: groupsMap[k], term: termsMap[v.term], room: roomsMap[v.room]};
+          return new TimeTableObj(groupsMap[k], termsMap[v.term], roomsMap[v.room]);
         });
       }),
       true

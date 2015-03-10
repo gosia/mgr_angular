@@ -1,10 +1,16 @@
 'use strict';
 /*global angular, $, _ */
 
-angular.module('schedulerApp').controller('BoardController', ['ApiService', '$routeParams', '$scope', 'Config',
-  function (ApiService, $routeParams, $scope, Config) {
+angular.module('schedulerApp').controller('BoardController', ['ApiService', '$routeParams', '$scope', 'Config', 'Calendar',
+  function (ApiService, $routeParams, $scope, Config, Calendar) {
+    var viewsList = [{value: 'tabs', label: 'Zakładki'}, {value: 'calendar', label: 'Kalendarz'}];
+    $scope.viewsList = [viewsList[0]];
+
     $scope.activeTabs = [];
     $scope.activeTabI = -1;
+    $scope.activeView = viewsList[0];
+
+    var calendar;
 
     var init = function() {
       var configId = $routeParams.configId;
@@ -19,10 +25,20 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
         if (taskId !== undefined) {
           ApiService.getTask(taskId).success(function(data) {
             $scope.config.setTimetable(data.timetable);
+
+            if (!_.isEmpty(data.timetable.results)) {
+              $scope.viewsList = viewsList;
+            }
           });
         }
 
       });
+    };
+
+    // Calendar handling
+    var initCalendar = function() {
+      calendar = Calendar.init('#calendar', $scope.config);
+      calendar.addTabs($scope.activeTabs);
     };
 
     // Tab handling
@@ -32,6 +48,8 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
     };
 
     var removeTab = function(i) {
+      var removed = $scope.activeTabs[i];
+
       $scope.activeTabs.splice(i, 1);
 
       if (i === $scope.activeTabI) {
@@ -41,6 +59,10 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
           changeTab(i);
         }
       }
+
+      if (calendar !== undefined) {
+        calendar.removeTab(removed);
+      }
     };
 
     var addTab = function(obj) {
@@ -48,6 +70,10 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
       if (i === -1) {
         $scope.activeTabs.push(obj);
         i = $scope.activeTabs.length - 1;
+
+        if (calendar !== undefined) {
+          calendar.addTab(obj);
+        }
       }
 
       changeTab(i);
@@ -55,6 +81,7 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
 
     init();
 
+    $scope. initCalendar = initCalendar;
     $scope.changeTab = changeTab;
     $scope.removeTab = removeTab;
     $scope.addTab = addTab;
