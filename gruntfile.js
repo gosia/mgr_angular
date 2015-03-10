@@ -149,15 +149,6 @@ module.exports = function (grunt) {
       ]
     },
 
-    mocha: {
-      all: {
-        options: {
-          run: true,
-          urls: ['http://<%= connect.test.options.hostname %>:<%= connect.test.options.port %>/index.html']
-        }
-      }
-    },
-
     uglify: {
       staticDir: {
         files: {
@@ -192,33 +183,11 @@ module.exports = function (grunt) {
 
 
   grunt.registerTask('serve', '', function () {
-    grunt.task.run([
-      'clean:server',
-      'sass:staticDir',
-      'connect:livereload',
-      'watch'
-    ]);
-    return grunt.task.run(['build', 'connect:dist:keepalive']);
-  });
-
-  grunt.registerTask('server', function (target) {
-    grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
-    grunt.task.run([target ? ('serve:' + target) : 'serve']);
-  });
-
-  grunt.registerTask('test', function (target) {
-    if (target !== 'watch') {
-      grunt.task.run([
-        'clean:server',
-        'sass:staticDir',
-        'uglify'
-      ]);
+    if (grunt.option('allow-remote')) {
+      grunt.config.set('connect.options.hostname', '0.0.0.0');
     }
 
-    grunt.task.run([
-      'connect:test',
-      'mocha'
-    ]);
+    return grunt.task.run(['build', 'connect:livereload']);
   });
 
   grunt.registerTask('build', [
@@ -235,7 +204,6 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', [
     'jshint',
-    'test',
     'build'
   ]);
 };
