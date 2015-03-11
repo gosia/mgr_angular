@@ -1,8 +1,8 @@
 'use strict';
 /*global angular, $, _ */
 
-angular.module('schedulerApp').controller('BoardController', ['ApiService', '$routeParams', '$scope', 'Config', 'Calendar', 'Teacher', 'Group', 'Room',
-  function (ApiService, $routeParams, $scope, Config, Calendar, Teacher, Group, Room) {
+angular.module('schedulerApp').controller('BoardController', ['ApiService', '$routeParams', '$scope', 'Config', 'Calendar', 'Teacher', 'Group', 'Room', 'Term',
+  function (ApiService, $routeParams, $scope, Config, Calendar, Teacher, Group, Room, Term) {
     var viewsList = [{value: 'tabs', label: 'Zakładki'}, {value: 'calendar', label: 'Kalendarz'}];
     $scope.viewsList = [viewsList[0]];
 
@@ -93,6 +93,10 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
       $scope.newRoom = {allTerms: true};
     };
 
+    var resetTermForm = function() {
+      $scope.newTerm = {addForAll: true, dayNames: Term.dayNames};
+    };
+
     var addX = function($selector, Obj, apiAddF, resetFormF, configAddF) {
 
       var resultF = function(apiData) {
@@ -100,9 +104,9 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
 
         var tab = Obj.initForModal($scope.config, apiData);
 
-        apiAddF(configId, tab).success(function (data) {
+        apiAddF(configId, tab, apiData).success(function (data) {
           if (data.ok) {
-            $scope.config[configAddF](tab);
+            $scope.config[configAddF](tab, apiData);
             resetFormF();
             addTab(tab);
           }
@@ -126,19 +130,27 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
       return f($scope.newRoom);
     };
 
+    var addTerm = function() {
+      var f = addX($('#add-config-term'), Term, ApiService.addConfigTerm, resetTermForm, 'addTerm');
+      return f($scope.newTerm);
+    };
+
     init();
 
     resetTeacherForm();
     resetGroupForm();
     resetRoomForm();
+    resetTermForm();
 
     $scope.addTeacher = addTeacher;
     $scope.addGroup = addGroup;
     $scope.addRoom = addRoom;
+    $scope.addTerm = addTerm;
 
     $scope.initCalendar = initCalendar;
     $scope.changeTab = changeTab;
     $scope.removeTab = removeTab;
     $scope.addTab = addTab;
+
   }
 ]);

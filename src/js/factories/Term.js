@@ -29,6 +29,15 @@ angular.module('schedulerApp').factory('Term', [function() {
     return new Term(apiData.id, apiData.start, apiData.end, apiData.day);
   };
 
+  Term.initForModal = function(config, apiData) {
+    return new Term(
+      apiData.id,
+      {hour: apiData.startHour, minute: apiData.startMinute},
+      {hour: apiData.endHour, minute: apiData.endMinute},
+      parseInt(apiData.day)
+    );
+  };
+
   Term.prototype.getPrettyName = function() {
     return dayNames[this.day] + ' ' + pad2(this.start.hour) + ':' + pad2(this.start.minute) + '-' +
       pad2(this.end.hour) + ':' + pad2(this.end.minute);
@@ -45,6 +54,8 @@ angular.module('schedulerApp').factory('Term', [function() {
   Term.prototype.setTimetable = function(timetable) {
     this.timetable = timetable;
   };
+
+  Term.dayNames = dayNames;
 
   return Term;
 }]);

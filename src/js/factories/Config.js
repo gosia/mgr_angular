@@ -74,5 +74,18 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
     this.rooms.push(room);
   };
 
+  Config.prototype.addTerm = function(term, apiData) {
+    this.terms.push(term);
+
+    if (apiData.addForAll) {
+      _.each(this.teachers, function(x) {
+        x.terms.push(term);
+      });
+      _.each(this.groups, function(x) {
+        x.terms.push(term);
+      });
+    }
+  };
+
   return Config;
 }]);

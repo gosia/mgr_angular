@@ -9,9 +9,10 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
     getTasks: '/api/tasks.json',
     getTask: '/api/task.json',
     createTask: '/api/create_task.json',
-    addConfigTeacher: '/api/add_teacher.json',
-    addConfigGroup: '/api/add_group.json',
-    addConfigRoom: '/api/add_room.json'
+    addConfigTeacher: '/api/default.json',
+    addConfigGroup: '/api/default.json',
+    addConfigRoom: '/api/default.json',
+    addConfigTerm: '/api/default.json'
   };
   var service = {urls: urls};
 
@@ -76,6 +77,22 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
           capacity: room.capacity,
           labels: _.map(room.labels, function (x) { return x.id; })
         }
+      }
+    );
+  };
+
+  service.addConfigTerm = function(configId, term, apiData) {
+    return $http.get(
+      service.urls.addConfigTerm,
+      {
+        config_id: configId,
+        term: {
+          id: term.id,
+          day: term.day,
+          start: term.start,
+          end: term.end
+        },
+        add_for_all: apiData.addForAll
       }
     );
   };
