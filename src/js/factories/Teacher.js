@@ -14,6 +14,15 @@ angular.module('schedulerApp').factory('Teacher', [function() {
     return new Teacher(apiData.id, terms);
   };
 
+  Teacher.initForModal = function(config, apiData) {
+    var formTermIds = (apiData.terms || '').split(',');
+    var formTerms = _.filter(config.terms, function(x) {
+      return _.contains(formTermIds, x.id);
+    });
+    var terms = apiData.allTerms ? config.terms : formTerms;
+    return new Teacher(apiData.id, terms);
+  };
+
   Teacher.prototype.getShortName = function() {
     return this.id;
   };

@@ -1,8 +1,8 @@
 'use strict';
 /*global angular, $, _ */
 
-angular.module('schedulerApp').controller('BoardController', ['ApiService', '$routeParams', '$scope', 'Config', 'Calendar', 'Teacher',
-  function (ApiService, $routeParams, $scope, Config, Calendar, Teacher) {
+angular.module('schedulerApp').controller('BoardController', ['ApiService', '$routeParams', '$scope', 'Config', 'Calendar', 'Teacher', 'Group',
+  function (ApiService, $routeParams, $scope, Config, Calendar, Teacher, Group) {
     var viewsList = [{value: 'tabs', label: 'Zakładki'}, {value: 'calendar', label: 'Kalendarz'}];
     $scope.viewsList = [viewsList[0]];
 
@@ -85,30 +85,45 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
       $scope.newTeacher = {allTerms: true};
     };
 
+    var resetGroupForm = function() {
+      $scope.newGroup = {allTerms: true};
+    };
+
+    var addX = function($selector, Obj, apiAddF, resetFormF, configAddF) {
+
+      var resultF = function(apiData) {
+        $selector.modal('hide');
+
+        var tab = Obj.initForModal($scope.config, apiData);
+
+        apiAddF(configId, tab).success(function (data) {
+          if (data.ok) {
+            $scope.config[configAddF](tab);
+            resetFormF();
+            addTab(tab);
+          }
+        });
+      };
+
+      return resultF;
+    };
+
     var addTeacher = function() {
-      $('#add-config-teacher').modal('hide');
-
-      var formTermIds = ($scope.newTeacher.terms || '').split(',');
-      var formTerms = _.filter($scope.config.terms, function(x) {
-        return _.contains(formTermIds, x.id);
-      });
-      var terms = $scope.newTeacher.allTerms ? $scope.config.terms : formTerms;
-      var teacher = new Teacher($scope.newTeacher.id, terms);
-
-      ApiService.addConfigTeacher(configId, teacher).success(function(data) {
-        if (data.ok) {
-          $scope.config.addTeacher(teacher);
-          resetTeacherForm();
-          addTab(teacher);
-        }
-      });
+      var f = addX($('#add-config-teacher'), Teacher, ApiService.addConfigTeacher, resetTeacherForm, 'addTeacher');
+      return f($scope.newTeacher);
+    };
+    var addGroup = function() {
+      var f = addX($('#add-config-group'), Group, ApiService.addConfigGroup, resetGroupForm, 'addGroup');
+      return f($scope.newGroup);
     };
 
     init();
 
     resetTeacherForm();
+    resetGroupForm();
 
     $scope.addTeacher = addTeacher;
+    $scope.addGroup = addGroup;
     $scope.initCalendar = initCalendar;
     $scope.changeTab = changeTab;
     $scope.removeTab = removeTab;

@@ -9,7 +9,8 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
     getTasks: '/api/tasks.json',
     getTask: '/api/task.json',
     createTask: '/api/create_task.json',
-    addConfigTeacher: '/api/add_teacher.json'
+    addConfigTeacher: '/api/add_teacher.json',
+    addConfigGroup: '/api/add_group.json'
   };
   var service = {urls: urls};
 
@@ -41,6 +42,25 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
     return $http.get(
       service.urls.addConfigTeacher,
       {config_id: configId, teacher: {id: teacher.id, terms: _.map(teacher.terms, function(x) { return x.id; })}}
+    );
+  };
+
+  service.addConfigGroup = function(configId, group) {
+    return $http.get(
+      service.urls.addConfigGroup,
+      {
+        config_id: configId,
+        group: {
+          id: group.id,
+          terms: _.map(group.terms, function (x) { return x.id; }),
+          terms_num: group.termsNum,
+          students_num: group.studentsNum,
+          teachers: _.map(group.teachers, function (x) { return x.id; }),
+          same_term_group_ids: _.map(group.sameTermGroupIds, function (x) { return x.id; }),
+          diff_term_group_ids: _.map(group.diffTermGroupIds, function (x) { return x.id; }),
+          labels: _.map(group.labels, function (x) { return x.id; })
+        }
+      }
     );
   };
 

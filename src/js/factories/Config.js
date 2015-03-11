@@ -66,5 +66,9 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
     this.teachers.push(teacher);
   };
 
+  Config.prototype.addGroup = function(group) {
+    this.groups.push(group);
+  };
+
   return Config;
 }]);
