@@ -1,5 +1,5 @@
 'use strict';
-/*global angular */
+/*global angular, _ */
 
 angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
   var urls = {
@@ -8,7 +8,8 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
     createConfig: '/api/create_config.json',
     getTasks: '/api/tasks.json',
     getTask: '/api/task.json',
-    createTask: '/api/create_task.json'
+    createTask: '/api/create_task.json',
+    addConfigTeacher: '/api/add_teacher.json'
   };
   var service = {urls: urls};
 
@@ -34,6 +35,13 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
 
   service.createTask = function(configId, algorithm) {
     return $http.get(service.urls.createTask, {config_id: configId, algorithm: algorithm});
+  };
+
+  service.addConfigTeacher = function(configId, teacher) {
+    return $http.get(
+      service.urls.addConfigTeacher,
+      {config_id: configId, teacher: {id: teacher.id, terms: _.map(teacher.terms, function(x) { return x.id; })}}
+    );
   };
 
   return service;

@@ -1,20 +1,21 @@
 'use strict';
 /*global angular, $, _ */
 
-angular.module('schedulerApp').controller('BoardController', ['ApiService', '$routeParams', '$scope', 'Config', 'Calendar',
-  function (ApiService, $routeParams, $scope, Config, Calendar) {
+angular.module('schedulerApp').controller('BoardController', ['ApiService', '$routeParams', '$scope', 'Config', 'Calendar', 'Teacher',
+  function (ApiService, $routeParams, $scope, Config, Calendar, Teacher) {
     var viewsList = [{value: 'tabs', label: 'Zakładki'}, {value: 'calendar', label: 'Kalendarz'}];
     $scope.viewsList = [viewsList[0]];
 
     $scope.activeTabs = [];
     $scope.activeTabI = -1;
     $scope.activeView = viewsList[0];
+    $scope.editable = true;
 
-    var calendar;
+    var calendar, configId, taskId;
 
     var init = function() {
-      var configId = $routeParams.configId;
-      var taskId = $routeParams.taskId;
+      configId = $routeParams.configId;
+      taskId = $routeParams.taskId;
 
       ApiService.getConfig(configId).success(function(data) {
         $scope.config = Config.init(data);
@@ -79,9 +80,36 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
       changeTab(i);
     };
 
+    // Changing config
+    var resetTeacherForm = function() {
+      $scope.newTeacher = {allTerms: true};
+    };
+
+    var addTeacher = function() {
+      $('#add-config-teacher').modal('hide');
+
+      var formTermIds = ($scope.newTeacher.terms || '').split(',');
+      var formTerms = _.filter($scope.config.terms, function(x) {
+        return _.contains(formTermIds, x.id);
+      });
+      var terms = $scope.newTeacher.allTerms ? $scope.config.terms : formTerms;
+      var teacher = new Teacher($scope.newTeacher.id, terms);
+
+      ApiService.addConfigTeacher(configId, teacher).success(function(data) {
+        if (data.ok) {
+          $scope.config.addTeacher(teacher);
+          resetTeacherForm();
+          addTab(teacher);
+        }
+      });
+    };
+
     init();
 
-    $scope. initCalendar = initCalendar;
+    resetTeacherForm();
+
+    $scope.addTeacher = addTeacher;
+    $scope.initCalendar = initCalendar;
     $scope.changeTab = changeTab;
     $scope.removeTab = removeTab;
     $scope.addTab = addTab;

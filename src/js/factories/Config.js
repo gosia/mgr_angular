@@ -62,5 +62,9 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
     _.each(this.terms, function(term) { term.setTimetable(timetableByTermId[term.id] || []); });
   };
 
+  Config.prototype.addTeacher = function(teacher) {
+    this.teachers.push(teacher);
+  };
+
   return Config;
 }]);
