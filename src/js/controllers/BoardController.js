@@ -1,8 +1,8 @@
 'use strict';
 /*global angular, $, _ */
 
-angular.module('schedulerApp').controller('BoardController', ['ApiService', '$routeParams', '$scope', 'Config', 'Calendar', 'Teacher', 'Group',
-  function (ApiService, $routeParams, $scope, Config, Calendar, Teacher, Group) {
+angular.module('schedulerApp').controller('BoardController', ['ApiService', '$routeParams', '$scope', 'Config', 'Calendar', 'Teacher', 'Group', 'Room',
+  function (ApiService, $routeParams, $scope, Config, Calendar, Teacher, Group, Room) {
     var viewsList = [{value: 'tabs', label: 'Zakładki'}, {value: 'calendar', label: 'Kalendarz'}];
     $scope.viewsList = [viewsList[0]];
 
@@ -89,6 +89,10 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
       $scope.newGroup = {allTerms: true};
     };
 
+    var resetRoomForm = function() {
+      $scope.newRoom = {allTerms: true};
+    };
+
     var addX = function($selector, Obj, apiAddF, resetFormF, configAddF) {
 
       var resultF = function(apiData) {
@@ -117,13 +121,21 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
       return f($scope.newGroup);
     };
 
+    var addRoom = function() {
+      var f = addX($('#add-config-room'), Room, ApiService.addConfigRoom, resetRoomForm, 'addRoom');
+      return f($scope.newRoom);
+    };
+
     init();
 
     resetTeacherForm();
     resetGroupForm();
+    resetRoomForm();
 
     $scope.addTeacher = addTeacher;
     $scope.addGroup = addGroup;
+    $scope.addRoom = addRoom;
+
     $scope.initCalendar = initCalendar;
     $scope.changeTab = changeTab;
     $scope.removeTab = removeTab;

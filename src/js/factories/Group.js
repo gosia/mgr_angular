@@ -47,19 +47,21 @@ angular.module('schedulerApp').factory('Group', [function() {
   };
 
   Group.initForModal = function(config, apiData) {
-    var formTermIds = (apiData.terms || '').split(',');
+    var formTermIds = apiData.terms ? apiData.terms.split(',') : [];
     var formTerms = _.filter(config.terms, function(x) { return _.contains(formTermIds, x.id); });
 
-    var formTeacherIds = (apiData.teachers || '').split(',');
+    var formTeacherIds = apiData.teachers ? apiData.teachers.split(',') : [];
     var formTeachers = _.filter(config.teachers, function(x) { return _.contains(formTeacherIds, x.id); });
 
     var terms = apiData.allTerms ? config.terms : formTerms;
-    var labels = (apiData.labels || '').split(',');
+    var labels = apiData.labels ? apiData.labels.split(',') : [];
 
-    return new Group(
+    var group = new Group(
       apiData.id, terms, apiData.termsNum, apiData.studentsNum, [], [], labels, formTeachers,
       {course: apiData.course, group_type: apiData.groupType}
     );
+    group.setGroupObj();
+    return group;
   };
 
   return Group;

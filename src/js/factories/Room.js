@@ -16,6 +16,16 @@ angular.module('schedulerApp').factory('Room', [function() {
     return new Room(apiData.id, terms, apiData.labels, apiData.capacity);
   };
 
+  Room.initForModal = function(config, apiData) {
+    var formTermIds = apiData.terms ? apiData.terms.split(',') : [];
+    var formTerms = _.filter(config.terms, function(x) { return _.contains(formTermIds, x.id); });
+
+    var terms = apiData.allTerms ? config.terms : formTerms;
+    var labels = apiData.labels ? apiData.labels.split(',') : [];
+
+    return new Room(apiData.id, terms, labels, apiData.capacity);
+  };
+
   Room.prototype.getShortName = function() {
     return this.id;
   };
