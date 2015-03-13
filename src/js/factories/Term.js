@@ -55,6 +55,19 @@ angular.module('schedulerApp').factory('Term', [function() {
     this.timetable = timetable;
   };
 
+  Term.prototype.getForModal = function() {
+    return {
+      id: this.id,
+      startHour: this.start.hour,
+      startMinute: this.start.minute,
+      endHour: this.end.hour,
+      endMinute: this.end.minute,
+      day: this.day + '',
+      addForAll: true,
+      dayNames: dayNames
+    };
+  };
+
   Term.dayNames = dayNames;
 
   return Term;

@@ -37,6 +37,20 @@ angular.module('schedulerApp').factory('Group', [function() {
     this.timetable = timetable;
   };
 
+  Group.prototype.getForModal = function(config) {
+    return {
+      id: this.id,
+      terms: _.map(this.terms, function(x) { return x.id; }),
+      allTerms: this.terms.length === config.terms.length,
+      termsNum: this.termsNum,
+      studentsNum: this.studentsNum,
+      labels: this.labels,
+      teachers: _.map(this.teachers, function(x) { return x.id; }),
+      course: this.extra.course,
+      groupType: this.extra.groupType
+    };
+  };
+
   Group.init = function(apiData, termsMap, teachersMap) {
     var terms = _.map(apiData.terms, function(termId) { return termsMap[termId]; });
     var teachers = _.map(apiData.teachers, function(teacherId) { return teachersMap[teacherId]; });

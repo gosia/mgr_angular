@@ -35,5 +35,13 @@ angular.module('schedulerApp').factory('Teacher', [function() {
     this.timetable = timetable;
   };
 
+  Teacher.prototype.getForModal = function(config) {
+    return {
+      id: this.id,
+      terms: _.map(this.terms, function(x) { return x.id; }),
+      allTerms: this.terms.length === config.terms.length
+    };
+  };
+
   return Teacher;
 }]);

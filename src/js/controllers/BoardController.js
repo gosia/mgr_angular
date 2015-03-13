@@ -9,6 +9,7 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
     $scope.activeTabs = [];
     $scope.activeTabI = -1;
     $scope.activeView = viewsList[0];
+
     $scope.editable = true;
 
     var calendar, configId, taskId;
@@ -82,57 +83,79 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
 
     // Changing config
     var resetTeacherForm = function() {
-      $scope.newTeacher = {allTerms: true};
+      $scope.newElement = {allTerms: true};
     };
 
     var resetGroupForm = function() {
-      $scope.newGroup = {allTerms: true};
+      $scope.newElement = {allTerms: true};
     };
 
     var resetRoomForm = function() {
-      $scope.newRoom = {allTerms: true};
+      $scope.newElement = {allTerms: true};
     };
 
     var resetTermForm = function() {
-      $scope.newTerm = {addForAll: true, dayNames: Term.dayNames};
+      $scope.newElement = {addForAll: true, dayNames: Term.dayNames};
     };
 
-    var addX = function($selector, Obj, apiAddF, resetFormF, configAddF) {
-
-      var resultF = function(apiData) {
-        $selector.modal('hide');
-
-        var tab = Obj.initForModal($scope.config, apiData);
-
-        apiAddF(configId, tab, apiData).success(function (data) {
-          if (data.ok) {
-            $scope.config[configAddF](tab, apiData);
-            resetFormF();
-            addTab(tab);
-          }
-        });
-      };
-
-      return resultF;
+    var datas = {
+      teacher: {modal: '#add-config-teacher', cls: Teacher, reset: resetTeacherForm, apiServiceAddF: ApiService.addConfigTeacher, configAddF: 'addTeacher'},
+      group: {modal: '#add-config-group', cls: Group, reset: resetGroupForm, apiServiceAddF: ApiService.addConfigGroup, configAddF: 'addGroup'},
+      room: {modal: '#add-config-room', cls: Room, reset: resetRoomForm, apiServiceAddF: ApiService.addConfigRoom, configAddF: 'addRoom'},
+      term: {modal: '#add-config-term', cls: Term, reset: resetTermForm, apiServiceAddF: ApiService.addConfigTerm, configAddF: 'addTerm'}
     };
 
-    var addTeacher = function() {
-      var f = addX($('#add-config-teacher'), Teacher, ApiService.addConfigTeacher, resetTeacherForm, 'addTeacher');
-      return f($scope.newTeacher);
-    };
-    var addGroup = function() {
-      var f = addX($('#add-config-group'), Group, ApiService.addConfigGroup, resetGroupForm, 'addGroup');
-      return f($scope.newGroup);
+    var addElement = function(type, form) {
+      var data = datas[type];
+
+      $(data.modal).modal('hide');
+
+      var tab = data.cls.initForModal($scope.config, $scope.newElement);
+
+      data.apiServiceAddF(configId, tab, $scope.newElement).success(function (result) {
+        if (result.ok) {
+          $scope.config[data.configAddF](tab, $scope.newElement);
+          data.reset();
+          addTab(tab);
+          resetForm(form);
+        }
+      });
+
     };
 
-    var addRoom = function() {
-      var f = addX($('#add-config-room'), Room, ApiService.addConfigRoom, resetRoomForm, 'addRoom');
-      return f($scope.newRoom);
+    var openAddModal = function(type) {
+      $scope.modalModeAdd = true;
+      $scope.modalModeEdit = false;
+
+      var modal = datas[type].modal;
+      datas[type].reset();
+      $(modal).modal('show');
     };
 
-    var addTerm = function() {
-      var f = addX($('#add-config-term'), Term, ApiService.addConfigTerm, resetTermForm, 'addTerm');
-      return f($scope.newTerm);
+    var openEditModal = function() {
+      $scope.modalModeAdd = false;
+      $scope.modalModeEdit = true;
+
+      var elem = $scope.activeTab;
+      var data = datas[elem.type];
+
+      $scope.newElement = elem.getForModal($scope.config);
+      $(data.modal).modal('show');
+
+    };
+
+    var resetForm = function(form) {
+      if (form) {
+        form.$setPristine();
+        form.$setUntouched();
+      }
+    };
+
+    var closeElementModal = function(type, form) {
+      var data = datas[type];
+      $(data.modal).modal('hide');
+      data.reset();
+      resetForm(form);
     };
 
     var areYouSureModal = function() {
@@ -156,16 +179,12 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
 
     init();
 
-    resetTeacherForm();
-    resetGroupForm();
-    resetRoomForm();
-    resetTermForm();
-
-    $scope.addTeacher = addTeacher;
-    $scope.addGroup = addGroup;
-    $scope.addRoom = addRoom;
-    $scope.addTerm = addTerm;
+    $scope.openAddModal = openAddModal;
+    $scope.openEditModal = openEditModal;
+    $scope.closeElementModal = closeElementModal;
     $scope.areYouSureModal = areYouSureModal;
+
+    $scope.addElement = addElement;
     $scope.removeElement = removeElement;
 
     $scope.initCalendar = initCalendar;

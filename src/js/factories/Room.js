@@ -38,5 +38,15 @@ angular.module('schedulerApp').factory('Room', [function() {
     this.timetable = timetable;
   };
 
+  Room.prototype.getForModal = function(config) {
+    return {
+      id: this.id,
+      terms: _.map(this.terms, function(x) { return x.id; }),
+      allTerms: this.terms.length === config.terms.length,
+      labels: this.labels,
+      capacity: this.capacity
+    };
+  };
+
   return Room;
 }]);
