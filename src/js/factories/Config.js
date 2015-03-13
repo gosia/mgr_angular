@@ -87,5 +87,40 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
     }
   };
 
+  Config.prototype.removeTeacher = function(teacher) {
+    this.teachers = _.filter(this.teachers, function(x) { return x.id !== teacher.id; });
+    _.each(this.groups, function(g) {
+      g.teachers = _.filter(g.teachers, function(x) { return x.id !== teacher.id; });
+    });
+  };
+
+  Config.prototype.removeGroup = function(group) {
+    this.groups = _.filter(this.groups, function(x) { return x.id !== group.id; });
+  };
+
+  Config.prototype.removeRoom = function(room) {
+    this.rooms = _.filter(this.rooms, function(x) { return x.id !== room.id; });
+  };
+
+  Config.prototype.removeTerm = function(term) {
+    this.terms = _.filter(this.terms, function(x) { return x.id !== term.id; });
+    _.each(this.groups, function(g) {
+      g.terms = _.filter(g.terms, function(x) { return x.id !== term.id; });
+    });
+    _.each(this.teachers, function(t) {
+      t.terms = _.filter(t.terms, function(x) { return x.id !== term.id; });
+    });
+  };
+
+  Config.prototype.removeElement = function(elem) {
+    var mapper = {
+      teacher: 'removeTeacher',
+      group: 'removeGroup',
+      room: 'removeRoom',
+      term: 'removeTerm'
+    };
+    return this[mapper[elem.type]](elem);
+  };
+
   return Config;
 }]);

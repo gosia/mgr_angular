@@ -135,6 +135,25 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
       return f($scope.newTerm);
     };
 
+    var areYouSureModal = function() {
+      var tab = $scope.activeTab;
+      $scope.areYouSureName = tab.getLongName();
+      $scope.areYouSureCall = function() {
+        return removeElement(tab);
+      };
+      $('#are-you-sure').modal('show');
+    };
+    var removeElement = function(elem) {
+      $('#are-you-sure').modal('hide');
+      ApiService.removeConfigElement(configId, elem).success(function(data) {
+        if (data.ok) {
+          $scope.config.removeElement(elem);
+          var i = _.findIndex($scope.activeTabs, function(x) { return x.id === elem.id; });
+          removeTab(i);
+        }
+      });
+    };
+
     init();
 
     resetTeacherForm();
@@ -146,6 +165,8 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
     $scope.addGroup = addGroup;
     $scope.addRoom = addRoom;
     $scope.addTerm = addTerm;
+    $scope.areYouSureModal = areYouSureModal;
+    $scope.removeElement = removeElement;
 
     $scope.initCalendar = initCalendar;
     $scope.changeTab = changeTab;
