@@ -41,18 +41,26 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
     return $http.get(service.urls.createTask, {config_id: configId, algorithm: algorithm});
   };
 
-  service.addConfigTeacher = function(configId, teacher) {
+  service.addConfigTeacher = function(configId, teacher, mode) {
     return $http.get(
       service.urls.addConfigTeacher,
-      {config_id: configId, teacher: {id: teacher.id, terms: _.map(teacher.terms, function(x) { return x.id; })}}
+      {
+        config_id: configId,
+        teacher: {
+          id: teacher.id,
+          mode: mode,
+          terms: _.map(teacher.terms, function(x) { return x.id; })
+        }
+      }
     );
   };
 
-  service.addConfigGroup = function(configId, group) {
+  service.addConfigGroup = function(configId, group, mode) {
     return $http.get(
       service.urls.addConfigGroup,
       {
         config_id: configId,
+        mode: mode,
         group: {
           id: group.id,
           terms: _.map(group.terms, function (x) { return x.id; }),
@@ -67,11 +75,12 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
     );
   };
 
-  service.addConfigRoom = function(configId, room) {
+  service.addConfigRoom = function(configId, room, mode) {
     return $http.get(
       service.urls.addConfigRoom,
       {
         config_id: configId,
+        mode: mode,
         room: {
           id: room.id,
           terms: _.map(room.terms, function (x) { return x.id; }),
@@ -82,11 +91,12 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
     );
   };
 
-  service.addConfigTerm = function(configId, term, apiData) {
+  service.addConfigTerm = function(configId, term, mode, apiData) {
     return $http.get(
       service.urls.addConfigTerm,
       {
         config_id: configId,
+        mode: mode,
         term: {
           id: term.id,
           day: term.day,

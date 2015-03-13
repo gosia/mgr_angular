@@ -87,6 +87,38 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
     }
   };
 
+  Config.prototype.editTeacher = function(teacher) {
+    _.each(this.teachers, function(x) {
+      if (x.id === teacher.id) {
+        x.edit(teacher);
+      }
+    });
+  };
+
+  Config.prototype.editGroup = function(group) {
+    _.each(this.groups, function(x) {
+      if (x.id === group.id) {
+        x.edit(group);
+      }
+    });
+  };
+
+  Config.prototype.editRoom = function(room) {
+    _.each(this.rooms, function(x) {
+      if (x.id === room.id) {
+        x.edit(room);
+      }
+    });
+  };
+
+  Config.prototype.editTerm = function(term) {
+    _.each(this.terms, function(x) {
+      if (x.id === term.id) {
+        x.edit(term);
+      }
+    });
+  };
+
   Config.prototype.removeTeacher = function(teacher) {
     this.teachers = _.filter(this.teachers, function(x) { return x.id !== teacher.id; });
     _.each(this.groups, function(g) {

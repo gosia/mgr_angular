@@ -38,9 +38,13 @@ angular.module('schedulerApp').factory('Teacher', [function() {
   Teacher.prototype.getForModal = function(config) {
     return {
       id: this.id,
-      terms: _.map(this.terms, function(x) { return x.id; }),
+      terms: _.map(this.terms, function(x) { return x.id; }).join(','),
       allTerms: this.terms.length === config.terms.length
     };
+  };
+
+  Teacher.prototype.edit = function(teacher) {
+    this.terms = teacher.terms;
   };
 
   return Teacher;

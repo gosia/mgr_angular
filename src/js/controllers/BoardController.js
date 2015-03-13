@@ -99,22 +99,27 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
     };
 
     var datas = {
-      teacher: {modal: '#add-config-teacher', cls: Teacher, reset: resetTeacherForm, apiServiceAddF: ApiService.addConfigTeacher, configAddF: 'addTeacher'},
-      group: {modal: '#add-config-group', cls: Group, reset: resetGroupForm, apiServiceAddF: ApiService.addConfigGroup, configAddF: 'addGroup'},
-      room: {modal: '#add-config-room', cls: Room, reset: resetRoomForm, apiServiceAddF: ApiService.addConfigRoom, configAddF: 'addRoom'},
-      term: {modal: '#add-config-term', cls: Term, reset: resetTermForm, apiServiceAddF: ApiService.addConfigTerm, configAddF: 'addTerm'}
+      teacher: {modal: '#add-config-teacher', cls: Teacher, reset: resetTeacherForm, apiServiceAddF: ApiService.addConfigTeacher, configAddF: 'addTeacher', configEditF: 'editTeacher'},
+      group: {modal: '#add-config-group', cls: Group, reset: resetGroupForm, apiServiceAddF: ApiService.addConfigGroup, configAddF: 'addGroup', configEditF: 'editGroup'},
+      room: {modal: '#add-config-room', cls: Room, reset: resetRoomForm, apiServiceAddF: ApiService.addConfigRoom, configAddF: 'addRoom', configEditF: 'editRoom'},
+      term: {modal: '#add-config-term', cls: Term, reset: resetTermForm, apiServiceAddF: ApiService.addConfigTerm, configAddF: 'addTerm', configEditF: 'editTerm'}
     };
 
-    var addElement = function(type, form) {
+    var saveElement = function(type, form) {
       var data = datas[type];
 
       $(data.modal).modal('hide');
+      var mode = $scope.modalModeEdit ? 'edit' : 'add';
 
       var tab = data.cls.initForModal($scope.config, $scope.newElement);
 
-      data.apiServiceAddF(configId, tab, $scope.newElement).success(function (result) {
+      data.apiServiceAddF(configId, tab, mode, $scope.newElement).success(function (result) {
         if (result.ok) {
-          $scope.config[data.configAddF](tab, $scope.newElement);
+          if (mode === 'add') {
+            $scope.config[data.configAddF](tab, $scope.newElement);
+          } else {
+            $scope.config[data.configEditF](tab, $scope.newElement);
+          }
           data.reset();
           addTab(tab);
           resetForm(form);
@@ -184,7 +189,7 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
     $scope.closeElementModal = closeElementModal;
     $scope.areYouSureModal = areYouSureModal;
 
-    $scope.addElement = addElement;
+    $scope.saveElement = saveElement;
     $scope.removeElement = removeElement;
 
     $scope.initCalendar = initCalendar;

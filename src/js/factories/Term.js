@@ -68,6 +68,12 @@ angular.module('schedulerApp').factory('Term', [function() {
     };
   };
 
+  Term.prototype.edit = function(term) {
+    this.start = term.start;
+    this.end = term.end;
+    this.day = term.day;
+  };
+
   Term.dayNames = dayNames;
 
   return Term;

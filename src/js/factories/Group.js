@@ -40,15 +40,24 @@ angular.module('schedulerApp').factory('Group', [function() {
   Group.prototype.getForModal = function(config) {
     return {
       id: this.id,
-      terms: _.map(this.terms, function(x) { return x.id; }),
+      terms: _.map(this.terms, function(x) { return x.id; }).join(','),
       allTerms: this.terms.length === config.terms.length,
       termsNum: this.termsNum,
       studentsNum: this.studentsNum,
-      labels: this.labels,
-      teachers: _.map(this.teachers, function(x) { return x.id; }),
+      labels: this.labels.join(','),
+      teachers: _.map(this.teachers, function(x) { return x.id; }).join(','),
       course: this.extra.course,
       groupType: this.extra.groupType
     };
+  };
+
+  Group.prototype.edit = function(group) {
+    this.terms = group.terms;
+    this.teachers = group.teachers;
+    this.labels = group.labels;
+    this.termsNum = group.termsNum;
+    this.studentsNum = group.studentsNum;
+    this.extra = group.extra;
   };
 
   Group.init = function(apiData, termsMap, teachersMap) {

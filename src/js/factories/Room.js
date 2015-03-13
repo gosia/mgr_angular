@@ -41,11 +41,17 @@ angular.module('schedulerApp').factory('Room', [function() {
   Room.prototype.getForModal = function(config) {
     return {
       id: this.id,
-      terms: _.map(this.terms, function(x) { return x.id; }),
+      terms: _.map(this.terms, function(x) { return x.id; }).join(','),
       allTerms: this.terms.length === config.terms.length,
-      labels: this.labels,
+      labels: this.labels.join(','),
       capacity: this.capacity
     };
+  };
+
+  Room.prototype.edit = function(room) {
+    this.terms = room.terms;
+    this.capacity = room.capacity;
+    this.labels = room.labels;
   };
 
   return Room;
