@@ -14,7 +14,8 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
     addConfigRoom: '/api/default.json',
     addConfigTerm: '/api/default.json',
     removeConfigElement: '/api/default.json',
-    addEvent: '/api/add_event.json'
+    addEvent: '/api/add_event.json',
+    deleteEvent: '/api/delete_event.json'
   };
   var service = {urls: urls};
 
@@ -129,6 +130,16 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
         day: day,
         hour: hour,
         minute: minute
+      }
+    );
+  };
+
+  service.deleteEvent = function(configId, groupId) {
+    return $http.get(
+      service.urls.addEvent,
+      {
+        config_id: configId,
+        group_id: groupId
       }
     );
   };

@@ -39,11 +39,12 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
 
     // Calendar handling
     var initCalendar = function() {
-      calendar = Calendar.init('#calendar', $scope.config, newEventAdded);
+      calendar = Calendar.init('#calendar', $scope.config, newEventAdded, deletedEventCallback);
       calendar.addTabs($scope.activeTabs);
     };
 
     function initEvents() {
+      $.AdminLTE.boxWidget.activate();
       $('div.external-event').each(function() {
         $(this).draggable({
           zIndex: 1070,
@@ -61,38 +62,55 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
       }
     });
 
+    var modifyTimetable = function(data, mode) {
+      if (data.ok) {
+        $scope.config.modifyTimetable(data.timetable, mode);
+
+
+        var changedRoomIds = _.uniq(_.flatten(
+          _.map(data.timetable.results, function(v) {
+            return _.map(v, function(vv) { return vv.room; });
+          })
+        )).filter(function(y) {
+          return _.findIndex($scope.activeTabs, function(x) { return x.id === y; }) !== -1;
+        });
+        var changedGroupIds = _.map(data.timetable.results, function(v, k) { return k; });
+        var changedTeacherIds = [];
+        _.each(changedGroupIds, function(g) {
+          _.each($scope.config.groupsMap[g].teachers, function(x) {
+            changedTeacherIds.push(x.id);
+          });
+        });
+        changedTeacherIds = _.uniq(changedTeacherIds).filter(function(y) {
+          return _.findIndex($scope.activeTabs, function(x) { return x.id === y; }) !== -1;
+        });
+        changedGroupIds = changedGroupIds.filter(function(y) {
+          return _.findIndex($scope.activeTabs, function(x) { return x.id === y; }) !== -1;
+        });
+
+        var tabs = [];
+        _.each(changedGroupIds, function(x) { tabs.push($scope.config.groupsMap[x]); });
+        _.each(changedTeacherIds, function(x) { tabs.push($scope.config.teachersMap[x]); });
+        _.each(changedRoomIds, function(x) { tabs.push($scope.config.roomsMap[x]); });
+
+        calendar.reload(tabs);
+
+      }
+    };
+
     var newEventAdded = function(date, groupId) {
       ApiService
         .addEvent(this.id, groupId, date.day(), date.hour(), date.minute())
         .success(function(data) {
-          if (data.ok) {
-            $scope.config.extendTimetable(data.timetable);
-            var group = $scope.config.getGroupByid(groupId);
+          modifyTimetable(data, 'extend');
+        });
+    };
 
-            calendar.removeTab(group);
-            calendar.addTab(group);
-
-            _.each(group.teachers, function(teacher) {
-              if (_.findIndex($scope.activeTabs, function(x) { return x.id === teacher.id; }) !== -1) {
-                calendar.removeTab(teacher);
-                calendar.addTab(teacher);
-              }
-            });
-
-            var changedRoomIds = _.uniq(_.flatten(
-              _.map(data.timetable.results, function(v) {
-                return _.map(v, function(vv) { return vv.room; });
-              })
-            ));
-            _.each(changedRoomIds, function(roomId) {
-              var roomI = _.findIndex($scope.activeTabs, function(x) { return x.id === roomId; });
-              if (roomI !== -1) {
-                var room = $scope.activeTabs[roomI];
-                calendar.removeTab(room);
-                calendar.addTab(room);
-              }
-            });
-          }
+    var deletedEventCallback = function(tab, timetableObj) {
+      ApiService
+        .addEvent(this.id, timetableObj)
+        .success(function(data) {
+          modifyTimetable(data, 'delete');
         });
     };
 

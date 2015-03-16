@@ -38,8 +38,16 @@ angular.module('schedulerApp').factory('Room', [function() {
     this.timetable = timetable;
   };
 
-  Room.prototype.extendTimetable = function(timetable) {
-    this.timetable = this.timetable.concat(timetable);
+  Room.prototype.modifyTimetable = function(timetable, mode) {
+    if (mode === 'extend') {
+      this.timetable = this.timetable.concat(timetable);
+    } else if (mode === 'delete') {
+      this.timetable = _.filter(this.timetable, function(x) {
+        return !_.some(timetable, function(y) {
+          return x.room.id === y.room.id && x.group.id === y.group.id && x.term.id === y.term.id;
+        });
+      });
+    }
   };
 
   Room.prototype.getForModal = function(config) {

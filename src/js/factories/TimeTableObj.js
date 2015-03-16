@@ -28,7 +28,9 @@ angular.module('schedulerApp').factory('TimeTableObj', ['Calendar', function(Cal
       backgroundColor: colors[tab.type],
       borderColor: colors[tab.type],
       tabId: tab.id,
-      id: this.getId()
+      id: this.getId(),
+      tab: tab,
+      timetableObj: this
     };
   };
 

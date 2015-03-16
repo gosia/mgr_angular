@@ -35,8 +35,16 @@ angular.module('schedulerApp').factory('Teacher', [function() {
     this.timetable = timetable;
   };
 
-  Teacher.prototype.extendTimetable = function(timetable) {
-    this.timetable = this.timetable.concat(timetable);
+  Teacher.prototype.modifyTimetable = function(timetable, mode) {
+    if (mode === 'extend') {
+      this.timetable = this.timetable.concat(timetable);
+    } else if (mode === 'delete') {
+      this.timetable = _.filter(this.timetable, function(x) {
+        return !_.some(timetable, function(y) {
+          return x.room.id === y.room.id && x.group.id === y.group.id && x.term.id === y.term.id;
+        });
+      });
+    }
   };
 
   Teacher.prototype.getForModal = function(config) {

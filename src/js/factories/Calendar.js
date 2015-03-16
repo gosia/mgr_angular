@@ -3,11 +3,12 @@
 
 angular.module('schedulerApp').factory('Calendar', [function () {
 
-  function Calendar(id, config, addedCallback) {
+  function Calendar(id, config, addedCallback, deletedCallback) {
     this.id = id;
     this.$selector = $(id);
     this.config = config;
     this.addedCallback = addedCallback;
+    this.deletedCallback = deletedCallback;
   }
 
   Calendar.d = 2;
@@ -43,9 +44,20 @@ angular.module('schedulerApp').factory('Calendar', [function () {
       },
       events: [],
       editable: true,
+      eventDurationEditable: false,
       droppable: true,
       drop: function(date) {
         calendar.addedCallback(date, $(this).data('id'));
+      },
+      eventDrop: function(event, delta) {
+        console.log(event, delta);
+      },
+      eventRender: function(event, element) {
+        var html = '<span class="pull-right closeon">x</span>';
+        element.find('.fc-time').append(html);
+        element.find('.closeon').click(function() {
+          calendar.deletedCallback(event.tab, event.timetableObj);
+        });
       }
     });
   };
@@ -66,8 +78,16 @@ angular.module('schedulerApp').factory('Calendar', [function () {
     _.each(tabs, function(tab) { calendar.addTab(tab); });
   };
 
-  Calendar.init = function(id, config, addedCallback) {
-    var calendar = new Calendar(id, config, addedCallback);
+  Calendar.prototype.reload = function(tabs) {
+    var calendar = this;
+    _.each(tabs, function(x) {
+      calendar.removeTab(x);
+      calendar.addTab(x);
+    });
+  };
+
+  Calendar.init = function(id, config, addedCallback, deletedCallback) {
+    var calendar = new Calendar(id, config, addedCallback, deletedCallback);
     moment.locale('pl');
 
     calendar.init();

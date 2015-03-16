@@ -10,7 +10,28 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
     this.rooms = rooms;
     this.year = year;
     this.term = term;
+
+    this.setTermsMap();
+    this.setRoomsMap();
+    this.setGroupsMap();
+    this.setTeachersMap();
   }
+
+  Config.prototype.setTermsMap = function() {
+    this.termsMap = _.object(_.map(this.terms, function (term) { return [term.id, term]; }));
+  };
+
+  Config.prototype.setRoomsMap = function() {
+    this.roomsMap = _.object(_.map(this.rooms, function (room) { return [room.id, room]; }));
+  };
+
+  Config.prototype.setGroupsMap = function() {
+    this.groupsMap = _.object(_.map(this.groups, function(group) { return [group.id, group]; }));
+  };
+
+  Config.prototype.setTeachersMap = function() {
+    this.teachersMap = _.object(_.map(this.teachers, function(teacher) { return [teacher.id, teacher]; }));
+  };
 
   Config.init = function(apiData) {
     var terms = _.map(apiData.terms, function(apiTerm) { return Term.init(apiTerm); });
@@ -29,14 +50,11 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
   };
 
   Config.prototype.setTimetable = function(apiData) {
-    var termsMap = _.object(_.map(this.terms, function(term) { return [term.id, term]; }));
-    var roomsMap = _.object(_.map(this.rooms, function(room) { return [room.id, room]; }));
-    var groupsMap = _.object(_.map(this.groups, function(group) { return [group.id, group]; }));
-
+    var config = this;
     var timetable = _.flatten(
       _.map(apiData.results, function(vv, k) {
         return _.map(vv, function(v){
-          return new TimeTableObj(groupsMap[k], termsMap[v.term], roomsMap[v.room]);
+          return new TimeTableObj(config.groupsMap[k], config.termsMap[v.term], config.roomsMap[v.room]);
         });
       }),
       true
@@ -62,16 +80,13 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
     _.each(this.terms, function(term) { term.setTimetable(timetableByTermId[term.id] || []); });
   };
 
-  Config.prototype.extendTimetable = function(apiData) {
-    var termsMap = _.object(_.map(this.terms, function(term) { return [term.id, term]; }));
-    var roomsMap = _.object(_.map(this.rooms, function(room) { return [room.id, room]; }));
-    var groupsMap = _.object(_.map(this.groups, function(group) { return [group.id, group]; }));
-    var teachersMap = _.object(_.map(this.teachers, function(teacher) { return [teacher.id, teacher]; }));
+  Config.prototype.modifyTimetable = function(apiData, mode) {
+    var calendar = this;
 
     var timetable = _.flatten(
       _.map(apiData.results, function(vv, k) {
         return _.map(vv, function(v){
-          return new TimeTableObj(groupsMap[k], termsMap[v.term], roomsMap[v.room]);
+          return new TimeTableObj(calendar.groupsMap[k], calendar.termsMap[v.term], calendar.roomsMap[v.room]);
         });
       }),
       true
@@ -91,27 +106,31 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
       });
     });
 
-    _.each(timetableByRoomId, function(v, k) { roomsMap[k].extendTimetable(v); });
-    _.each(timetableByGroupId, function(v, k) { groupsMap[k].extendTimetable(v); });
-    _.each(timetableByTermId, function(v, k) { termsMap[k].extendTimetable(v); });
-    _.each(timetableByTeacherId, function(v, k) { teachersMap[k].extendTimetable(v); });
+    _.each(timetableByRoomId, function(v, k) { calendar.roomsMap[k].modifyTimetable(v, mode); });
+    _.each(timetableByGroupId, function(v, k) { calendar.groupsMap[k].modifyTimetable(v, mode); });
+    _.each(timetableByTermId, function(v, k) { calendar.termsMap[k].modifyTimetable(v, mode); });
+    _.each(timetableByTeacherId, function(v, k) { calendar.teachersMap[k].modifyTimetable(v, mode); });
 
   };
 
   Config.prototype.addTeacher = function(teacher) {
     this.teachers.push(teacher);
+    this.setTeachersMap();
   };
 
   Config.prototype.addGroup = function(group) {
     this.groups.push(group);
+    this.setGroupsMap();
   };
 
   Config.prototype.addRoom = function(room) {
     this.rooms.push(room);
+    this.setRoomsMap();
   };
 
   Config.prototype.addTerm = function(term, apiData) {
     this.terms.push(term);
+    this.setTermsMap();
 
     if (apiData.addForAll) {
       _.each(this.teachers, function(x) {
@@ -160,14 +179,17 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
     _.each(this.groups, function(g) {
       g.teachers = _.filter(g.teachers, function(x) { return x.id !== teacher.id; });
     });
+    this.setTeachersMap();
   };
 
   Config.prototype.removeGroup = function(group) {
     this.groups = _.filter(this.groups, function(x) { return x.id !== group.id; });
+    this.setGroupsMap();
   };
 
   Config.prototype.removeRoom = function(room) {
     this.rooms = _.filter(this.rooms, function(x) { return x.id !== room.id; });
+    this.setRoomsMap();
   };
 
   Config.prototype.removeTerm = function(term) {
@@ -178,6 +200,7 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
     _.each(this.teachers, function(t) {
       t.terms = _.filter(t.terms, function(x) { return x.id !== term.id; });
     });
+    this.setTermsMap();
   };
 
   Config.prototype.removeElement = function(elem) {
@@ -188,14 +211,6 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
       term: 'removeTerm'
     };
     return this[mapper[elem.type]](elem);
-  };
-
-  Config.prototype.getGroupByid = function(groupId) {
-    var i = _.findIndex(this.groups, function(x) { return x.id === groupId; });
-    if (i === -1) {
-      return undefined;
-    }
-    return this.groups[i];
   };
 
   Config.prototype.findTerms = function(date, howMany) {
