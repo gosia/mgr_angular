@@ -3,10 +3,11 @@
 
 angular.module('schedulerApp').factory('Calendar', [function () {
 
-  function Calendar(id, config) {
+  function Calendar(id, config, addedCallback) {
     this.id = id;
     this.$selector = $(id);
     this.config = config;
+    this.addedCallback = addedCallback;
   }
 
   Calendar.d = 2;
@@ -15,7 +16,8 @@ angular.module('schedulerApp').factory('Calendar', [function () {
 
   Calendar.prototype.init = function() {
     var d = 2, m = 1, y = 2015;
-    this.$selector.fullCalendar({
+    var calendar = this;
+    calendar.$selector.fullCalendar({
       defaultView: 'schedulerAgenda',
       defaultDate: new Date(y, m, d),
       header: {
@@ -41,7 +43,10 @@ angular.module('schedulerApp').factory('Calendar', [function () {
       },
       events: [],
       editable: true,
-      droppable: true
+      droppable: true,
+      drop: function(date) {
+        calendar.addedCallback(date, $(this).data('id'));
+      }
     });
   };
 
@@ -61,8 +66,8 @@ angular.module('schedulerApp').factory('Calendar', [function () {
     _.each(tabs, function(tab) { calendar.addTab(tab); });
   };
 
-  Calendar.init = function(id, config) {
-    var calendar = new Calendar(id, config);
+  Calendar.init = function(id, config, addedCallback) {
+    var calendar = new Calendar(id, config, addedCallback);
     moment.locale('pl');
 
     calendar.init();

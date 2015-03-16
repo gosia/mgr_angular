@@ -13,7 +13,8 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
     addConfigGroup: '/api/default.json',
     addConfigRoom: '/api/default.json',
     addConfigTerm: '/api/default.json',
-    removeConfigElement: '/api/default.json'
+    removeConfigElement: '/api/default.json',
+    addEvent: '/api/add_event.json'
   };
   var service = {urls: urls};
 
@@ -115,6 +116,19 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
         config_id: configId,
         element_type: element.type,
         element_id: element.id
+      }
+    );
+  };
+
+  service.addEvent = function(configId, groupId, day, hour, minute) {
+    return $http.get(
+      service.urls.addEvent,
+      {
+        config_id: configId,
+        group_id: groupId,
+        day: day,
+        hour: hour,
+        minute: minute
       }
     );
   };

@@ -62,6 +62,42 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
     _.each(this.terms, function(term) { term.setTimetable(timetableByTermId[term.id] || []); });
   };
 
+  Config.prototype.extendTimetable = function(apiData) {
+    var termsMap = _.object(_.map(this.terms, function(term) { return [term.id, term]; }));
+    var roomsMap = _.object(_.map(this.rooms, function(room) { return [room.id, room]; }));
+    var groupsMap = _.object(_.map(this.groups, function(group) { return [group.id, group]; }));
+    var teachersMap = _.object(_.map(this.teachers, function(teacher) { return [teacher.id, teacher]; }));
+
+    var timetable = _.flatten(
+      _.map(apiData.results, function(vv, k) {
+        return _.map(vv, function(v){
+          return new TimeTableObj(groupsMap[k], termsMap[v.term], roomsMap[v.room]);
+        });
+      }),
+      true
+    );
+
+    var timetableByRoomId = _.groupBy(timetable, function(x) { return x.room.id; });
+    var timetableByGroupId = _.groupBy(timetable, function(x) { return x.group.id; });
+    var timetableByTermId = _.groupBy(timetable, function(x) { return x.term.id; });
+    var timetableByTeacherId = {};
+    _.each(timetable, function(x) {
+      _.each(x.group.teachers, function(t) {
+        if (timetableByTeacherId[t.id] === undefined) {
+          timetableByTeacherId[t.id] = [x];
+        } else {
+          timetableByTeacherId[t.id].push(x);
+        }
+      });
+    });
+
+    _.each(timetableByRoomId, function(v, k) { roomsMap[k].extendTimetable(v); });
+    _.each(timetableByGroupId, function(v, k) { groupsMap[k].extendTimetable(v); });
+    _.each(timetableByTermId, function(v, k) { termsMap[k].extendTimetable(v); });
+    _.each(timetableByTeacherId, function(v, k) { teachersMap[k].extendTimetable(v); });
+
+  };
+
   Config.prototype.addTeacher = function(teacher) {
     this.teachers.push(teacher);
   };
@@ -152,6 +188,30 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
       term: 'removeTerm'
     };
     return this[mapper[elem.type]](elem);
+  };
+
+  Config.prototype.getGroupByid = function(groupId) {
+    var i = _.findIndex(this.groups, function(x) { return x.id === groupId; });
+    if (i === -1) {
+      return undefined;
+    }
+    return this.groups[i];
+  };
+
+  Config.prototype.findTerms = function(date, howMany) {
+    var day=date.day(), hour=date.hour(), minute=date.minute();
+
+    var i = _.findIndex(this.terms, function(x) { return x.pointInTerm(day, hour, minute); });
+    if (i === -1) {
+      return undefined;
+    }
+
+    var terms = this.terms.slice(i, i + howMany);
+
+    if (_.exists(terms, function(x) { return x !== day; })) {
+      return undefined;
+    }
+    return terms;
   };
 
   return Config;

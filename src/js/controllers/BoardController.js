@@ -1,8 +1,8 @@
 'use strict';
-/*global angular, $, _ */
+/* global angular, $, _ */
 
-angular.module('schedulerApp').controller('BoardController', ['ApiService', '$routeParams', '$scope', 'Config', 'Calendar', 'Teacher', 'Group', 'Room', 'Term',
-  function (ApiService, $routeParams, $scope, Config, Calendar, Teacher, Group, Room, Term) {
+angular.module('schedulerApp').controller('BoardController', ['ApiService', '$routeParams', '$scope', 'Config', 'Calendar', 'Teacher', 'Group', 'Room', 'Term', '$timeout',
+  function (ApiService, $routeParams, $scope, Config, Calendar, Teacher, Group, Room, Term, $timeout) {
     var viewsList = [{value: 'tabs', label: 'Zakładki'}, {value: 'calendar', label: 'Kalendarz'}];
     $scope.viewsList = [viewsList[0]];
 
@@ -39,8 +39,61 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
 
     // Calendar handling
     var initCalendar = function() {
-      calendar = Calendar.init('#calendar', $scope.config);
+      calendar = Calendar.init('#calendar', $scope.config, newEventAdded);
       calendar.addTabs($scope.activeTabs);
+    };
+
+    function initEvents() {
+      $('div.external-event').each(function() {
+        $(this).draggable({
+          zIndex: 1070,
+          revert: true,
+          revertDuration: 0
+        });
+      });
+    }
+
+    $scope.$watch('activeView', function(newValue) {
+      if (newValue.value === 'calendar') {
+        $timeout(function() {
+          initEvents();
+        }, 1000);
+      }
+    });
+
+    var newEventAdded = function(date, groupId) {
+      ApiService
+        .addEvent(this.id, groupId, date.day(), date.hour(), date.minute())
+        .success(function(data) {
+          if (data.ok) {
+            $scope.config.extendTimetable(data.timetable);
+            var group = $scope.config.getGroupByid(groupId);
+
+            calendar.removeTab(group);
+            calendar.addTab(group);
+
+            _.each(group.teachers, function(teacher) {
+              if (_.findIndex($scope.activeTabs, function(x) { return x.id === teacher.id; }) !== -1) {
+                calendar.removeTab(teacher);
+                calendar.addTab(teacher);
+              }
+            });
+
+            var changedRoomIds = _.uniq(_.flatten(
+              _.map(data.timetable.results, function(v) {
+                return _.map(v, function(vv) { return vv.room; });
+              })
+            ));
+            _.each(changedRoomIds, function(roomId) {
+              var roomI = _.findIndex($scope.activeTabs, function(x) { return x.id === roomId; });
+              if (roomI !== -1) {
+                var room = $scope.activeTabs[roomI];
+                calendar.removeTab(room);
+                calendar.addTab(room);
+              }
+            });
+          }
+        });
     };
 
     // Tab handling
@@ -75,6 +128,7 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
 
         if (calendar !== undefined) {
           calendar.addTab(obj);
+          initEvents();
         }
       }
 

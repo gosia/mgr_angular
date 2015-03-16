@@ -55,6 +55,10 @@ angular.module('schedulerApp').factory('Term', [function() {
     this.timetable = timetable;
   };
 
+  Term.prototype.extendTimetable = function(timetable) {
+    this.timetable = this.timetable.concat(timetable);
+  };
+
   Term.prototype.getForModal = function() {
     return {
       id: this.id,
@@ -72,6 +76,16 @@ angular.module('schedulerApp').factory('Term', [function() {
     this.start = term.start;
     this.end = term.end;
     this.day = term.day;
+  };
+
+  Term.prototype.events = function() {
+    return [];
+  };
+
+  Term.prototype.pointInTerm = function(day, hour, minute) {
+    return day === this.day &&
+      (this.start.hour < hour || (this.start.hour === hour && this.start.minute <= minute)) &&
+      (hour < this.end.hour || (hour === this.end.hour && minute <= this.end.minute));
   };
 
   Term.dayNames = dayNames;

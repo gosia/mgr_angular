@@ -29,12 +29,20 @@ angular.module('schedulerApp').factory('Group', [function() {
     return 'Grupa ' + this.id + ' (' + this.extra.course + ', ' + this.extra.groupType +  ')';
   };
 
+  Group.prototype.getEventName = function() {
+    return this.id + ' - ' + _.map(this.teachers, function(x) { return x.id; }).join(', ');
+  };
+
   Group.prototype.isATeacher = function(teacherId) {
     return _.some(this.teachers, function(x) { return x.id === teacherId; });
   };
 
   Group.prototype.setTimetable = function(timetable) {
     this.timetable = timetable;
+  };
+
+  Group.prototype.extendTimetable = function(timetable) {
+    this.timetable = this.timetable.concat(timetable);
   };
 
   Group.prototype.getForModal = function(config) {
@@ -58,6 +66,10 @@ angular.module('schedulerApp').factory('Group', [function() {
     this.termsNum = group.termsNum;
     this.studentsNum = group.studentsNum;
     this.extra = group.extra;
+  };
+
+  Group.prototype.events = function() {
+    return [];
   };
 
   Group.init = function(apiData, termsMap, teachersMap) {

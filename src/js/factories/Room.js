@@ -38,6 +38,10 @@ angular.module('schedulerApp').factory('Room', [function() {
     this.timetable = timetable;
   };
 
+  Room.prototype.extendTimetable = function(timetable) {
+    this.timetable = this.timetable.concat(timetable);
+  };
+
   Room.prototype.getForModal = function(config) {
     return {
       id: this.id,
@@ -52,6 +56,10 @@ angular.module('schedulerApp').factory('Room', [function() {
     this.terms = room.terms;
     this.capacity = room.capacity;
     this.labels = room.labels;
+  };
+
+  Room.prototype.events = function() {
+    return [];
   };
 
   return Room;

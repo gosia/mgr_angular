@@ -35,6 +35,10 @@ angular.module('schedulerApp').factory('Teacher', [function() {
     this.timetable = timetable;
   };
 
+  Teacher.prototype.extendTimetable = function(timetable) {
+    this.timetable = this.timetable.concat(timetable);
+  };
+
   Teacher.prototype.getForModal = function(config) {
     return {
       id: this.id,
@@ -45,6 +49,26 @@ angular.module('schedulerApp').factory('Teacher', [function() {
 
   Teacher.prototype.edit = function(teacher) {
     this.terms = teacher.terms;
+  };
+
+  Teacher.prototype.events = function() {
+    var events = [];
+
+    var groups = _.uniq(
+      _.map(this.timetable, function(x) { return x.group; }),
+      function(x) { return x.id; }
+    );
+
+    _.each(groups, function(x) {
+      var newEventsCount = x.termsNum - x.timetable.length;
+
+      _(newEventsCount).times(function() {
+        events.push(x);
+      });
+    });
+
+    return events;
+
   };
 
   return Teacher;

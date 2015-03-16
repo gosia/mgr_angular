@@ -16,7 +16,7 @@ angular.module('schedulerApp').factory('TimeTableObj', ['Calendar', function(Cal
   };
 
   TimeTableObj.prototype.getId = function() {
-    return this.group.id + ':' + this.term.id;
+    return this.group.id + ':' + this.term.id + ':' + this.room.id;
   };
 
   TimeTableObj.prototype.getEventForTab = function(tab) {
@@ -27,7 +27,8 @@ angular.module('schedulerApp').factory('TimeTableObj', ['Calendar', function(Cal
       allDay: false,
       backgroundColor: colors[tab.type],
       borderColor: colors[tab.type],
-      tabId: tab.id
+      tabId: tab.id,
+      id: this.getId()
     };
   };
 
