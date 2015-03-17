@@ -7,14 +7,15 @@ module.exports = function (grunt) {
 
   require('time-grunt')(grunt);
   require('load-grunt-tasks')(grunt);
+  grunt.loadNpmTasks('grunt-bowercopy');
 
   var modRewrite = require('connect-modrewrite');
 
   var config = {
     jsDir: 'src/js',
     sassDir: 'src/sass',
-    templateDir: '../templates',
-    staticDir: '../static',
+    templateDir: '../django_scheduler/templates',
+    staticDir: '../django_scheduler/static/django_scheduler',
     testDir: 'src/test',
     imgDir: 'src/img'
   };
@@ -79,13 +80,13 @@ module.exports = function (grunt) {
           middleware: function(connect) {
             return [
               connect().use('/static/bower_components', connect.static('./bower_components')),
-              connect().use('/static/templates', connect.static('../templates')),
-              connect().use('/static', connect.static('../static')),
+              connect().use('/static/templates', connect.static(config.templateDir)),
+              connect().use('/static', connect.static(config.staticDir)),
               connect().use('/api', connect.static('src/endpointmocks')),
               connect().use('/dist/img', connect.static('./bower_components/admin-lte/dist/img')),
-              connect.static('../templates'),
+              connect.static(config.templateDir),
               modRewrite(['^.*$ /index.html [L]']),
-              connect.static('../templates')
+              connect.static(config.templateDir)
             ];
           }
         }
@@ -162,6 +163,39 @@ module.exports = function (grunt) {
       }
     },
 
+    bowercopy: {
+      js: {
+        options: {
+          destPrefix: '<%= config.staticDir %>/js/libs'
+        },
+        files: {
+          'jquery.js': 'jquery/dist/jquery.js',
+          'bootstrap.min.js': 'admin-lte/bootstrap/js/bootstrap.min.js',
+          'angular/angular.js': 'angular/angular.js',
+          'angular/angular-route.min.js': 'angular-route/angular-route.min.js',
+          'angular/angular-route.min.js.map': 'angular-route/angular-route.min.js.map',
+          'underscore-min.js': 'underscore/underscore-min.js',
+          'underscore-min.map': 'underscore/underscore-min.map',
+          'admin-lte/app.min.js': 'admin-lte/dist/js/app.min.js',
+          'moment-with-locales.min.js': 'moment/min/moment-with-locales.min.js',
+          'fullcalendar.min.js': 'admin-lte/plugins/fullcalendar/fullcalendar.min.js',
+          'jquery-ui-1.10.3.min.js': 'admin-lte/plugins/jQueryUI/jquery-ui-1.10.3.min.js'
+        }
+      },
+      css: {
+        options: {
+          destPrefix: '<%= config.staticDir %>/css/libs'
+        },
+        files: {
+          'bootstrap.min.css': 'admin-lte/bootstrap/css/bootstrap.min.css',
+          'admin-lte/AdminLTE.css': 'admin-lte/dist/css/AdminLTE.css',
+          'admin-lte/skin-blue.css': 'admin-lte/dist/css/skins/skin-blue.css',
+          'fullcalendar/fullcalendar.min.css': 'admin-lte/plugins/fullcalendar/fullcalendar.min.css',
+          'fullcalendar/fullcalendar.print.css': 'admin-lte/plugins/fullcalendar/fullcalendar.print.css'
+        }
+      }
+    },
+
     copy: {
       staticDir: {
         files: [
@@ -195,7 +229,8 @@ module.exports = function (grunt) {
     'bower:install',
     'sass:staticDir',
     'uglify',
-    'copy:staticDir'
+    'copy:staticDir',
+    'bowercopy'
   ]);
 
   grunt.registerTask('dev', [

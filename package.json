@@ -20,6 +20,7 @@
     "node": ">=0.10.0"
   },
   "dependencies": {
-    "connect-modrewrite": "^0.7.11"
+    "connect-modrewrite": "^0.7.11",
+    "grunt-bowercopy": "^1.2.0"
   }
 }
