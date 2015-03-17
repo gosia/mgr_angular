@@ -8,11 +8,18 @@ angular.module('schedulerApp').factory('TimeTableObj', ['Calendar', function(Cal
     this.term = term;
   }
 
-  var colors = {
+  var backgrouundColors = {
     teacher: '#00a65a',
     group: '#f39c12',
     room: '#d2d6de',
     term: '#3c8dbc'
+  };
+
+  var colors = {
+    teacher: 'white',
+    group: 'white',
+    room: 'black',
+    term: 'white'
   };
 
   TimeTableObj.prototype.getId = function() {
@@ -25,8 +32,9 @@ angular.module('schedulerApp').factory('TimeTableObj', ['Calendar', function(Cal
       start: new Date(Calendar.y, Calendar.m, Calendar.d + this.term.day, this.term.start.hour, this.term.start.minute),
       end: new Date(Calendar.y, Calendar.m, Calendar.d, this.term.end.hour, this.term.end.minute),
       allDay: false,
-      backgroundColor: colors[tab.type],
-      borderColor: colors[tab.type],
+      backgroundColor: backgrouundColors[tab.type],
+      borderColor: backgrouundColors[tab.type],
+      textColor: colors[tab.type],
       tabId: tab.id,
       id: this.getId(),
       tab: tab,

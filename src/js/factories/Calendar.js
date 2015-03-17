@@ -39,18 +39,16 @@ angular.module('schedulerApp').factory('Calendar', [function () {
           maxTime: '22:00:00',
           firstDay: 1,
           axisFormat: 'hh:mm',
-          columnFormat: 'dddd'
+          columnFormat: 'dddd',
+          slotEventOverlap: false
         }
       },
       events: [],
-      editable: true,
+      editable: false,
       eventDurationEditable: false,
       droppable: true,
       drop: function(date) {
         calendar.addedCallback(date, $(this).data('id'));
-      },
-      eventDrop: function(event, delta) {
-        console.log(event, delta);
       },
       eventRender: function(event, element) {
         var html = '<span class="pull-right closeon">x</span>';
