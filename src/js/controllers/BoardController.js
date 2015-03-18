@@ -100,7 +100,7 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
 
     var newEventAdded = function(date, groupId) {
       ApiService
-        .addEvent(this.id, groupId, date.day(), date.hour(), date.minute())
+        .addEvent(taskId, groupId, date.day(), date.hour(), date.minute())
         .success(function(data) {
           modifyTimetable(data, 'extend');
         });
@@ -108,7 +108,7 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
 
     var deletedEventCallback = function(tab, timetableObj) {
       ApiService
-        .addEvent(this.id, timetableObj)
+        .removeEvent(taskId, timetableObj)
         .success(function(data) {
           modifyTimetable(data, 'delete');
         });

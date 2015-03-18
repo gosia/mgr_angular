@@ -1,5 +1,5 @@
 'use strict';
-/*global angular */
+/* global angular, document */
 
 angular.module('schedulerApp').controller('MenuController', ['$http', '$rootScope', '$scope', '$location',
   function ($http, $rootScope, $scope, $location) {
@@ -18,5 +18,7 @@ angular.module('schedulerApp').controller('MenuController', ['$http', '$rootScop
     });
 
     init();
+
+    $scope.base = document.getElementsByTagName('base')[0].getAttribute('href');
   }
 ]);

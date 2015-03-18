@@ -1,53 +1,54 @@
 'use strict';
-/*global angular, _ */
+/* global angular, _, document */
 
 angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
+  var base = document.getElementsByTagName('base')[0].getAttribute('href');
   var urls = {
-    getConfigs: '/api/configs.json',
-    getConfig: '/api/config.json',
-    createConfig: '/api/create_config.json',
-    getTasks: '/api/tasks.json',
-    getTask: '/api/task.json',
-    createTask: '/api/create_task.json',
-    addConfigTeacher: '/api/default.json',
-    addConfigGroup: '/api/default.json',
-    addConfigRoom: '/api/default.json',
-    addConfigTerm: '/api/default.json',
-    removeConfigElement: '/api/default.json',
-    addEvent: '/api/add_event.json',
-    deleteEvent: '/api/delete_event.json'
+    getConfigs: function() { return base + 'api/configs'; },
+    getConfig: function(id) { return base + 'api/config/' + id; },
+    createConfig: function() { return base + 'api/config'; },
+    addConfigElement: function(id) { return base + 'api/config/' + id + '/add'; },
+    removeConfigElement: function(id) { return base + 'api/config/' + id + '/remove'; },
+
+    getTasks: function() { return base + 'api/tasks'; },
+    getTask: function(id) { return base + 'api/task/' + id; },
+    createTask: function() { return base + 'api/task'; },
+    addTaskElement: function(id) { return base + 'api/task/' + id + '/add'; },
+    removeTaskElement: function(id) { return base + 'api/task/' + id + '/remove'; }
   };
   var service = {urls: urls};
 
   service.getConfigs = function() {
-    return $http.get(service.urls.getConfigs);
+    return $http.get(service.urls.getConfigs());
   };
 
   service.getConfig = function(configId) {
-    return $http.get(service.urls.getConfig, {config_id: configId});
+    return $http.get(service.urls.getConfig(configId));
   };
 
   service.createConfig = function(id, year, term) {
-    return $http.get(service.urls.createConfig, {id: id, year: year, term: term});
+    return $http.post(service.urls.createConfig(), {id: id, year: year, term: term});
   };
 
   service.getTasks = function() {
-    return $http.get(service.urls.getTasks);
+    return $http.get(service.urls.getTasks());
   };
 
   service.getTask = function(taskId) {
-    return $http.get(service.urls.getTask, {task_id: taskId});
+    return $http.get(service.urls.getTask(taskId));
   };
 
   service.createTask = function(configId, algorithm) {
-    return $http.get(service.urls.createTask, {config_id: configId, algorithm: algorithm});
+    return $http.get(service.urls.createTask(), {config_id: configId, algorithm: algorithm});
   };
 
   service.addConfigTeacher = function(configId, teacher, mode) {
-    return $http.get(
-      service.urls.addConfigTeacher,
+    return $http.post(
+      service.urls.addConfigElement(configId),
       {
         config_id: configId,
+        mode: mode,
+        type: 'teacher',
         teacher: {
           id: teacher.id,
           mode: mode,
@@ -58,11 +59,12 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
   };
 
   service.addConfigGroup = function(configId, group, mode) {
-    return $http.get(
-      service.urls.addConfigGroup,
+    return $http.post(
+      service.urls.addConfigElement(configId),
       {
         config_id: configId,
         mode: mode,
+        type: 'group',
         group: {
           id: group.id,
           terms: _.map(group.terms, function (x) { return x.id; }),
@@ -78,11 +80,12 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
   };
 
   service.addConfigRoom = function(configId, room, mode) {
-    return $http.get(
-      service.urls.addConfigRoom,
+    return $http.post(
+      service.urls.addConfigElement(configId),
       {
         config_id: configId,
         mode: mode,
+        type: 'room',
         room: {
           id: room.id,
           terms: _.map(room.terms, function (x) { return x.id; }),
@@ -94,11 +97,12 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
   };
 
   service.addConfigTerm = function(configId, term, mode, apiData) {
-    return $http.get(
-      service.urls.addConfigTerm,
+    return $http.post(
+      service.urls.addConfigElement(configId),
       {
         config_id: configId,
         mode: mode,
+        type: 'term',
         term: {
           id: term.id,
           day: term.day,
@@ -111,8 +115,8 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
   };
 
   service.removeConfigElement = function(configId, element) {
-    return $http.get(
-      service.urls.removeConfigElement,
+    return $http.post(
+      service.urls.removeConfigElement(configId),
       {
         config_id: configId,
         element_type: element.type,
@@ -121,11 +125,10 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
     );
   };
 
-  service.addEvent = function(configId, groupId, day, hour, minute) {
-    return $http.get(
-      service.urls.addEvent,
+  service.addEvent = function(taskId, groupId, day, hour, minute) {
+    return $http.post(
+      service.urls.addTaskElement(taskId),
       {
-        config_id: configId,
         group_id: groupId,
         day: day,
         hour: hour,
@@ -134,12 +137,12 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
     );
   };
 
-  service.deleteEvent = function(configId, groupId) {
-    return $http.get(
-      service.urls.addEvent,
-      {
-        config_id: configId,
-        group_id: groupId
+  service.removeEvent = function(taskId, timetableObj) {
+    return $http.post(
+      service.urls.removeTaskElement(taskId), {
+        group_id: timetableObj.group.id,
+        term_id: timetableObj.term.id,
+        room_id: timetableObj.room.id
       }
     );
   };

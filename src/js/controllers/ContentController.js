@@ -1,5 +1,5 @@
 'use strict';
-/*global angular */
+/* global angular, document */
 
 angular.module('schedulerApp').controller('ContentController', ['$http', '$scope', '$timeout',
   function ($http, $scope, $timeout) {
@@ -32,6 +32,8 @@ angular.module('schedulerApp').controller('ContentController', ['$http', '$scope
     $scope.$on('changeContent', function (event, name, extra) {
       resetData(name, extra);
     });
+
+    $scope.base = document.getElementsByTagName('base')[0].getAttribute('href');
 
   }
 ]);
