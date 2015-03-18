@@ -39,7 +39,7 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
   };
 
   service.createTask = function(configId, algorithm) {
-    return $http.get(service.urls.createTask(), {config_id: configId, algorithm: algorithm});
+    return $http.post(service.urls.createTask(), {config_id: configId, algorithm: algorithm});
   };
 
   service.addConfigTeacher = function(configId, teacher, mode) {
