@@ -73,7 +73,9 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
           teachers: _.map(group.teachers, x => x.id),
           same_term_group_ids: _.map(group.sameTermGroupIds, x => x.id),
           diff_term_group_ids: _.map(group.diffTermGroupIds, x => x.id),
-          labels: _.map(group.labels, x => x.id)
+          labels: group.labels,
+          course: group.extra.course,
+          group_type: group.extra.groupType
         }
       }
     );
@@ -90,7 +92,7 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
           id: room.id,
           terms: _.map(room.terms, x => x.id),
           capacity: room.capacity,
-          labels: _.map(room.labels, x => x.id)
+          labels: room.labels
         }
       }
     );
