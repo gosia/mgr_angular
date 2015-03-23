@@ -4,17 +4,17 @@
 angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
   var base = document.getElementsByTagName('base')[0].getAttribute('href');
   var urls = {
-    getConfigs: () => base + 'api/configs',
-    getConfig: id => base + 'api/config/' + id,
-    createConfig: () => base + 'api/config',
-    addConfigElement: id => base + 'api/config/' + id + '/add',
-    removeConfigElement: (id) => base + 'api/config/' + id + '/remove',
+    getConfigs: () => base + 'api/configs/',
+    getConfig: id => base + 'api/config/' + id + '/',
+    createConfig: () => base + 'api/config/',
+    addConfigElement: id => base + 'api/config/' + id + '/add/',
+    removeConfigElement: (id) => base + 'api/config/' + id + '/remove/',
 
-    getTasks: () => base + 'api/tasks',
-    getTask: id => base + 'api/task/' + id,
-    createTask: () => base + 'api/task',
-    addTaskElement: id => base + 'api/task/' + id + '/add',
-    removeTaskElement: id => base + 'api/task/' + id + '/remove'
+    getTasks: () => base + 'api/tasks/',
+    getTask: id => base + 'api/task/' + id + '/',
+    createTask: () => base + 'api/task/',
+    addTaskElement: id => base + 'api/task/' + id + '/add/',
+    removeTaskElement: id => base + 'api/task/' + id + '/remove/'
   };
   var service = {urls: urls};
 
@@ -26,8 +26,8 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
     return $http.get(service.urls.getConfig(configId));
   };
 
-  service.createConfig = function(id, year, term) {
-    return $http.post(service.urls.createConfig(), {id: id, year: year, term: term});
+  service.createConfig = function(configId, year, term) {
+    return $http.post(service.urls.createConfig(), {config_id: configId, year: year, term: term});
   };
 
   service.getTasks = function() {
