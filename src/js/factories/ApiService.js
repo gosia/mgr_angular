@@ -4,17 +4,17 @@
 angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
   var base = document.getElementsByTagName('base')[0].getAttribute('href');
   var urls = {
-    getConfigs: function() { return base + 'api/configs'; },
-    getConfig: function(id) { return base + 'api/config/' + id; },
-    createConfig: function() { return base + 'api/config'; },
-    addConfigElement: function(id) { return base + 'api/config/' + id + '/add'; },
-    removeConfigElement: function(id) { return base + 'api/config/' + id + '/remove'; },
+    getConfigs: () => base + 'api/configs',
+    getConfig: id => base + 'api/config/' + id,
+    createConfig: () => base + 'api/config',
+    addConfigElement: id => base + 'api/config/' + id + '/add',
+    removeConfigElement: (id) => base + 'api/config/' + id + '/remove',
 
-    getTasks: function() { return base + 'api/tasks'; },
-    getTask: function(id) { return base + 'api/task/' + id; },
-    createTask: function() { return base + 'api/task'; },
-    addTaskElement: function(id) { return base + 'api/task/' + id + '/add'; },
-    removeTaskElement: function(id) { return base + 'api/task/' + id + '/remove'; }
+    getTasks: () => base + 'api/tasks',
+    getTask: id => base + 'api/task/' + id,
+    createTask: () => base + 'api/task',
+    addTaskElement: id => base + 'api/task/' + id + '/add',
+    removeTaskElement: id => base + 'api/task/' + id + '/remove'
   };
   var service = {urls: urls};
 
@@ -52,7 +52,7 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
         teacher: {
           id: teacher.id,
           mode: mode,
-          terms: _.map(teacher.terms, function(x) { return x.id; })
+          terms: _.map(teacher.terms, x => x.id)
         }
       }
     );
@@ -67,13 +67,13 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
         type: 'group',
         group: {
           id: group.id,
-          terms: _.map(group.terms, function (x) { return x.id; }),
+          terms: _.map(group.terms, x => x.id),
           terms_num: group.termsNum,
           students_num: group.studentsNum,
-          teachers: _.map(group.teachers, function (x) { return x.id; }),
-          same_term_group_ids: _.map(group.sameTermGroupIds, function (x) { return x.id; }),
-          diff_term_group_ids: _.map(group.diffTermGroupIds, function (x) { return x.id; }),
-          labels: _.map(group.labels, function (x) { return x.id; })
+          teachers: _.map(group.teachers, x => x.id),
+          same_term_group_ids: _.map(group.sameTermGroupIds, x => x.id),
+          diff_term_group_ids: _.map(group.diffTermGroupIds, x => x.id),
+          labels: _.map(group.labels, x => x.id)
         }
       }
     );
@@ -88,9 +88,9 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
         type: 'room',
         room: {
           id: room.id,
-          terms: _.map(room.terms, function (x) { return x.id; }),
+          terms: _.map(room.terms, x => x.id),
           capacity: room.capacity,
-          labels: _.map(room.labels, function (x) { return x.id; })
+          labels: _.map(room.labels, x => x.id)
         }
       }
     );

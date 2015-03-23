@@ -7,7 +7,9 @@ module.exports = function (grunt) {
 
   require('time-grunt')(grunt);
   require('load-grunt-tasks')(grunt);
+  require("load-grunt-tasks")(grunt);
   grunt.loadNpmTasks('grunt-bowercopy');
+  grunt.loadNpmTasks('grunt-contrib-concat');
 
   var modRewrite = require('connect-modrewrite');
 
@@ -16,6 +18,7 @@ module.exports = function (grunt) {
     sassDir: 'src/sass',
     templateDir: '../django_scheduler/templates',
     staticDir: '../django_scheduler/static/django_scheduler',
+    buildDir: '.build',
     testDir: 'src/test',
     imgDir: 'src/img'
   };
@@ -30,7 +33,7 @@ module.exports = function (grunt) {
       },
       js: {
         files: ['<%= config.jsDir %>/**/*.js'],
-        tasks: ['jshint', 'uglify', 'copy'],
+        tasks: ['jshint', 'concat', 'babel', 'uglify', 'copy'],
         options: {
           livereload: true
         }
@@ -54,7 +57,9 @@ module.exports = function (grunt) {
       css: {
         files: ['<%= config.sassDir %>/**/*.scss'],
         tasks: ['sass'],
-        options: { spawn: false }
+        options: {
+          livereload: true
+        }
       },
       images: {
         files: ['<%= config.imgDir %>/**/*.{gif,jpeg,jpg,png}'],
@@ -149,11 +154,26 @@ module.exports = function (grunt) {
         '<%= config.testDir %>/**/*.js'
       ]
     },
-
+    concat: {
+      dist: {
+        src: ['<%= config.jsDir %>/**/*.js'],
+        dest: '<%= config.buildDir %>/js/scheduler.concat.js'
+      }
+    },
+    babel: {
+      options: {
+        sourceMap: true
+      },
+      dist: {
+        files: {
+          '<%= config.buildDir %>/js/scheduler.babel.js': '<%= config.buildDir %>/js/scheduler.concat.js'
+        }
+      }
+    },
     uglify: {
       staticDir: {
         files: {
-          '<%= config.staticDir %>/js/scheduler.min.js': ['<%= config.jsDir %>/**/*.js']
+          '<%= config.staticDir %>/js/scheduler.min.js': ['<%= config.buildDir %>/js/scheduler.babel.js']
         },
         options: {
           sourceMap: true,
@@ -228,6 +248,8 @@ module.exports = function (grunt) {
     'clean:staticDir',
     'bower:install',
     'sass:staticDir',
+    'concat',
+    'babel',
     'uglify',
     'copy:staticDir',
     'bowercopy'
