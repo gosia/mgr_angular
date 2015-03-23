@@ -21,8 +21,7 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
       ApiService.getConfig(configId).success(function(data) {
         $scope.config = Config.init(data);
         $.AdminLTE.boxWidget.activate();
-        $scope.activeTabs = [$scope.config.teachers[0], $scope.config.groups[0], $scope.config.rooms[0]];
-        changeTab(0);
+        $scope.activeTabs = [];
 
         if (taskId !== undefined) {
           ApiService.getTask(taskId).success(function(data) {
