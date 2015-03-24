@@ -95,6 +95,7 @@ module.exports = function (grunt) {
                 '^/api/tasks/$ /api/tasks.json [L]',
                 '^/api/task/$ /api/create_task.json [L]',
                 '^/api/task/[\\w\\d\\-:]+/$ /api/task.json [L]',
+                '^/api/task/[\\w\\d\\-:]+/start/$ /api/default.json [L]',
                 '^/api/task/[\\w\\d\\-:]+/add/$ /api/add_event.json [L]',
                 '^/api/task/[\\w\\d\\-:]+/remove/$ /api/delete_event.json [L]',
 

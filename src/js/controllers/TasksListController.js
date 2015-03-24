@@ -47,8 +47,17 @@ angular.module('schedulerApp').controller('TasksListController', ['ApiService', 
       });
     };
 
+    var startTask = function(task) {
+      ApiService.startTask(task.id).success(function(data) {
+        if (data.ok) {
+          task.status = 'processing';
+        }
+      });
+    };
+
     $scope.init = init;
     $scope.createTask = createTask;
+    $scope.startTask = startTask;
     $scope.removeTask = removeTask;
   }
 ]);
