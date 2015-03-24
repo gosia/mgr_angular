@@ -83,8 +83,8 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
 
     var timetable = _.flatten(
       _.map(apiData.results, (vv, k) => {
-        _.map(vv, v => {
-          new TimeTableObj(calendar.groupsMap[k], calendar.termsMap[v.term], calendar.roomsMap[v.room]);
+        return _.map(vv, v => {
+          return new TimeTableObj(calendar.groupsMap[k], calendar.termsMap[v.term], calendar.roomsMap[v.room]);
         });
       }),
       true

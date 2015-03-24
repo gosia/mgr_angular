@@ -7,7 +7,6 @@ module.exports = function (grunt) {
 
   require('time-grunt')(grunt);
   require('load-grunt-tasks')(grunt);
-  require("load-grunt-tasks")(grunt);
   grunt.loadNpmTasks('grunt-bowercopy');
   grunt.loadNpmTasks('grunt-contrib-concat');
 
@@ -16,9 +15,10 @@ module.exports = function (grunt) {
   var config = {
     jsDir: 'src/js',
     sassDir: 'src/sass',
-    templateDir: '../django_scheduler/templates',
+    djangoTemplateDir: '../django_scheduler/templates',
     staticDir: '../django_scheduler/static/django_scheduler',
     buildDir: '.build',
+    templateDir: '.build/templates',
     testDir: 'src/test',
     imgDir: 'src/img'
   };
@@ -84,11 +84,31 @@ module.exports = function (grunt) {
           keepalive: true,
           middleware: function(connect) {
             return [
+              modRewrite([
+                '^/api/tasks/$ /api/tasks.json [L]',
+                '^/api/task/$ /api/create_task.json [L]',
+                '^/api/task/[\\w\\d\\-:]+/$ /api/task.json [L]',
+                '^/api/task/[\\w\\d\\-:]+/add/$ /api/add_event.json [L]',
+                '^/api/task/[\\w\\d\\-:]+/remove/$ /api/delete_event.json [L]',
+
+                '^/api/configs/$ /api/configs.json [L]',
+                '^/api/config/$ /api/create_config.json [L]',
+                '^/api/config/[\\w\\d\\-:]+/$ /api/config.json [L]',
+                '^/api/config/[\\w\\d\\-:]+/add/$ /api/default.json [L]',
+                '^/api/config/[\\w\\d\\-:]+/remove/$ /api/default.json [L]'
+              ]),
+              function(req, res, next) {
+                console.log(req.method, req.url);
+                if (req.method === 'POST' && req.url.substr(0, 4) === '/api') {
+                  req.method = 'GET';
+                }
+                return next();
+              },
               connect().use('/static/bower_components', connect.static('./bower_components')),
-              connect().use('/static/templates', connect.static(config.templateDir)),
-              connect().use('/static', connect.static(config.staticDir)),
+              connect().use('/grunt/.build', connect.static('./.build')),
+              connect().use('/static/django_scheduler/templates', connect.static(config.templateDir)),
+              connect().use('/static/django_scheduler', connect.static(config.staticDir)),
               connect().use('/api', connect.static('src/endpointmocks')),
-              connect().use('/dist/img', connect.static('./bower_components/admin-lte/dist/img')),
               connect.static(config.templateDir),
               modRewrite(['^.*$ /index.html [L]']),
               connect.static(config.templateDir)
@@ -140,7 +160,7 @@ module.exports = function (grunt) {
           '<%= config.staticDir %>/**/*'
         ]
       },
-      server: '.tmp'
+      build: '.build'
     },
 
     jshint: {
@@ -162,7 +182,7 @@ module.exports = function (grunt) {
     },
     babel: {
       options: {
-        sourceMap: true
+        sourceMap: false
       },
       dist: {
         files: {
@@ -217,6 +237,19 @@ module.exports = function (grunt) {
     },
 
     copy: {
+      djangoHtml: {
+        expand: true,
+        cwd: config.djangoTemplateDir,
+        dest: '<%= config.templateDir %>/',
+        src: ['**'],
+        options: {
+          process: function (content) {
+            return content
+              .replace(/{% load staticfiles %}\n/g, '')
+              .replace(/{% static '(.*)' %}/g, '/static/$1');
+          }
+        }
+      },
       staticDir: {
         files: [
           {
@@ -246,13 +279,15 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:staticDir',
+    'clean:build',
     'bower:install',
     'sass:staticDir',
     'concat',
     'babel',
     'uglify',
     'copy:staticDir',
-    'bowercopy'
+    'bowercopy',
+    'copy:djangoHtml'
   ]);
 
   grunt.registerTask('dev', [
