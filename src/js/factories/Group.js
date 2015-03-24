@@ -1,7 +1,7 @@
 'use strict';
 /*global angular, _ */
 
-angular.module('schedulerApp').factory('Group', [function() {
+angular.module('schedulerApp').factory('Group', ['Perms', function(Perms) {
   function Group(id, terms, termsNum, studentsNum, sameTermGroupIds, diffTermGroupIds, labels, teachers, extra) {
     this.id = id;
     this.terms = terms;
@@ -14,6 +14,7 @@ angular.module('schedulerApp').factory('Group', [function() {
     this.extra = {course: extra.course, groupType: extra.group_type};
     this.type = 'group';
     this.timetable = [];
+    this.perms = Perms.init();
   }
 
   Group.prototype.setGroupObj = function(groupsMap) {

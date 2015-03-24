@@ -1,12 +1,14 @@
 'use strict';
 /*global angular */
 
-angular.module('schedulerApp').factory('Task', [function() {
+angular.module('schedulerApp').factory('Task', ['Perms', function(Perms) {
   function Task(id, configId, algorithm, status) {
     this.id = id;
     this.configId = configId;
     this.algorithm = algorithm;
     this.status = status;
+
+    this.perms = Perms.init();
   }
 
   Task.init = function(apiData) {

@@ -1,12 +1,13 @@
 'use strict';
-/*global angular, _ */
+/* global angular, _ */
 
-angular.module('schedulerApp').factory('Teacher', [function() {
+angular.module('schedulerApp').factory('Teacher', ['Perms', function(Perms) {
   function Teacher(id, terms) {
     this.id = id;
     this.terms = terms;
     this.type = 'teacher';
     this.timetable = [];
+    this.perms = Perms.init();
   }
 
   Teacher.init = function(apiData, termsMap) {

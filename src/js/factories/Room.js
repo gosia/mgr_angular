@@ -1,7 +1,7 @@
 'use strict';
 /*global angular, _ */
 
-angular.module('schedulerApp').factory('Room', [function() {
+angular.module('schedulerApp').factory('Room', ['Perms', function(Perms) {
   function Room(id, terms, labels, capacity) {
     this.id = id;
     this.terms = terms;
@@ -9,6 +9,7 @@ angular.module('schedulerApp').factory('Room', [function() {
     this.capacity = capacity;
     this.type = 'room';
     this.timetable = [];
+    this.perms = Perms.init();
   }
 
   Room.init = function(apiData, termsMap) {

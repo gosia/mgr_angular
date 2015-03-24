@@ -1,7 +1,7 @@
 'use strict';
 /*global angular, _ */
 
-angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'Room', 'TimeTableObj', function(Teacher, Term, Group, Room, TimeTableObj) {
+angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'Room', 'TimeTableObj', 'Perms', function(Teacher, Term, Group, Room, TimeTableObj, Perms) {
   function Config(id, terms, teachers, groups, rooms, year, term) {
     this.id = id;
     this.terms = terms;
@@ -15,6 +15,8 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
     this.setRoomsMap();
     this.setGroupsMap();
     this.setTeachersMap();
+
+    this.perms = Perms.init();
   }
 
   Config.prototype.setTermsMap = function() {

@@ -10,8 +10,6 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
     $scope.activeTabI = -1;
     $scope.activeView = viewsList[0];
 
-    $scope.editable = true;
-
     var calendar, configId, taskId;
 
     var init = function() {

@@ -1,7 +1,7 @@
 'use strict';
 /*global angular, _ */
 
-angular.module('schedulerApp').factory('Term', [function() {
+angular.module('schedulerApp').factory('Term', ['Perms', function(Perms) {
   function Term(id, start, end, day) {
     this.id = id;
     this.start = start;
@@ -9,6 +9,7 @@ angular.module('schedulerApp').factory('Term', [function() {
     this.day = day;
     this.type = 'term';
     this.timetable = [];
+    this.perms = Perms.init();
   }
 
   var dayNames = {
