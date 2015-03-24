@@ -1,8 +1,8 @@
 'use strict';
 /*global angular, _ */
 
-angular.module('schedulerApp').controller('ConfigsController', ['ApiService', '$rootScope', '$scope', '$location',
-  function (ApiService, $rootScope, $scope, $location) {
+angular.module('schedulerApp').controller('ConfigsController', ['ApiService', '$rootScope', '$scope', '$location', 'User',
+  function (ApiService, $rootScope, $scope, $location, User) {
     var controller = this;
 
     controller.items = [];
@@ -11,6 +11,8 @@ angular.module('schedulerApp').controller('ConfigsController', ['ApiService', '$
     controller.numAll = 0;
     controller.pages = 0;
     controller.activaPage = 0;
+
+    $scope.user = User.init();
 
     var init = function() {
       $rootScope.$broadcast('changeContent', 'configs');

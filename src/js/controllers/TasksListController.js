@@ -1,8 +1,8 @@
 'use strict';
 /* global angular, _ */
 
-angular.module('schedulerApp').controller('TasksListController', ['ApiService', '$scope', '$location', 'Task',
-  function (ApiService, $scope, $location, Task) {
+angular.module('schedulerApp').controller('TasksListController', ['ApiService', '$scope', '$location', 'Task', 'User',
+  function (ApiService, $scope, $location, Task, User) {
     var controller = this;
 
     controller.items = [];
@@ -13,6 +13,8 @@ angular.module('schedulerApp').controller('TasksListController', ['ApiService', 
     controller.activaPage = 0;
 
     $scope.newTask = {configId: undefined, algorithm: undefined};
+
+    $scope.user = User.init();
 
     var init = function(configId) {
       $scope.newTask.configId = configId;

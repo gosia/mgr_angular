@@ -1,5 +1,5 @@
 'use strict';
-/*global angular */
+/* global angular */
 
 angular.module('schedulerApp').factory('Task', ['Perms', function(Perms) {
   function Task(id, configId, algorithm, status) {
