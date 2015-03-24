@@ -30,7 +30,7 @@ angular.module('schedulerApp').factory('TimeTableObj', ['Calendar', function(Cal
     return {
       title: tab.id,
       start: new Date(Calendar.y, Calendar.m, Calendar.d + this.term.day, this.term.start.hour, this.term.start.minute),
-      end: new Date(Calendar.y, Calendar.m, Calendar.d, this.term.end.hour, this.term.end.minute),
+      end: new Date(Calendar.y, Calendar.m, Calendar.d + this.term.day, this.term.end.hour, this.term.end.minute),
       allDay: false,
       backgroundColor: backgrouundColors[tab.type],
       borderColor: backgrouundColors[tab.type],
