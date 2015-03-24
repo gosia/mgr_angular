@@ -26,10 +26,7 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
         if (taskId !== undefined) {
           ApiService.getTask(taskId).success(function(data) {
             $scope.config.setTimetable(data.timetable);
-
-            if (!_.isEmpty(data.timetable.results)) {
-              $scope.viewsList = viewsList;
-            }
+            $scope.viewsList = viewsList;
           });
         }
 
