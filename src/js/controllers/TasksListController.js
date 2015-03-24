@@ -1,5 +1,5 @@
 'use strict';
-/*global angular, _ */
+/* global angular, _ */
 
 angular.module('schedulerApp').controller('TasksListController', ['ApiService', '$scope', '$location',
   function (ApiService, $scope, $location) {
@@ -39,7 +39,16 @@ angular.module('schedulerApp').controller('TasksListController', ['ApiService', 
       });
     };
 
+    var removeTask = function(taskId) {
+      ApiService.removeTask(taskId).success(function(data) {
+        if (data.ok) {
+          controller.items = _.filter(controller.items, x => x.id !== taskId);
+        }
+      });
+    };
+
     $scope.init = init;
     $scope.createTask = createTask;
+    $scope.removeTask = removeTask;
   }
 ]);

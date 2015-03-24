@@ -64,6 +64,13 @@ module.exports = function (grunt) {
       images: {
         files: ['<%= config.imgDir %>/**/*.{gif,jpeg,jpg,png}'],
         tasks: ['copy']
+      },
+      templates: {
+        files: ['<%= config.djangoTemplateDir %>/**/*.html'],
+        tasks: ['copy:djangoHtml'],
+        options: {
+          livereload: true
+        }
       }
     },
 
@@ -98,9 +105,12 @@ module.exports = function (grunt) {
                 '^/api/config/[\\w\\d\\-:]+/remove/$ /api/default.json [L]'
               ]),
               function(req, res, next) {
-                console.log(req.method, req.url);
                 if (req.method === 'POST' && req.url.substr(0, 4) === '/api') {
                   req.method = 'GET';
+                }
+                else if (req.method === 'DELETE' && req.url === '/api/task.json') {
+                  req.method = 'GET';
+                  req.url = '/api/default.json';
                 }
                 return next();
               },

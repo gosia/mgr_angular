@@ -12,6 +12,7 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
 
     getTasks: () => base + 'api/tasks/',
     getTask: id => base + 'api/task/' + id + '/',
+    removeTask: id => base + 'api/task/' + id + '/',
     createTask: () => base + 'api/task/',
     addTaskElement: id => base + 'api/task/' + id + '/add/',
     removeTaskElement: id => base + 'api/task/' + id + '/remove/'
@@ -36,6 +37,10 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
 
   service.getTask = function(taskId) {
     return $http.get(service.urls.getTask(taskId));
+  };
+
+  service.removeTask = function(taskId) {
+    return $http.delete(service.urls.removeTask(taskId));
   };
 
   service.createTask = function(configId, algorithm) {
