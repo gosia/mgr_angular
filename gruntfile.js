@@ -257,7 +257,8 @@ module.exports = function (grunt) {
           process: function (content) {
             return content
               .replace(/{% load staticfiles %}\n/g, '')
-              .replace(/{% static '(.*)' %}/g, '/static/$1');
+              .replace(/{% static '(.*)' %}/g, '/static/$1')
+              .replace(/{{ SCHEDULER_BASE_HREF }}/g, 'http://localhost:9002/');
           }
         }
       },
