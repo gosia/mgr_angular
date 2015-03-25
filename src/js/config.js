@@ -20,7 +20,8 @@ angular.module('schedulerApp')
         })
         .when('/config/:configId', {
           templateUrl: window.STATIC_URL + 'django_scheduler/templates/content/config.html',
-          controller: 'ConfigController'
+          controller: 'ConfigController',
+          reloadOnSearch: false
         })
         .when('/tasks', {
           templateUrl: window.STATIC_URL + 'django_scheduler/templates/content/tasks.html',
@@ -28,7 +29,8 @@ angular.module('schedulerApp')
         })
         .when('/task/:configId/:taskId', {
           templateUrl: window.STATIC_URL + 'django_scheduler/templates/content/task.html',
-          controller: 'TaskController'
+          controller: 'TaskController',
+          reloadOnSearch: false
         })
         .otherwise({
           redirectTo: '/'

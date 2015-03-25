@@ -1,15 +1,13 @@
 'use strict';
-/*global angular, _ */
+/* global angular, _ */
 
 angular.module('schedulerApp').controller('ConfigsController', ['ApiService', '$rootScope', '$scope', '$location', 'User',
   function (ApiService, $rootScope, $scope, $location, User) {
-    var controller = this;
-
-    controller.numStart = 0;
-    controller.numEnd = 0;
-    controller.numAll = 0;
-    controller.pages = 0;
-    controller.activaPage = 0;
+    $scope.numStart = 0;
+    $scope.numEnd = 0;
+    $scope.numAll = 0;
+    $scope.pages = 0;
+    $scope.activaPage = 0;
 
     $scope.user = User.init();
 
@@ -17,14 +15,14 @@ angular.module('schedulerApp').controller('ConfigsController', ['ApiService', '$
       $rootScope.$broadcast('changeContent', 'configs');
 
       ApiService.getConfigs().success(function(data) {
-        controller.items = data.results;
-        controller.numStart = data.num_start;
-        controller.numEnd = data.num_end;
-        controller.numAll = data.num_all;
+        $scope.items = data.results;
+        $scope.numStart = data.num_start;
+        $scope.numEnd = data.num_end;
+        $scope.numAll = data.num_all;
 
         var pageSize = data.num_end - data.num_start + 1;
-        controller.pages = _.range(1, Math.ceil(data.num_all / pageSize) + 1);
-        controller.activePage = Math.floor(data.num_start / pageSize) + 1;
+        $scope.pages = _.range(1, Math.ceil(data.num_all / pageSize) + 1);
+        $scope.activePage = Math.floor(data.num_start / pageSize) + 1;
       });
     };
 

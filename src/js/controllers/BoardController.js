@@ -16,19 +16,13 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
       configId = $routeParams.configId;
       taskId = $routeParams.taskId;
 
-      ApiService.getConfig(configId).success(function(data) {
-        $scope.config = Config.init(data);
-        $.AdminLTE.boxWidget.activate();
-        $scope.activeTabs = [];
+      $.AdminLTE.boxWidget.activate();
+      $scope.activeTabs = [];
 
-        if (taskId !== undefined) {
-          ApiService.getTask(taskId).success(function(data) {
-            $scope.config.setTimetable(data.timetable);
-            $scope.viewsList = viewsList;
-          });
-        }
+      if (taskId !== undefined) {
+          $scope.viewsList = viewsList;
+      }
 
-      });
     };
 
     // Calendar handling
