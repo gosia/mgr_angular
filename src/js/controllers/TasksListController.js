@@ -5,7 +5,6 @@ angular.module('schedulerApp').controller('TasksListController', ['ApiService', 
   function (ApiService, $scope, $location, Task, User) {
     var controller = this;
 
-    controller.items = [];
     controller.numStart = 0;
     controller.numEnd = 0;
     controller.numAll = 0;

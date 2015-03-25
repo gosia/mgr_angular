@@ -5,7 +5,6 @@ angular.module('schedulerApp').controller('ConfigsController', ['ApiService', '$
   function (ApiService, $rootScope, $scope, $location, User) {
     var controller = this;
 
-    controller.items = [];
     controller.numStart = 0;
     controller.numEnd = 0;
     controller.numAll = 0;

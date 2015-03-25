@@ -244,6 +244,18 @@ module.exports = function (grunt) {
           'fullcalendar/fullcalendar.min.css': 'admin-lte/plugins/fullcalendar/fullcalendar.min.css',
           'fullcalendar/fullcalendar.print.css': 'admin-lte/plugins/fullcalendar/fullcalendar.print.css'
         }
+      },
+      fonts: {
+        options: {
+          destPrefix: '<%= config.staticDir %>/css/fonts'
+        },
+        files: {
+          'glyphicons-halflings-regular.eot': 'admin-lte/bootstrap/fonts/glyphicons-halflings-regular.eot',
+          'glyphicons-halflings-regular.svg': 'admin-lte/bootstrap/fonts/glyphicons-halflings-regular.svg',
+          'glyphicons-halflings-regular.ttf': 'admin-lte/bootstrap/fonts/glyphicons-halflings-regular.ttf',
+          'glyphicons-halflings-regular.woff': 'admin-lte/bootstrap/fonts/glyphicons-halflings-regular.woff',
+          'glyphicons-halflings-regular.woff2': 'admin-lte/bootstrap/fonts/glyphicons-halflings-regular.woff2'
+        }
       }
     },
 
