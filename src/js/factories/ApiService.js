@@ -1,7 +1,7 @@
 'use strict';
 /* global angular, _, document */
 
-angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
+angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', function($http, $rootScope) {
   var base = document.getElementsByTagName('base')[0].getAttribute('href');
   var urls = {
     getConfigs: () => base + 'api/configs/',
@@ -20,36 +20,57 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
   };
   var service = {urls: urls};
 
+  var showAlert = function() {
+    $rootScope.$broadcast('addAlertByCode', '500');
+  };
+  var checkErrorResponse = function(data){
+    if (data.ok === false) {
+      $rootScope.$broadcast('addAlertByMessage', data.message);
+    }
+  };
+
   service.getConfigs = function() {
-    return $http.get(service.urls.getConfigs());
+    return $http.get(service.urls.getConfigs()).error(showAlert).success(checkErrorResponse);
   };
 
   service.getConfig = function(configId) {
-    return $http.get(service.urls.getConfig(configId));
+    return $http.get(service.urls.getConfig(configId)).error(showAlert).success(checkErrorResponse);
   };
 
   service.createConfig = function(configId, year, term) {
-    return $http.post(service.urls.createConfig(), {config_id: configId, year: year, term: term});
+    return $http
+      .post(service.urls.createConfig(), {config_id: configId, year: year, term: term})
+      .error(showAlert)
+      .success(checkErrorResponse);
   };
 
   service.getTasks = function() {
-    return $http.get(service.urls.getTasks());
+    return $http.get(service.urls.getTasks()).error(showAlert).success(checkErrorResponse);
   };
 
   service.getTask = function(taskId) {
-    return $http.get(service.urls.getTask(taskId));
+    return $http.get(service.urls.getTask(taskId)).error(showAlert).success(checkErrorResponse);
   };
 
   service.removeTask = function(taskId) {
-    return $http.delete(service.urls.removeTask(taskId));
+    return $http
+      .delete(service.urls.removeTask(taskId))
+      .error(showAlert)
+      .success(checkErrorResponse);
   };
 
   service.startTask = function(taskId) {
-    return $http.post(service.urls.startTask(taskId));
+    return $http
+      .post(service.urls.startTask(taskId))
+      .error(showAlert)
+      .success(checkErrorResponse);
   };
 
   service.createTask = function(configId, algorithm) {
-    return $http.post(service.urls.createTask(), {config_id: configId, algorithm: algorithm});
+    return $http
+      .post(service.urls.createTask(), {config_id: configId, algorithm: algorithm})
+      .error(showAlert)
+      .success(checkErrorResponse);
   };
 
   service.addConfigTeacher = function(configId, teacher, mode) {
@@ -65,7 +86,7 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
           terms: _.map(teacher.terms, x => x.id)
         }
       }
-    );
+    ).error(showAlert).success(checkErrorResponse);
   };
 
   service.addConfigGroup = function(configId, group, mode) {
@@ -88,7 +109,7 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
           group_type: group.extra.groupType
         }
       }
-    );
+    ).error(showAlert).success(checkErrorResponse);
   };
 
   service.addConfigRoom = function(configId, room, mode) {
@@ -105,7 +126,7 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
           labels: room.labels
         }
       }
-    );
+    ).error(showAlert).success(checkErrorResponse);
   };
 
   service.addConfigTerm = function(configId, term, mode, apiData) {
@@ -123,7 +144,7 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
         },
         add_for_all: apiData.addForAll
       }
-    );
+    ).error(showAlert).success(checkErrorResponse);
   };
 
   service.removeConfigElement = function(configId, element) {
@@ -134,7 +155,7 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
         element_type: element.type,
         element_id: element.id
       }
-    );
+    ).error(showAlert);
   };
 
   service.addEvent = function(taskId, groupId, day, hour, minute) {
@@ -146,7 +167,7 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
         hour: hour,
         minute: minute
       }
-    );
+    ).error(showAlert).success(checkErrorResponse);
   };
 
   service.removeEvent = function(taskId, timetableObj) {
@@ -156,7 +177,7 @@ angular.module('schedulerApp').factory('ApiService', ['$http', function($http) {
         term_id: timetableObj.term.id,
         room_id: timetableObj.room.id
       }
-    );
+    ).error(showAlert).success(checkErrorResponse);
   };
 
   return service;
