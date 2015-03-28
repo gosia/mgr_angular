@@ -2,8 +2,8 @@
 /* global angular */
 
 angular.module('schedulerApp')
-  .config(['$routeProvider', '$locationProvider', '$interpolateProvider', '$httpProvider',
-    function($routeProvider, $locationProvider, $interpolateProvider, $httpProvider) {
+  .config(['$routeProvider', '$locationProvider', '$interpolateProvider', '$httpProvider', '$sceDelegateProvider',
+    function($routeProvider, $locationProvider, $interpolateProvider, $httpProvider, $sceDelegateProvider) {
       $locationProvider.html5Mode(true);
       $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
 
@@ -35,5 +35,12 @@ angular.module('schedulerApp')
         .otherwise({
           redirectTo: '/'
         });
+
+      if (window.STATIC_URL.substr(0, 4) === 'http') {
+        $sceDelegateProvider.resourceUrlWhitelist([
+          'self',
+          window.STATIC_URL + '**'
+        ]);
+      }
     }
   ]);
