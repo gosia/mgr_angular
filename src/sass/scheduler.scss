@@ -14,11 +14,14 @@
   to { -moz-transform: rotate(360deg);}
 }
 
-#tabLabels {
+#tabLabels, #pickView {
   margin-bottom: 20px;
+}
 
+#tabLabels {
   .btn {
     margin-right: 10px;
+    margin-bottom: 5px;
 
     .fa-times {
       cursor: pointer;
@@ -47,6 +50,12 @@ a {
 .box {
   .box-loading-icon {
     display: none;
+  }
+
+  .box-header > .box-tools {
+    position: relative !important;
+    top: 0;
+    margin-top: -8px;
   }
 }
 

@@ -120,8 +120,6 @@ module.exports = function (grunt) {
               connect().use('/static/django_scheduler/templates', connect.static(config.templateDir)),
               connect().use('/static/django_scheduler', connect.static(config.staticDir)),
               connect().use('/api', connect.static('src/endpointmocks')),
-              connect.static(config.templateDir),
-              modRewrite(['^.*$ /index.html [L]']),
               connect.static(config.templateDir)
             ];
           }
@@ -270,7 +268,8 @@ module.exports = function (grunt) {
             return content
               .replace(/{% load staticfiles %}\n/g, '')
               .replace(/{% static '(.*)' %}/g, '/static/$1')
-              .replace(/{{ SCHEDULER_BASE_HREF }}/g, 'http://localhost:9002/');
+              .replace(/{{ SCHEDULER_BASE_HREF }}/g, 'http://localhost:9002/')
+              .replace(/{{ STATIC_URL }}/g, '/static/');
           }
         }
       },
