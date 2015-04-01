@@ -219,9 +219,9 @@ module.exports = function (grunt) {
           destPrefix: '<%= config.staticDir %>/js/libs'
         },
         files: {
-          'jquery.js': 'jquery/dist/jquery.js',
+          'jquery.min.js': 'jquery/dist/jquery.min.js',
           'bootstrap.min.js': 'admin-lte/bootstrap/js/bootstrap.min.js',
-          'angular/angular.js': 'angular/angular.js',
+          'angular/angular.min.js': 'angular/angular.min.js',
           'angular/angular-route.min.js': 'angular-route/angular-route.min.js',
           'angular/angular-route.min.js.map': 'angular-route/angular-route.min.js.map',
           'underscore-min.js': 'underscore/underscore-min.js',
