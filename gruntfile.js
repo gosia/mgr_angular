@@ -238,7 +238,7 @@ module.exports = function (grunt) {
         },
         files: {
           'bootstrap.min.css': 'admin-lte/bootstrap/css/bootstrap.min.css',
-          'admin-lte/AdminLTE.css': 'admin-lte/dist/css/AdminLTE.css',
+          'admin-lte/AdminLTE.min.css': 'admin-lte/dist/css/AdminLTE.min.css',
           'admin-lte/skin-blue.css': 'admin-lte/dist/css/skins/skin-blue.css',
           'fullcalendar/fullcalendar.min.css': 'admin-lte/plugins/fullcalendar/fullcalendar.min.css',
           'fullcalendar/fullcalendar.print.css': 'admin-lte/plugins/fullcalendar/fullcalendar.print.css'
