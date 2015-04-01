@@ -103,7 +103,8 @@ module.exports = function (grunt) {
                 '^/api/config/$ /api/create_config.json [L]',
                 '^/api/config/[\\w\\d\\-:]+/$ /api/config.json [L]',
                 '^/api/config/[\\w\\d\\-:]+/add/$ /api/default.json [L]',
-                '^/api/config/[\\w\\d\\-:]+/remove/$ /api/default.json [L]'
+                '^/api/config/[\\w\\d\\-:]+/remove/$ /api/default.json [L]',
+                '^/api/config/[\\w\\d\\-:]+/copy/$ /api/default.json [L]'
               ]),
               function(req, res, next) {
                 if (req.method === 'POST' && req.url.substr(0, 4) === '/api') {

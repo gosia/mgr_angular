@@ -1,8 +1,8 @@
 'use strict';
 /* global angular */
 
-angular.module('schedulerApp').controller('ConfigController', ['ApiService', '$routeParams', '$rootScope', '$scope', 'Config', '$location',
-  function (ApiService, $routeParams, $rootScope, $scope, Config, $location) {
+angular.module('schedulerApp').controller('ConfigController', ['ApiService', '$routeParams', '$rootScope', '$scope', 'Config', '$location', '$route',
+  function (ApiService, $routeParams, $rootScope, $scope, Config, $location, $route) {
     $scope.configId = $routeParams.configId;
 
     var init = function() {
@@ -16,5 +16,19 @@ angular.module('schedulerApp').controller('ConfigController', ['ApiService', '$r
     };
 
     init();
+
+    var copyConfigElements = function(type) {
+      return function(fromConfigId) {
+        ApiService.copyConfigElements(type, $scope.configId, fromConfigId).success(function(data) {
+          if (data.ok) {
+            $route.reload();
+          }
+        });
+      };
+    };
+
+    $scope.copyTeachers = copyConfigElements('teacher');
+    $scope.copyTerms = copyConfigElements('term');
+    $scope.copyRooms = copyConfigElements('room');
   }
 ]);

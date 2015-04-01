@@ -9,6 +9,7 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', fun
     createConfig: () => base + 'api/config/',
     addConfigElement: id => base + 'api/config/' + id + '/add/',
     removeConfigElement: (id) => base + 'api/config/' + id + '/remove/',
+    copyConfigElements: (id) => base + 'api/config/' + id + '/copy/',
 
     getTasks: () => base + 'api/tasks/',
     getTask: id => base + 'api/task/' + id + '/',
@@ -176,6 +177,15 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', fun
         group_id: timetableObj.group.id,
         term_id: timetableObj.term.id,
         room_id: timetableObj.room.id
+      }
+    ).error(showAlert).success(checkErrorResponse);
+  };
+
+  service.copyConfigElements = function(type, toConfigId, fromConfigId) {
+    return $http.post(
+      service.urls.copyConfigElements(toConfigId), {
+        type: type,
+        from: fromConfigId
       }
     ).error(showAlert).success(checkErrorResponse);
   };
