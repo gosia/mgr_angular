@@ -23,6 +23,7 @@
     "connect-modrewrite": "^0.7.11",
     "grunt-bowercopy": "^1.2.0",
     "grunt-babel": "^4.0.0",
-    "grunt-contrib-concat": "^0.5.1"
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-cssmin": "^0.12.2"
   }
 }

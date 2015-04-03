@@ -9,6 +9,7 @@ module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
   grunt.loadNpmTasks('grunt-bowercopy');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
 
   var modRewrite = require('connect-modrewrite');
 
@@ -33,7 +34,7 @@ module.exports = function (grunt) {
       },
       js: {
         files: ['<%= config.jsDir %>/**/*.js'],
-        tasks: ['jshint', 'concat', 'babel', 'uglify', 'copy'],
+        tasks: ['jshint', 'js'],
         options: {
           livereload: true
         }
@@ -56,18 +57,18 @@ module.exports = function (grunt) {
       },
       css: {
         files: ['<%= config.sassDir %>/**/*.scss'],
-        tasks: ['sass'],
+        tasks: ['css'],
         options: {
           livereload: true
         }
       },
       images: {
         files: ['<%= config.imgDir %>/**/*.{gif,jpeg,jpg,png}'],
-        tasks: ['copy']
+        tasks: ['img']
       },
       templates: {
         files: ['<%= config.djangoTemplateDir %>/**/*.html'],
-        tasks: ['copy:djangoHtml'],
+        tasks: ['html'],
         options: {
           livereload: true
         }
@@ -145,19 +146,31 @@ module.exports = function (grunt) {
 
     sass: {
       options: {
-        sourceMap: true,
+        sourceMap: false,
         outputStyle: 'expanded'
       },
-      staticDir: {
+      compile: {
         files: [
           {
             expand: true,
             cwd: '<%= config.sassDir %>',
             src: ['**/*.scss'],
-            dest: '<%= config.staticDir %>/css',
+            dest: '<%= config.buildDir %>/css',
             ext: '.css'
           }
         ]
+      }
+    },
+
+    cssmin: {
+      target: {
+        files: [{
+          expand: true,
+          cwd: '<%= config.buildDir %>/css',
+          src: ['scheduler.css'],
+          dest: '<%= config.staticDir %>/css',
+          ext: '.css'
+        }]
       }
     },
 
@@ -188,6 +201,25 @@ module.exports = function (grunt) {
       dist: {
         src: ['<%= config.jsDir %>/**/*.js'],
         dest: '<%= config.buildDir %>/js/scheduler.concat.js'
+      },
+      bower1: {
+        src: [
+          '<%= config.buildDir %>/js/libs/jquery.min.js',
+          '<%= config.buildDir %>/js/libs/bootstrap.min.js',
+          '<%= config.buildDir %>/js/libs/angular/angular.min.js',
+          '<%= config.buildDir %>/js/libs/angular/angular-route.min.js',
+          '<%= config.buildDir %>/js/libs/underscore-min.js',
+          '<%= config.buildDir %>/js/libs/admin-lte/app.min.js'
+        ],
+        dest: '<%= config.staticDir %>/js/vendor1.js'
+      },
+      bower2: {
+        src: [
+          '<%= config.buildDir %>/js/libs/moment-with-locales.min.js',
+          '<%= config.buildDir %>/js/libs/fullcalendar.min.js',
+          '<%= config.buildDir %>/js/libs/jquery-ui-1.10.3.min.js'
+        ],
+        dest: '<%= config.staticDir %>/js/vendor2.js'
       }
     },
     babel: {
@@ -206,7 +238,7 @@ module.exports = function (grunt) {
           '<%= config.staticDir %>/js/scheduler.min.js': ['<%= config.buildDir %>/js/scheduler.babel.js']
         },
         options: {
-          sourceMap: true,
+          sourceMap: false,
           mangle: false,
           exapanded: true
         }
@@ -216,16 +248,14 @@ module.exports = function (grunt) {
     bowercopy: {
       js: {
         options: {
-          destPrefix: '<%= config.staticDir %>/js/libs'
+          destPrefix: '<%= config.buildDir %>/js/libs'
         },
         files: {
           'jquery.min.js': 'jquery/dist/jquery.min.js',
           'bootstrap.min.js': 'admin-lte/bootstrap/js/bootstrap.min.js',
           'angular/angular.min.js': 'angular/angular.min.js',
           'angular/angular-route.min.js': 'angular-route/angular-route.min.js',
-          'angular/angular-route.min.js.map': 'angular-route/angular-route.min.js.map',
           'underscore-min.js': 'underscore/underscore-min.js',
-          'underscore-min.map': 'underscore/underscore-min.map',
           'admin-lte/app.min.js': 'admin-lte/dist/js/app.min.js',
           'moment-with-locales.min.js': 'moment/min/moment-with-locales.min.js',
           'fullcalendar.min.js': 'admin-lte/plugins/fullcalendar/fullcalendar.min.js',
@@ -274,7 +304,7 @@ module.exports = function (grunt) {
           }
         }
       },
-      staticDir: {
+      img: {
         files: [
           {
             expand: true,
@@ -301,17 +331,40 @@ module.exports = function (grunt) {
     return grunt.task.run(['build', 'connect:livereload']);
   });
 
+  grunt.registerTask('css', [
+    'sass',
+    'cssmin',
+    'bowercopy:css'
+  ]);
+
+  grunt.registerTask('html', [
+    'copy:djangoHtml'
+  ]);
+
+  grunt.registerTask('js', [
+    'bowercopy:js',
+    'concat',
+    'babel',
+    'uglify'
+  ]);
+
+  grunt.registerTask('img', [
+    'copy:img'
+  ]);
+
+  grunt.registerTask('font', [
+    'bowercopy:fonts'
+  ]);
+
   grunt.registerTask('build', [
     'clean:staticDir',
     'clean:build',
     'bower:install',
-    'sass:staticDir',
-    'concat',
-    'babel',
-    'uglify',
-    'copy:staticDir',
-    'bowercopy',
-    'copy:djangoHtml'
+    'css',
+    'js',
+    'img',
+    'font',
+    'html'
   ]);
 
   grunt.registerTask('dev', [
