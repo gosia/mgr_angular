@@ -10,6 +10,7 @@ angular.module('schedulerApp').controller('ConfigsController', ['ApiService', '$
     $scope.activaPage = 0;
 
     $scope.user = User.init();
+    $scope.newConfig = {id: undefined, year: undefined, term: undefined};
 
     var init = function() {
       $rootScope.$broadcast('changeContent', 'configs');
