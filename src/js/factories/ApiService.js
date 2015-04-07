@@ -174,9 +174,7 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', fun
   service.removeEvent = function(taskId, timetableObj) {
     return $http.post(
       service.urls.removeTaskElement(taskId), {
-        group_id: timetableObj.group.id,
-        term_id: timetableObj.term.id,
-        room_id: timetableObj.room.id
+        group_id: timetableObj.group.id
       }
     ).error(showAlert).success(checkErrorResponse);
   };

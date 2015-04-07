@@ -78,6 +78,9 @@ angular.module('schedulerApp').factory('Group', ['Perms', function(Perms) {
   };
 
   Group.prototype.events = function() {
+    if (this.timetable.length > 0) {
+      return [this];
+    }
     return [];
   };
 

@@ -42,7 +42,18 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
     var teachersMap = _.object(_.map(teachers, teacher => [teacher.id, teacher]));
     var groups = _.map(apiData.groups, apiGroup => Group.init(apiGroup, termsMap, teachersMap));
     var groupsMap = _.object(_.map(groups, group => [group.id, group]));
+    var groupsByTeacher = {};
+    _.each(groups, group => {
+      _.each(group.teachers, t => {
+        if (groupsByTeacher[t.id] === undefined) {
+          groupsByTeacher[t.id] = [group];
+        } else {
+          groupsByTeacher[t.id].push(group);
+        }
+      });
+    });
     _.each(groups, group => group.setGroupObj(groupsMap));
+    _.each(teachers, teacher => teacher.setGroups(groupsByTeacher[teacher.id]));
 
     var rooms = _.map(apiData.rooms, apiRoom => Room.init(apiRoom, termsMap));
 

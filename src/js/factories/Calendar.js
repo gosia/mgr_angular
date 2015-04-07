@@ -48,7 +48,7 @@ angular.module('schedulerApp').factory('Calendar', [function () {
       eventDurationEditable: false,
       droppable: true,
       drop: function(date) {
-        calendar.addedCallback(date, $(this).data('id'));
+        calendar.addedCallback(date, $(this).attr('data-id'));
       },
       eventRender: function(event, element) {
         var html = '<span class="pull-right closeon">x</span>';

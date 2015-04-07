@@ -8,6 +8,7 @@ angular.module('schedulerApp').factory('Teacher', ['Perms', function(Perms) {
     this.type = 'teacher';
     this.timetable = [];
     this.perms = Perms.init();
+    this.groups = [];
   }
 
   Teacher.init = function(apiData, termsMap) {
@@ -60,21 +61,21 @@ angular.module('schedulerApp').factory('Teacher', ['Perms', function(Perms) {
     this.terms = teacher.terms;
   };
 
+  Teacher.prototype.setGroups = function(groups) {
+    this.groups = groups || [];
+  };
+
   Teacher.prototype.events = function() {
     var events = [];
 
-    var groups = _.uniq(
-      _.map(this.timetable, function(x) { return x.group; }),
-      function(x) { return x.id; }
+    var groupIds = _.uniq(_.map(this.timetable, x => x.group.id));
+
+    _.each(this.groups, group => {
+        if (!_.some(groupIds, x => x === group.id)) {
+          events.push(group);
+        }
+      }
     );
-
-    _.each(groups, function(x) {
-      var newEventsCount = x.termsNum - x.timetable.length;
-
-      _(newEventsCount).times(function() {
-        events.push(x);
-      });
-    });
 
     return events;
 

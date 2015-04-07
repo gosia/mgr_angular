@@ -88,7 +88,7 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
 
     var newEventAdded = function(date, groupId) {
       ApiService
-        .addEvent(taskId, groupId, date.day(), date.hour(), date.minute())
+        .addEvent(taskId, groupId, date.day() - 1, date.hour(), date.minute())
         .success(function(data) {
           modifyTimetable(data, 'extend');
         });
