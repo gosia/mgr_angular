@@ -40,4 +40,16 @@ angular.module('schedulerApp')
         loadingIf: '=if'
       }
     };
+  }])
+  .directive('draggable', [function() {
+    return {
+      restrict: 'A',
+      link: function ($scope, $element) {
+        $element.draggable({
+          zIndex: 1070,
+          revert: true,
+          revertDuration: 0
+        });
+      }
+    };
   }]);

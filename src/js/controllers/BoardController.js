@@ -33,13 +33,6 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
 
     function initEvents() {
       $.AdminLTE.boxWidget.activate();
-      $('div.external-event').each(function() {
-        $(this).draggable({
-          zIndex: 1070,
-          revert: true,
-          revertDuration: 0
-        });
-      });
     }
 
     $scope.$watch('activeView', function(newValue) {
@@ -82,6 +75,7 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
         _.each(changedRoomIds, function(x) { tabs.push($scope.config.roomsMap[x]); });
 
         calendar.reload(tabs);
+        initEvents();
 
       }
     };
