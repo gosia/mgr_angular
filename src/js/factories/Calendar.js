@@ -56,6 +56,25 @@ angular.module('schedulerApp').factory('Calendar', [function () {
         element.find('.closeon').click(function() {
           calendar.deletedCallback(event.tab, event.timetableObj);
         });
+      },
+      eventClick: function(event) {
+        var t = event.timetableObj;
+        var content = '' +
+          '<h4>' + t.group.extra.course + ' (' + t.group.extra.groupType + ')</h4><br>' +
+          'Prowadzący: ' + _.map(t.group.teachers, x => x.id).join(', ') + '<br>' +
+          'Sala: ' + t.room.id + '<br>' +
+          'Grupa: ' + t.group.id + '<br>' +
+          'Etykiety: ' + t.group.labels.join(', ');
+
+        var options = {
+          content: content,
+          placement: 'top',
+          trigger: 'focus',
+          html: true,
+          container: 'body'
+        };
+        $(this).popover(options);
+        $(this).popover('toggle');
       }
     });
   };
