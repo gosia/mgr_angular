@@ -1,8 +1,8 @@
 'use strict';
 /* global angular, _ */
 
-angular.module('schedulerApp').controller('ConfigsController', ['ApiService', '$rootScope', '$scope', '$location', 'User',
-  function (ApiService, $rootScope, $scope, $location, User) {
+angular.module('schedulerApp').controller('ConfigsController', ['ApiService', '$rootScope', '$scope', '$location', 'User', 'Config',
+  function (ApiService, $rootScope, $scope, $location, User, Config) {
     $scope.numStart = 0;
     $scope.numEnd = 0;
     $scope.numAll = 0;
@@ -16,7 +16,7 @@ angular.module('schedulerApp').controller('ConfigsController', ['ApiService', '$
       $rootScope.$broadcast('changeContent', 'configs');
 
       ApiService.getConfigs().success(function(data) {
-        $scope.items = data.results;
+        $scope.items = _.map(data.results, x => Config.initForList(x));
         $scope.numStart = data.num_start;
         $scope.numEnd = data.num_end;
         $scope.numAll = data.num_all;
@@ -40,6 +40,15 @@ angular.module('schedulerApp').controller('ConfigsController', ['ApiService', '$
         });
     };
 
+    var removeConfig = function(configId) {
+      ApiService.removeConfig(configId).success(function(data) {
+        if (data.ok) {
+          $scope.items = _.filter($scope.items, x => x.id !== configId);
+        }
+      });
+    };
+
     $scope.createConfig = createConfig;
+    $scope.removeConfig = removeConfig;
   }
 ]);

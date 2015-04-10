@@ -6,6 +6,7 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', fun
   var urls = {
     getConfigs: () => base + 'api/configs/',
     getConfig: id => base + 'api/config/' + id + '/',
+    removeConfig: id => base + 'api/config/' + id + '/',
     createConfig: () => base + 'api/config/',
     addConfigElement: id => base + 'api/config/' + id + '/add/',
     removeConfigElement: (id) => base + 'api/config/' + id + '/remove/',
@@ -41,6 +42,13 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', fun
   service.createConfig = function(configId, year, term) {
     return $http
       .post(service.urls.createConfig(), {config_id: configId, year: year, term: term})
+      .error(showAlert)
+      .success(checkErrorResponse);
+  };
+
+  service.removeConfig = function(configId) {
+    return $http
+      .delete(service.urls.removeConfig(configId))
       .error(showAlert)
       .success(checkErrorResponse);
   };

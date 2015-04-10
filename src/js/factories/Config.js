@@ -60,6 +60,10 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
     return new Config(apiData.id, terms, teachers, groups, rooms, apiData.year, apiData.term);
   };
 
+  Config.initForList = function(apiData) {
+    return new Config(apiData.id, [], [], [], [], apiData.year, apiData.term);
+  };
+
   Config.prototype.setTimetable = function(apiData) {
     var config = this;
     var timetable = _.flatten(

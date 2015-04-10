@@ -111,7 +111,10 @@ module.exports = function (grunt) {
                 if (req.method === 'POST' && req.url.substr(0, 4) === '/api') {
                   req.method = 'GET';
                 }
-                else if (req.method === 'DELETE' && req.url === '/api/task.json') {
+                else if (
+                  req.method === 'DELETE' &&
+                  (req.url === '/api/task.json' || req.url === '/api/config.json')
+                ) {
                   req.method = 'GET';
                   req.url = '/api/default.json';
                 }
