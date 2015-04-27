@@ -52,4 +52,48 @@ angular.module('schedulerApp')
         });
       }
     };
+  }])
+  .directive('calendarOverflow', [function() {
+    return {
+      restrict: 'E',
+      templateUrl: window.STATIC_URL + 'django_scheduler/templates/includes/calendar_overflow.html',
+      scope: {
+        events: '=',
+        background: '='
+      }
+    };
+  }])
+  .directive('calendarOverflowEvent', [function() {
+    return {
+      restrict: 'E',
+      template: '<div class="event"></div>',
+      link: function ($scope, $element) {
+        var start = $scope.event.start;
+        var end = $scope.event.end;
+
+        var h = 40; // height of one hour cell
+
+        var s = Math.round(((start - 480) * h) / 60.0);
+        var tpx = s + 'px';
+        var hpx = Math.round(((end - start) * h) / 60.0) + 'px';
+
+        var $event = $element.find('.event');
+
+        $event.css('height', hpx);
+        $event.css('top', tpx);
+        $event.css('border-radius', '5px');
+
+        console.log($scope.event);
+
+        if ($scope.event.options.backgroundColor !== undefined) {
+          $event.css('background-color', $scope.event.options.backgroundColor);
+        }
+        if ($scope.event.options.borderColor !== undefined) {
+          $event.css('border', '1px solid ' + $scope.event.options.borderColor);
+        }
+      },
+      scope: {
+        event: '='
+      }
+    };
   }]);

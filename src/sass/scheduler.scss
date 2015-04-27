@@ -126,11 +126,35 @@ a {
 
   .calendar-cell {
     width: 198px;
-    height: 50px;
+    height: 40px;
   }
 
   .calendar-axis-day {
     background-color: #fafafa;
   }
 
+}
+
+.table-calendar-overflow {
+  position: absolute;
+  top: 20px;
+  left: 33px;
+
+  td {
+    width: 198px;
+    height: 560px;
+  }
+
+  .event {
+    position: absolute;
+    width: 198px;
+  }
+}
+
+.table-calendar-overflow-background {
+  .event {
+    background-color: rgba(255, 128, 128, .15);
+    position: absolute;
+    width: 198px;
+  }
 }

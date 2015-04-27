@@ -1,7 +1,7 @@
 'use strict';
 /* global angular */
 
-angular.module('schedulerApp').factory('TimeTableObj', ['Calendar', function(Calendar) {
+angular.module('schedulerApp').factory('TimeTableObj', ['Calendar', 'Event', function(Calendar, Event) {
   function TimeTableObj(group, term, room) {
     this.group = group;
     this.room = room;
@@ -40,6 +40,20 @@ angular.module('schedulerApp').factory('TimeTableObj', ['Calendar', function(Cal
       tab: tab,
       timetableObj: this
     };
+  };
+
+  TimeTableObj.prototype.getEvent = function(tab) {
+    var opts = {
+      backgroundColor: backgrouundColors[tab.type],
+      borderColor: backgrouundColors[tab.type]
+    };
+    return new Event(
+      this.term.day,
+      this.term.start.hour * 60 + this.term.start.minute,
+      this.term.end.hour * 60 + this.term.end.minute,
+      tab,
+      opts
+    );
   };
 
   return TimeTableObj;
