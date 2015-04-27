@@ -3,7 +3,11 @@
 
 angular.module('schedulerApp').controller('BoardController', ['ApiService', '$routeParams', '$scope', 'Config', 'Calendar', 'Teacher', 'Group', 'Room', 'Term', '$timeout',
   function (ApiService, $routeParams, $scope, Config, Calendar, Teacher, Group, Room, Term, $timeout) {
-    var viewsList = [{value: 'tabs', label: 'Zakładki'}, {value: 'calendar', label: 'Kalendarz'}];
+    var viewsList = [
+      {value: 'tabs', label: 'Zakładki'},
+      {value: 'calendar', label: 'Kalendarz'},
+      {value: 'custom-calendar', label: 'Nowy kalendarz'}
+    ];
     $scope.viewsList = [viewsList[0]];
 
     $scope.activeTabs = [];

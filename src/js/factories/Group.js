@@ -30,6 +30,11 @@ angular.module('schedulerApp').factory('Group', ['Perms', function(Perms) {
     return 'Grupa ' + this.id + ' (' + this.extra.course + ', ' + this.extra.groupType +  ')';
   };
 
+  Group.prototype.getCourseName = function() {
+    return this.extra.course + ' (' + this.extra.groupType + ') - ' +
+      _.map(this.teachers, function(x) { return x.id; }).join(', ');
+  };
+
   Group.prototype.getEventName = function() {
     return this.id + ' - ' + _.map(this.teachers, function(x) { return x.id; }).join(', ');
   };
