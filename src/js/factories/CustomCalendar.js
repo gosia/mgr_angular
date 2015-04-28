@@ -13,18 +13,15 @@ angular.module('schedulerApp').factory('CustomCalendar', [function () {
     this.events = [];
   }
 
-  Calendar.prototype.init = function() {
-  };
-
   Calendar.prototype.removeTab = function(tab) {
     console.log('removeTab', tab);
-    var events = _.map(tab.timetable, t => t.getEvent(tab));
+    var events = _.map(tab.timetable, t => t.getEvent(this, tab));
     this.events = _.filter(this.events, t => !_.some(events, x => t.id === x.id));
   };
 
   Calendar.prototype.addTab = function(tab) {
     console.log('addTab', tab);
-    var events = _.map(tab.timetable, t => t.getEvent(tab));
+    var events = _.map(tab.timetable, t => t.getEvent(this, tab));
     this.events = _.uniq(this.events.concat(events), x => x.id);
   };
 
@@ -42,11 +39,7 @@ angular.module('schedulerApp').factory('CustomCalendar', [function () {
   };
 
   Calendar.init = function(id, config, addedCallback, deletedCallback) {
-    var calendar = new Calendar(id, config, addedCallback, deletedCallback);
-
-    calendar.init();
-
-    return calendar;
+    return new Calendar(id, config, addedCallback, deletedCallback);
   };
 
   return Calendar;

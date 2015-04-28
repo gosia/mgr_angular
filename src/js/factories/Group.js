@@ -35,14 +35,6 @@ angular.module('schedulerApp').factory('Group', ['Perms', function(Perms) {
       _.map(this.teachers, function(x) { return x.id; }).join(', ');
   };
 
-  Group.prototype.getEventName = function() {
-    return this.id + ' - ' + _.map(this.teachers, function(x) { return x.id; }).join(', ');
-  };
-
-  Group.prototype.isATeacher = function(teacherId) {
-    return _.some(this.teachers, function(x) { return x.id === teacherId; });
-  };
-
   Group.prototype.setTimetable = function(timetable) {
     this.timetable = timetable;
   };

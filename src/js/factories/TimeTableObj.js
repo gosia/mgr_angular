@@ -42,15 +42,19 @@ angular.module('schedulerApp').factory('TimeTableObj', ['Calendar', 'Event', fun
     };
   };
 
-  TimeTableObj.prototype.getEvent = function(tab) {
+  TimeTableObj.prototype.getEvent = function(calendar, tab) {
     var opts = {
       backgroundColor: backgrouundColors[tab.type],
-      borderColor: backgrouundColors[tab.type]
+      borderColor: backgrouundColors[tab.type],
+      textColor: colors[tab.type]
     };
+
     return new Event(
       this.term.day,
       this.term.start.hour * 60 + this.term.start.minute,
       this.term.end.hour * 60 + this.term.end.minute,
+      calendar,
+      this,
       tab,
       opts
     );

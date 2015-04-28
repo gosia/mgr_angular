@@ -148,6 +148,18 @@ a {
   .event {
     position: absolute;
     width: 198px;
+    font-size: 11px;
+    padding: 2px;
+    line-height: 12px;
+
+    .title {
+      max-width: 150px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 150px;
+      display: inline-block;
+      overflow: hidden;
+    }
   }
 }
 

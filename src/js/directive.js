@@ -83,13 +83,23 @@ angular.module('schedulerApp')
         $event.css('top', tpx);
         $event.css('border-radius', '5px');
 
-        console.log($scope.event);
-
         if ($scope.event.options.backgroundColor !== undefined) {
           $event.css('background-color', $scope.event.options.backgroundColor);
         }
         if ($scope.event.options.borderColor !== undefined) {
           $event.css('border', '1px solid ' + $scope.event.options.borderColor);
+        }
+        if ($scope.event.options.textColor !== undefined) {
+          $event.css('color', $scope.event.options.textColor);
+        }
+
+        if ($scope.event.tab !== undefined) {
+          $event.append('<div><div class="title">' + $scope.event.getTitle() + '</div><div class="pull-right closeon">x</div></div>');
+          $event.append('<div><span>' + $scope.event.getLeftSubTitle() + '</span><span class="pull-right">' + $scope.event.getRightSubTitle() + '</span></div>');
+
+          $event.find('.closeon').click(function() {
+            $scope.event.calendar.deletedCallback($scope.event.tab, $scope.event.timetableObj);
+          });
         }
       },
       scope: {
