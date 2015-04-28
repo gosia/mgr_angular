@@ -1,5 +1,5 @@
 'use strict';
-/* global angular */
+/* global angular, _ */
 
 angular.module('schedulerApp')
   .directive('contentChange', ['$location', function($location) {
@@ -66,7 +66,7 @@ angular.module('schedulerApp')
   .directive('calendarOverflowEvent', [function() {
     return {
       restrict: 'E',
-      template: '<div class="event"></div>',
+      template: '<a class="event" tabindex="0" role="button"></a>',
       link: function ($scope, $element) {
         var start = $scope.event.start;
         var end = $scope.event.end;
@@ -122,6 +122,24 @@ angular.module('schedulerApp')
           $event.find('.closeon').click(function() {
             $scope.event.calendar.deletedCallback($scope.event.tab, $scope.event.timetableObj);
           });
+
+          // add popover
+          var t = $scope.event.timetableObj;
+          var content = '' +
+            '<h4>' + t.group.extra.course + ' (' + t.group.extra.groupType + ')</h4><br>' +
+            'Prowadzący: ' + _.map(t.group.teachers, x => x.id).join(', ') + '<br>' +
+            'Sala: ' + t.room.id + '<br>' +
+            'Grupa: ' + t.group.id + '<br>' +
+            'Etykiety: ' + t.group.labels.join(', ');
+
+          var options = {
+            content: content,
+            placement: 'top',
+            trigger: 'focus',
+            html: true,
+            container: 'body'
+          };
+          $event.popover(options);
         }
       },
       scope: {
