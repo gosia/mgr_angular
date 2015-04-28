@@ -72,17 +72,38 @@ angular.module('schedulerApp')
         var end = $scope.event.end;
 
         var h = 40; // height of one hour cell
-
-        var s = Math.round(((start - 480) * h) / 60.0);
-        var tpx = s + 'px';
-        var hpx = Math.round(((end - start) * h) / 60.0) + 'px';
+        var w = 198; // width of one hour cell
 
         var $event = $element.find('.event');
 
-        $event.css('height', hpx);
-        $event.css('top', tpx);
-        $event.css('border-radius', '5px');
+        // count height of event and top/bottom position
+        var s = Math.round(((start - 480) * h) / 60.0);
+        var topPx = s + 'px';
+        var heightPx = Math.round(((end - start) * h) / 60.0) + 'px';
 
+        $event.css('height', heightPx);
+        $event.css('top', topPx);
+
+        // count width and left/right position
+        var recountWidth = function($event){
+          var cw = Math.floor(w / $scope.event.overlappingEvents);
+          var widthPx = cw + 'px';
+          var leftPx = (w * $scope.event.day + cw * ($scope.event.overlappingEventPosition - 1)) + 'px';
+          $event.css('width', widthPx);
+          $event.css('left', leftPx);
+        };
+        recountWidth($event);
+
+        // recalculate changes
+        $scope.$watch('event.overlappingEventPosition', function() {
+          recountWidth($event);
+        });
+        $scope.$watch('event.overlappingEvents', function() {
+          recountWidth($event);
+        });
+
+        // set colors and borders
+        $event.css('border-radius', '5px');
         if ($scope.event.options.backgroundColor !== undefined) {
           $event.css('background-color', $scope.event.options.backgroundColor);
         }
@@ -93,6 +114,7 @@ angular.module('schedulerApp')
           $event.css('color', $scope.event.options.textColor);
         }
 
+        // set text
         if ($scope.event.tab !== undefined) {
           $event.append('<div><div class="title">' + $scope.event.getTitle() + '</div><div class="pull-right closeon">x</div></div>');
           $event.append('<div><span>' + $scope.event.getLeftSubTitle() + '</span><span class="pull-right">' + $scope.event.getRightSubTitle() + '</span></div>');

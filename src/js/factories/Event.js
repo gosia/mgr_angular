@@ -11,6 +11,9 @@ angular.module('schedulerApp').factory('Event', [function() {
     this.timetableObj = timetableObj;
     this.options = options || {};
 
+    this.overlappingEvents = 1;
+    this.overlappingEventPosition = 1;
+
     this.id = day + ':' + start + ':' + end + ':' + (tab === undefined ? '' : tab.id);
   }
 
