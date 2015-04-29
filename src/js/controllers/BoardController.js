@@ -251,6 +251,23 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
       });
     };
 
+    var activateOverflow = function(groupId) {
+
+      ApiService.getBusyTermsForGroup(taskId, groupId).success(function(data) {
+        if (data.ok) {
+          $scope.busyEvents = _.map(data.terms, termId => {
+              var t = $scope.config.termsMap[termId];
+              return new Event(
+                t.day,
+                t.start.hour * 60 + t.start.minute,
+                t.end.hour * 60 + t.end.minute
+              );
+            }
+          );
+        }
+      });
+    };
+
     init();
 
     $scope.openAddModal = openAddModal;
@@ -266,7 +283,9 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
     $scope.removeTab = removeTab;
     $scope.addTab = addTab;
 
-    $scope.testEvents = [new Event(1, 615, 720), new Event(1, 14*60, 16*60)];
+    $scope.activateOverflow = activateOverflow;
+
+    $scope.busyEvents = [];
     $scope.calendar = customCalendar;
   }
 ]);

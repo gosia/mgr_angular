@@ -74,11 +74,11 @@ angular.module('schedulerApp').factory('Group', ['Perms', function(Perms) {
     this.extra = group.extra;
   };
 
-  Group.prototype.events = function() {
+  Group.prototype.newEvents = function() {
     if (this.timetable.length > 0) {
-      return [this];
+      return [];
     }
-    return [];
+    return [this];
   };
 
   Group.init = function(apiData, termsMap, teachersMap) {

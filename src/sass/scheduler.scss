@@ -151,6 +151,7 @@ a {
     font-size: 11px;
     padding: 2px;
     line-height: 12px;
+    border-radius: 5px;
 
     .title {
       max-width: 150px;
@@ -172,5 +173,6 @@ a {
     background-color: rgba(255, 128, 128, .15);
     position: absolute;
     width: 198px;
+    border-radius: 0;
   }
 }

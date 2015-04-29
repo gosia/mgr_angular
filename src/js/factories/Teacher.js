@@ -65,7 +65,7 @@ angular.module('schedulerApp').factory('Teacher', ['Perms', function(Perms) {
     this.groups = groups || [];
   };
 
-  Teacher.prototype.events = function() {
+  Teacher.prototype.newEvents = function() {
     var events = [];
 
     var groupIds = _.uniq(_.map(this.timetable, x => x.group.id));

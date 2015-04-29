@@ -87,7 +87,7 @@ angular.module('schedulerApp').factory('Term', ['Perms', function(Perms) {
     this.day = term.day;
   };
 
-  Term.prototype.events = function() {
+  Term.prototype.newEvents = function() {
     return [];
   };
 

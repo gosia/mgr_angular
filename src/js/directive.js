@@ -103,7 +103,6 @@ angular.module('schedulerApp')
         });
 
         // set colors and borders
-        $event.css('border-radius', '5px');
         if ($scope.event.options.backgroundColor !== undefined) {
           $event.css('background-color', $scope.event.options.backgroundColor);
         }

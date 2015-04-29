@@ -67,7 +67,7 @@ angular.module('schedulerApp').factory('Room', ['Perms', function(Perms) {
     this.labels = room.labels;
   };
 
-  Room.prototype.events = function() {
+  Room.prototype.newEvents = function() {
     return [];
   };
 

@@ -18,6 +18,7 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', fun
     startTask: id => base + 'api/task/' + id + '/start/',
     createTask: () => base + 'api/task/',
     addTaskElement: id => base + 'api/task/' + id + '/add/',
+    getBusyTerms: (id, groupId) => base + 'api/task/' + id + '/busy_terms/' + groupId + '/',
     removeTaskElement: id => base + 'api/task/' + id + '/remove/'
   };
   var service = {urls: urls};
@@ -194,6 +195,13 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', fun
         from: fromConfigId
       }
     ).error(showAlert).success(checkErrorResponse);
+  };
+
+  service.getBusyTermsForGroup = function(taskId, groupId) {
+    return $http
+      .get(service.urls.getBusyTerms(taskId, groupId))
+      .error(showAlert)
+      .success(checkErrorResponse);
   };
 
   return service;
