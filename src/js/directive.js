@@ -46,10 +46,26 @@ angular.module('schedulerApp')
       restrict: 'A',
       link: function ($scope, $element) {
         $element.draggable({
+          cursorAt: {top: 0, left: 99},
           zIndex: 1070,
           revert: true,
           revertDuration: 0
         });
+      }
+    };
+  }])
+  .directive('droppable', [function() {
+    return {
+      restrict: 'A',
+      link: function ($scope, $element) {
+        $element.droppable({
+          drop: function(event, ui){
+            $scope.dropCallback(event, ui);
+          }
+        });
+      },
+      scope: {
+        dropCallback: '='
       }
     };
   }])

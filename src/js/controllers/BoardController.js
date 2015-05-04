@@ -88,8 +88,30 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
       }
     };
 
-    var newEventAdded = function(date, groupId) {
+    var newEventAddedCallback = function(event, ui) {
+      var $target = $(event.target);
+      var hour = $target.data('hour');
+      var day = $target.data('day');
+
+      var $newPosY = ui.offset.top - $target.offset().top;
+      if ($newPosY < 0) {
+        hour--;
+        $newPosY = (40 + $newPosY);
+      }
+
+      var minute = Math.floor(($newPosY * 60) / 40.0);
+
+      var groupId = $(event.toElement).attr('data-id');
+
       ApiService
+        .addEvent(taskId, groupId, day, hour, minute)
+        .success(function(data) {
+          modifyTimetable(data, 'extend');
+        });
+    };
+
+    var newEventAdded = function(date, groupId) {
+      return ApiService
         .addEvent(taskId, groupId, date.day() - 1, date.hour(), date.minute())
         .success(function(data) {
           modifyTimetable(data, 'extend');
@@ -97,7 +119,7 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
     };
 
     var deletedEventCallback = function(tab, timetableObj) {
-      ApiService
+      return ApiService
         .removeEvent(taskId, timetableObj)
         .success(function(data) {
           modifyTimetable(data, 'delete');
@@ -284,6 +306,8 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
     $scope.addTab = addTab;
 
     $scope.activateOverflow = activateOverflow;
+
+    $scope.dropCallback = newEventAddedCallback;
 
     $scope.busyEvents = [];
     $scope.calendar = customCalendar;

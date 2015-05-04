@@ -152,6 +152,7 @@ a {
     padding: 2px;
     line-height: 12px;
     border-radius: 5px;
+    cursor: default;
 
     .title {
       max-width: 150px;
@@ -166,6 +167,10 @@ a {
       cursor: pointer;
     }
   }
+}
+
+.external-event.ui-draggable-dragging {
+  width: 198px;
 }
 
 .table-calendar-overflow-background {

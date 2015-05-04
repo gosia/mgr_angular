@@ -66,6 +66,20 @@
         "course": "Zaawansowany kurs języka Java",
         "group_type": "wykład"
       }
+    },
+    {
+      "id": "group3",
+      "teachers": ["jurkiewicz"],
+      "terms": [],
+      "same_term_groups": [],
+      "diff_term_groups": [],
+      "labels": [],
+      "terms_num": 2,
+      "students_num": 18,
+      "extra": {
+        "course": "Kurs Pythona",
+        "group_type": "wykład"
+      }
     }
   ],
   "rooms": [
