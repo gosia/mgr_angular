@@ -14,8 +14,16 @@ angular.module('schedulerApp').factory('Event', [function() {
     this.overlappingEvents = 1;
     this.overlappingEventPosition = 1;
 
+    this.recountBase();
+
     this.id = day + ':' + start + ':' + end + ':' + (tab === undefined ? '' : tab.id);
   }
+
+  Event.prototype.recountBase = function() {
+    var $cell = $('.calendar-day-0.calendar-hour-11');
+    this.baseH = $cell.outerHeight();
+    this.baseW = $cell.outerWidth();
+  };
 
   Event.prototype.getTitle = function() {
     return this.timetableObj.group.extra.course + ' (' + this.timetableObj.group.extra.groupType + ')';

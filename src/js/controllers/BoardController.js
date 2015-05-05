@@ -290,6 +290,16 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
       });
     };
 
+    $scope.$watch(
+      function () {
+        console.log('checking');
+        return [$('.calendar-day-0.calendar-hour-11').outerWidth(), $('.calendar-day-0.calendar-hour-11').outerHeight()].join('x');
+      },
+      function (value) {
+        console.log('directive got resized:', value);
+      }
+    );
+
     init();
 
     $scope.openAddModal = openAddModal;

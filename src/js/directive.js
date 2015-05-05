@@ -84,27 +84,28 @@ angular.module('schedulerApp')
       restrict: 'E',
       template: '<a class="event" tabindex="0" role="button"></a>',
       link: function ($scope, $element) {
-        var start = $scope.event.start;
-        var end = $scope.event.end;
-
-        var h = 40; // height of one hour cell
-        var w = 198; // width of one hour cell
+        var event = $scope.event;
+        var start = event.start;
+        var end = event.end;
 
         var $event = $element.find('.event');
 
         // count height of event and top/bottom position
-        var s = Math.round(((start - 480) * h) / 60.0);
-        var topPx = s + 'px';
-        var heightPx = Math.round(((end - start) * h) / 60.0) + 'px';
+        var recountHeight = function($event) {
+          var s = Math.round(((start - 480) * event.baseH) / 60.0);
+          var topPx = s + 'px';
+          var heightPx = Math.round(((end - start) * event.baseH) / 60.0) + 'px';
 
-        $event.css('height', heightPx);
-        $event.css('top', topPx);
+          $event.css('height', heightPx);
+          $event.css('top', topPx);
+        };
+        recountHeight($event);
 
         // count width and left/right position
         var recountWidth = function($event){
-          var cw = Math.floor(w / $scope.event.overlappingEvents);
+          var cw = Math.floor(event.baseW / $scope.event.overlappingEvents);
           var widthPx = cw + 'px';
-          var leftPx = (w * $scope.event.day + cw * ($scope.event.overlappingEventPosition - 1)) + 'px';
+          var leftPx = (event.baseW * $scope.event.day + cw * ($scope.event.overlappingEventPosition - 1)) + 'px';
           $event.css('width', widthPx);
           $event.css('left', leftPx);
         };
@@ -116,6 +117,12 @@ angular.module('schedulerApp')
         });
         $scope.$watch('event.overlappingEvents', function() {
           recountWidth($event);
+        });
+        $scope.$watch('event.baseW', function() {
+          recountWidth($event);
+        });
+        $scope.$watch('event.baseH', function() {
+          recountHeight($event);
         });
 
         // set colors and borders
@@ -134,7 +141,8 @@ angular.module('schedulerApp')
           $event.append('<div><div class="title">' + $scope.event.getTitle() + '</div><div class="pull-right closeon">x</div></div>');
           $event.append('<div><span>' + $scope.event.getLeftSubTitle() + '</span><span class="pull-right">' + $scope.event.getRightSubTitle() + '</span></div>');
 
-          $event.find('.closeon').click(function() {
+          $event.find('.closeon').click(function(event) {
+            event.stopPropagation();
             $scope.event.calendar.deletedCallback($scope.event.tab, $scope.event.timetableObj);
           });
 
@@ -150,11 +158,16 @@ angular.module('schedulerApp')
           var options = {
             content: content,
             placement: 'top',
-            trigger: 'focus',
+            trigger: 'manual',
             html: true,
             container: 'body'
           };
           $event.popover(options);
+          $event.on('click', function() {
+            $event.popover('toggle');
+          }).on('focusout', function(){
+            $event.popover('hide');
+          });
         }
       },
       scope: {

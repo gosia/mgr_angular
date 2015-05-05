@@ -155,10 +155,9 @@ a {
     cursor: default;
 
     .title {
-      max-width: 150px;
+      max-width: 90%;
       text-overflow: ellipsis;
       white-space: nowrap;
-      width: 150px;
       display: inline-block;
       overflow: hidden;
     }

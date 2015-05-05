@@ -1,7 +1,7 @@
 'use strict';
 /* global angular, _ */
 
-angular.module('schedulerApp').factory('CustomCalendar', [function () {
+angular.module('schedulerApp').factory('CustomCalendar', [function() {
 
   function Calendar(id, config, addedCallback, deletedCallback) {
     this.id = id;
