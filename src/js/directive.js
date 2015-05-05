@@ -69,13 +69,20 @@ angular.module('schedulerApp')
       }
     };
   }])
-  .directive('calendarOverflow', [function() {
+  .directive('calendarOverflow', ['$timeout', function($timeout) {
     return {
       restrict: 'E',
       templateUrl: window.STATIC_URL + 'django_scheduler/templates/includes/calendar_overflow.html',
       scope: {
         events: '=',
         background: '='
+      },
+      link: function($scope) {
+        $('[data-toggle="offcanvas"]').click(function() {
+          $timeout(function() {
+            _.each($scope.events, event => event.recountBase());
+          }, 800);
+        });
       }
     };
   }])
