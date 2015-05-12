@@ -121,7 +121,6 @@ module.exports = function (grunt) {
                 }
                 return next();
               },
-              connect().use('/static/bower_components', connect.static('./bower_components')),
               connect().use('/grunt/.build', connect.static('./.build')),
               connect().use('/static/django_scheduler/templates', connect.static(config.templateDir)),
               connect().use('/static/django_scheduler', connect.static(config.staticDir)),
@@ -219,8 +218,6 @@ module.exports = function (grunt) {
       },
       bower2: {
         src: [
-          '<%= config.buildDir %>/js/libs/moment-with-locales.min.js',
-          '<%= config.buildDir %>/js/libs/fullcalendar.min.js',
           '<%= config.buildDir %>/js/libs/jquery-ui-1.10.3.min.js'
         ],
         dest: '<%= config.staticDir %>/js/vendor2.js'

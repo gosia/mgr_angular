@@ -1,12 +1,11 @@
 'use strict';
 /* global angular, $, _ */
 
-angular.module('schedulerApp').controller('BoardController', ['ApiService', '$routeParams', '$scope', 'Config', 'Calendar', 'Teacher', 'Group', 'Room', 'Term', '$timeout', 'Event', 'CustomCalendar',
-  function (ApiService, $routeParams, $scope, Config, Calendar, Teacher, Group, Room, Term, $timeout, Event, CustomCalendar) {
+angular.module('schedulerApp').controller('BoardController', ['ApiService', '$routeParams', '$scope', 'Config', 'Teacher', 'Group', 'Room', 'Term', '$timeout', 'Event', 'CustomCalendar',
+  function (ApiService, $routeParams, $scope, Config, Teacher, Group, Room, Term, $timeout, Event, CustomCalendar) {
     var viewsList = [
       {value: 'tabs', label: 'Zakładki'},
-      {value: 'calendar', label: 'Kalendarz'},
-      {value: 'custom-calendar', label: 'Nowy kalendarz'}
+      {value: 'custom-calendar', label: 'Kalendarz'}
     ];
     $scope.viewsList = [viewsList[0]];
 
@@ -14,7 +13,7 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
     $scope.activeTabI = -1;
     $scope.activeView = viewsList[0];
 
-    var calendar, configId, taskId, customCalendar;
+    var configId, taskId, customCalendar;
 
     var init = function() {
       configId = $routeParams.configId;
@@ -31,8 +30,6 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
 
     // Calendar handling
     var initCalendar = function() {
-      calendar = Calendar.init('#calendar', $scope.config, newEventAdded, deletedEventCallback);
-      calendar.addTabs($scope.activeTabs);
       customCalendar = CustomCalendar.init('#calendar', $scope.config, newEventAdded, deletedEventCallback);
       customCalendar.addTabs($scope.activeTabs);
       $scope.calendar = customCalendar;
@@ -41,14 +38,6 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
     function initEvents() {
       $.AdminLTE.boxWidget.activate();
     }
-
-    $scope.$watch('activeView', function(newValue) {
-      if (newValue.value === 'calendar') {
-        $timeout(function() {
-          initEvents();
-        }, 1000);
-      }
-    });
 
     var modifyTimetable = function(data, mode) {
       if (data.ok) {
@@ -81,7 +70,6 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
         _.each(changedTeacherIds, function(x) { tabs.push($scope.config.teachersMap[x]); });
         _.each(changedRoomIds, function(x) { tabs.push($scope.config.roomsMap[x]); });
 
-        calendar.reload(tabs);
         customCalendar.reload(tabs);
         initEvents();
 
@@ -145,9 +133,6 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
         }
       }
 
-      if (calendar !== undefined) {
-        calendar.removeTab(removed);
-      }
       if (customCalendar !== undefined) {
         customCalendar.removeTab(removed);
       }
@@ -159,10 +144,6 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
         $scope.activeTabs.push(obj);
         i = $scope.activeTabs.length - 1;
 
-        if (calendar !== undefined) {
-          calendar.addTab(obj);
-          initEvents();
-        }
         if (customCalendar !== undefined) {
           customCalendar.addTab(obj);
           initEvents();

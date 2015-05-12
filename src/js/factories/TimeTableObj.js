@@ -1,7 +1,7 @@
 'use strict';
 /* global angular */
 
-angular.module('schedulerApp').factory('TimeTableObj', ['Calendar', 'Event', function(Calendar, Event) {
+angular.module('schedulerApp').factory('TimeTableObj', ['Event', function(Event) {
   function TimeTableObj(group, term, room) {
     this.group = group;
     this.room = room;
@@ -24,22 +24,6 @@ angular.module('schedulerApp').factory('TimeTableObj', ['Calendar', 'Event', fun
 
   TimeTableObj.prototype.getId = function() {
     return this.group.id + ':' + this.term.id + ':' + this.room.id;
-  };
-
-  TimeTableObj.prototype.getEventForTab = function(tab) {
-    return {
-      title: tab.id,
-      start: new Date(Calendar.y, Calendar.m, Calendar.d + this.term.day, this.term.start.hour, this.term.start.minute),
-      end: new Date(Calendar.y, Calendar.m, Calendar.d + this.term.day, this.term.end.hour, this.term.end.minute),
-      allDay: false,
-      backgroundColor: backgrouundColors[tab.type],
-      borderColor: backgrouundColors[tab.type],
-      textColor: colors[tab.type],
-      tabId: tab.id,
-      id: this.getId(),
-      tab: tab,
-      timetableObj: this
-    };
   };
 
   TimeTableObj.prototype.getEvent = function(calendar, tab) {
