@@ -1,8 +1,8 @@
 'use strict';
 /* global angular, $, _ */
 
-angular.module('schedulerApp').controller('BoardController', ['ApiService', '$routeParams', '$scope', 'Config', 'Teacher', 'Group', 'Room', 'Term', '$timeout', 'Event', 'CustomCalendar',
-  function (ApiService, $routeParams, $scope, Config, Teacher, Group, Room, Term, $timeout, Event, CustomCalendar) {
+angular.module('schedulerApp').controller('BoardController', ['ApiService', '$routeParams', '$scope', 'Config', 'Teacher', 'Group', 'Room', 'Term', '$timeout', 'Event', 'Calendar',
+  function (ApiService, $routeParams, $scope, Config, Teacher, Group, Room, Term, $timeout, Event, Calendar) {
     var viewsList = [
       {value: 'tabs', label: 'Zakładki'},
       {value: 'custom-calendar', label: 'Kalendarz'}
@@ -30,7 +30,7 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
 
     // Calendar handling
     var initCalendar = function() {
-      customCalendar = CustomCalendar.init('#calendar', $scope.config, newEventAdded, deletedEventCallback);
+      customCalendar = Calendar.init($scope.config, deletedEventCallback);
       customCalendar.addTabs($scope.activeTabs);
       $scope.calendar = customCalendar;
     };
