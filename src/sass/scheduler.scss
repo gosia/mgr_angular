@@ -1,4 +1,8 @@
 
+$screen-sm-min: 768px;
+$screen-md-min: 992px;
+$screen-lg-min: 1200px;
+
 @keyframes spin {
   from { transform: scale(1) rotate(0deg);}
   to { transform: scale(1) rotate(360deg);}
@@ -125,8 +129,8 @@ a {
   }
 
   .calendar-cell {
-    width: 198px;
     height: 40px;
+    width: 500px;
   }
 
   .calendar-axis-day {
@@ -141,13 +145,11 @@ a {
   left: 33px;
 
   td {
-    width: 198px;
     height: 560px;
   }
 
   .event {
     position: absolute;
-    width: 198px;
     font-size: 11px;
     padding: 2px;
     line-height: 12px;
@@ -169,14 +171,13 @@ a {
 }
 
 .external-event.ui-draggable-dragging {
-  width: 198px;
+  width: 100px;
 }
 
 .table-calendar-overflow-background {
   .event {
     background-color: rgba(255, 128, 128, .15);
     position: absolute;
-    width: 198px;
     border-radius: 0;
   }
 }
@@ -185,6 +186,10 @@ ol.breadcrumb {
   width: 30%;
   white-space: nowrap;
   overflow: hidden;
+
+  @media (min-width: $screen-lg-min) {
+    width: 40%;
+  }
 
   & > li {
     display: inline;

@@ -112,7 +112,13 @@ angular.module('schedulerApp')
         var recountWidth = function($event){
           var cw = Math.floor(event.baseW / $scope.event.overlappingEvents);
           var widthPx = cw + 'px';
-          var leftPx = (event.baseW * $scope.event.day + cw * ($scope.event.overlappingEventPosition - 1)) + 'px';
+
+          var lp = _.reduce(
+            _.times($scope.event.day, x => $('.calendar-day-' + x + '.calendar-hour-11').outerWidth()),
+            (s, x) => s + x,
+            0
+          );
+          var leftPx = (lp + cw * ($scope.event.overlappingEventPosition - 1)) + 'px';
           $event.css('width', widthPx);
           $event.css('left', leftPx);
         };

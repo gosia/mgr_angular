@@ -20,7 +20,7 @@ angular.module('schedulerApp').factory('Event', [function() {
   }
 
   Event.prototype.recountBase = function() {
-    var $cell = $('.calendar-day-0.calendar-hour-11');
+    var $cell = $('.calendar-day-' + this.day + '.calendar-hour-11');
     this.baseH = $cell.outerHeight();
     this.baseW = $cell.outerWidth();
   };
