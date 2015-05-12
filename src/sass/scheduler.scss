@@ -180,3 +180,13 @@ a {
     border-radius: 0;
   }
 }
+
+ol.breadcrumb {
+  width: 30%;
+  white-space: nowrap;
+  overflow: hidden;
+
+  & > li {
+    display: inline;
+  }
+}
