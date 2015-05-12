@@ -3,6 +3,10 @@ $screen-sm-min: 768px;
 $screen-md-min: 992px;
 $screen-lg-min: 1200px;
 
+body {
+  background-color: #ecf0f5;
+}
+
 @keyframes spin {
   from { transform: scale(1) rotate(0deg);}
   to { transform: scale(1) rotate(360deg);}
@@ -195,4 +199,29 @@ ol.breadcrumb {
   & > li {
     display: inline;
   }
+}
+
+.content-header {
+  &.hidden {
+    padding: 0;
+  }
+
+  &.alerts-header {
+    padding-top: 0;
+
+    .alert:first-child {
+      padding-top: 15px;
+    }
+  }
+}
+
+.content {
+  &.view-compressed {
+    padding-bottom: 0;
+    padding-top: 0;
+  }
+}
+
+.nav > li > a {
+  padding: 15px;
 }
