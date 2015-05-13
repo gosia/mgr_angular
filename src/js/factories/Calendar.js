@@ -53,6 +53,10 @@ angular.module('schedulerApp').factory('Calendar', [function() {
     }
   };
 
+  Calendar.prototype.recountBase = function() {
+    _.each(this.events, event => event.recountBase());
+  };
+
   Calendar.prototype.removeTab = function(tab) {
     this.events = _.filter(this.events, e => e.tab.id !== tab.id || e.tab.type !== tab.type);
     this.recountOverlappingEvents();

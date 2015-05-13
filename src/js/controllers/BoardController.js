@@ -13,7 +13,7 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
     $scope.activeTabI = -1;
     $scope.activeView = viewsList[0];
 
-    var configId, taskId, customCalendar;
+    var configId, taskId, calendar;
 
     var init = function() {
       configId = $routeParams.configId;
@@ -30,19 +30,22 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
 
     // Calendar handling
     var initCalendar = function() {
-      customCalendar = Calendar.init($scope.config, deletedEventCallback);
-      customCalendar.addTabs($scope.activeTabs);
-      $scope.calendar = customCalendar;
+      calendar = Calendar.init($scope.config, deletedEventCallback);
+      calendar.addTabs($scope.activeTabs);
+      $scope.calendar = calendar;
     };
 
-    function initEvents() {
-      $.AdminLTE.boxWidget.activate();
-    }
+    $scope.$watch('activeView', function() {
+      if ($scope.activeView.value === 'custom-calendar') {
+        $timeout(function() {
+          calendar.recountBase();
+        }, 500);
+      }
+    });
 
     var modifyTimetable = function(data, mode) {
       if (data.ok) {
         $scope.config.modifyTimetable(data.timetable, mode);
-
 
         var changedRoomIds = _.uniq(_.flatten(
           _.map(data.timetable.results, function(v) {
@@ -70,8 +73,7 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
         _.each(changedTeacherIds, function(x) { tabs.push($scope.config.teachersMap[x]); });
         _.each(changedRoomIds, function(x) { tabs.push($scope.config.roomsMap[x]); });
 
-        customCalendar.reload(tabs);
-        initEvents();
+        calendar.reload(tabs);
 
       }
     };
@@ -125,8 +127,8 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
         }
       }
 
-      if (customCalendar !== undefined) {
-        customCalendar.removeTab(removed);
+      if (calendar !== undefined) {
+        calendar.removeTab(removed);
       }
     };
 
@@ -136,9 +138,8 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
         $scope.activeTabs.push(obj);
         i = $scope.activeTabs.length - 1;
 
-        if (customCalendar !== undefined) {
-          customCalendar.addTab(obj);
-          initEvents();
+        if (calendar !== undefined) {
+          calendar.addTab(obj);
         }
       }
 
@@ -283,6 +284,6 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
     $scope.dropCallback = newEventAddedCallback;
 
     $scope.busyEvents = [];
-    $scope.calendar = customCalendar;
+    $scope.calendar = calendar;
   }
 ]);
