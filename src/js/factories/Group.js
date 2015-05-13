@@ -26,12 +26,20 @@ angular.module('schedulerApp').factory('Group', ['Perms', function(Perms) {
     return this.id;
   };
 
+  Group.prototype.getTabName = function() {
+    return this.getCourseName();
+  };
+
   Group.prototype.getLongName = function() {
     return 'Grupa ' + this.id + ' (' + this.extra.course + ', ' + this.extra.groupType +  ')';
   };
 
   Group.prototype.getCourseName = function() {
-    return this.extra.course + ' (' + this.extra.groupType + ') - ' +
+    return this.extra.course + ' (' + this.extra.groupType + ')';
+  };
+
+  Group.prototype.getCourseNameWithTeachers = function() {
+    return this.getCourseName() + ' - ' +
       _.map(this.teachers, function(x) { return x.id; }).join(', ');
   };
 

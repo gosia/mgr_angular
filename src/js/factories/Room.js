@@ -31,6 +31,10 @@ angular.module('schedulerApp').factory('Room', ['Perms', function(Perms) {
     return this.id;
   };
 
+  Room.prototype.getTabName = function() {
+    return this.getShortName();
+  };
+
   Room.prototype.getLongName = function() {
     return 'Sala ' + this.id;
   };

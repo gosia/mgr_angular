@@ -48,6 +48,10 @@ angular.module('schedulerApp').factory('Term', ['Perms', function(Perms) {
     return this.id;
   };
 
+  Term.prototype.getTabName = function() {
+    return this.getPrettyName();
+  };
+
   Term.prototype.getLongName = function() {
     return 'Termin ' + this.id + ' (' + this.getPrettyName() + ')';
   };

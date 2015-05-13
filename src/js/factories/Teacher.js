@@ -29,6 +29,10 @@ angular.module('schedulerApp').factory('Teacher', ['Perms', function(Perms) {
     return this.id;
   };
 
+  Teacher.prototype.getTabName = function() {
+    return this.getShortName();
+  };
+
   Teacher.prototype.getLongName = function() {
     return 'Nauczyciel ' + this.id;
   };
