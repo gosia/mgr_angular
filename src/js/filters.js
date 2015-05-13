@@ -14,4 +14,10 @@ angular.module('schedulerApp')
 
       return events;
     };
+  })
+  .filter('termNotIn', function() {
+    return function(terms, notInTerms) {
+      var notInTermsMap = _.object(_.map(notInTerms, term => [term.id, term]));
+      return _.filter(terms, term => notInTermsMap[term.id] === undefined);
+    };
   });
