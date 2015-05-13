@@ -266,22 +266,27 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
 
     init();
 
-    $scope.openAddModal = openAddModal;
-    $scope.openEditModal = openEditModal;
-    $scope.closeElementModal = closeElementModal;
-    $scope.areYouSureModal = areYouSureModal;
+    var board = {
+      openAddModal: openAddModal,
+      openEditModal: openEditModal,
+      closeElementModal: closeElementModal,
+      areYouSureModal: areYouSureModal,
 
-    $scope.saveElement = saveElement;
-    $scope.removeElement = removeElement;
+      saveElement: saveElement,
+      removeElement: removeElement,
 
-    $scope.initCalendar = initCalendar;
-    $scope.changeTab = changeTab;
-    $scope.removeTab = removeTab;
-    $scope.addTab = addTab;
+      changeTab: changeTab,
+      removeTab: removeTab,
+      addTab: addTab,
 
-    $scope.activateOverflow = activateOverflow;
+      initCalendar: initCalendar,
+      activateOverflow: activateOverflow,
+      dropCallback: newEventAddedCallback,
 
-    $scope.dropCallback = newEventAddedCallback;
+      calendar: calendar
+    };
+
+    $scope.board = board;
 
     $scope.busyEvents = [];
     $scope.calendar = calendar;
