@@ -2,101 +2,6 @@
 /* global angular, _ */
 
 angular.module('schedulerApp')
-  .directive('contentChange', ['$location', function($location) {
-    return {
-      restrict: 'A',
-      link: function ($scope, $element, $attr) {
-        $element.bind('click', function () {
-          $location.path($attr.href);
-        });
-      }
-    };
-  }])
-  .directive('timetable', [function() {
-    return {
-      restrict: 'AE',
-      templateUrl: window.STATIC_URL + 'django_scheduler/templates/includes/timetable.html',
-      scope: false
-    };
-  }])
-  .directive('loadingBox', [function() {
-    return {
-      restrict: 'A',
-      link: function ($scope, $element) {
-
-        var onConditionChange = function(newValue) {
-          if (newValue) {
-            $element.addClass('box-loading');
-          } else {
-            $element.removeClass('box-loading');
-          }
-        };
-
-        onConditionChange(true);
-
-        $scope.$watch(function() { return $scope.loadingIf; }, onConditionChange);
-      },
-      scope: {
-        loadingIf: '=if'
-      }
-    };
-  }])
-  .directive('draggable', [function() {
-    return {
-      restrict: 'A',
-      link: function ($scope, $element) {
-        $element.draggable({
-          cursorAt: {top: 0, left: 99},
-          zIndex: 1070,
-          revert: true,
-          revertDuration: 0
-        });
-      }
-    };
-  }])
-  .directive('droppable', [function() {
-    return {
-      restrict: 'A',
-      link: function ($scope, $element) {
-        $element.droppable({
-          drop: function(event, ui){
-            $scope.dropCallback(event, ui);
-          }
-        });
-      },
-      scope: {
-        dropCallback: '='
-      }
-    };
-  }])
-  .directive('calendarOverflow', ['$timeout', '$window', function($timeout, $window) {
-    return {
-      restrict: 'E',
-      templateUrl: window.STATIC_URL + 'django_scheduler/templates/includes/calendar_overflow.html',
-      scope: {
-        events: '=',
-        background: '=',
-        board: '='
-      },
-      link: function($scope) {
-
-        function recountEventsPositions() {
-          $timeout(function() {
-            _.each($scope.events, event => event.recountBase());
-          }, 800);
-        }
-
-        $('[data-toggle="offcanvas"]').click(function() {
-          recountEventsPositions();
-        });
-
-        angular.element($window).bind('resize', function() {
-          recountEventsPositions();
-        });
-
-      }
-    };
-  }])
   .directive('calendarOverflowEvent', ['$compile', function($compile) {
     return {
       restrict: 'E',
@@ -202,23 +107,6 @@ angular.module('schedulerApp')
       },
       scope: {
         event: '=',
-        board: '='
-      }
-    };
-  }])
-  .directive('listTerms', [function() {
-    return {
-      restrict: 'E',
-      templateUrl: window.STATIC_URL + 'django_scheduler/templates/includes/terms_list.html',
-      link: function($scope) {
-        $scope.allOpen = false;
-        $scope.allTermsGiven = $scope.terms.length === $scope.config.terms.length;
-        $scope.showAllExcept = !$scope.allTermsGiven &&
-          4 * $scope.terms.length > 3 * $scope.config.terms.length;
-      },
-      scope: {
-        terms: '=',
-        config: '=',
         board: '='
       }
     };
