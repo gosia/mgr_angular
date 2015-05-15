@@ -12,6 +12,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
 
   var modRewrite = require('connect-modrewrite');
+  var fs = require('fs');
 
   var config = {
     jsDir: 'src/js',
@@ -109,6 +110,34 @@ module.exports = function (grunt) {
                 '^/api/config/[\\w\\d\\-:]+/copy/$ /api/default.json [L]',
                 '^/api/config/[\\w\\d\\-:]+/import/$ /api/default.json [L]'
               ]),
+              function(req, res, next) {
+                var regexpes = [
+                  '^/config/([\\w\\d\\-:]+)/?$',
+                  '^/configs/?$',
+
+                  '^/task/([\\w\\d\\-:]+)/?$',
+                  '^/task/([\\w\\d\\-:]+)/([\\w\\d\\-:]+)/?$',
+                  '^/tasks/?$'
+                ];
+                var urlMatches = false;
+                for (var i=0; i<regexpes.length; i++) {
+                  var r = new RegExp(regexpes[i]);
+                  if (r.test(req.url)) {
+                    urlMatches = true;
+                    break;
+                  }
+                }
+                
+                if (urlMatches) {
+                  var index = config.templateDir + '/index.html';
+                  fs.readFile(index, function (err, data) {
+                    console.log(data);
+                    res.end(data);
+                  });
+                } else {
+                  return next();
+                }
+              },
               function(req, res, next) {
                 if (req.method === 'POST' && req.url.substr(0, 4) === '/api') {
                   req.method = 'GET';
