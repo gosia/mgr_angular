@@ -131,7 +131,6 @@ module.exports = function (grunt) {
                 if (urlMatches) {
                   var index = config.templateDir + '/index.html';
                   fs.readFile(index, function (err, data) {
-                    console.log(data);
                     res.end(data);
                   });
                 } else {

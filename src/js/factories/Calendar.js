@@ -8,6 +8,8 @@ angular.module('schedulerApp').factory('Calendar', [function() {
     this.deletedCallback = deletedCallback;
 
     this.events = [];
+
+    this.visibleEventsTypes = ['teacher', 'group', 'room'];
   }
 
   Calendar.prototype.recountOverlappingEvents = function() {
@@ -63,7 +65,12 @@ angular.module('schedulerApp').factory('Calendar', [function() {
   };
 
   Calendar.prototype.addTab = function(tab) {
-    var events = _.map(tab.timetable, t => t.getEvent(this, tab));
+    var events;
+    if (_.contains(this.visibleEventsTypes, tab.type)) {
+      events = _.map(tab.timetable, t => t.getEvent(this, tab));
+    } else {
+      events = [];
+    }
     this.events = _.uniq(this.events.concat(events), x => x.id);
     this.recountOverlappingEvents();
   };
