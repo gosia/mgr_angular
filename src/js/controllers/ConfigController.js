@@ -27,6 +27,15 @@ angular.module('schedulerApp').controller('ConfigController', ['ApiService', '$r
       };
     };
 
+    var importData = function() {
+      ApiService.importData($scope.configId, $scope.importData.data).success(function(data) {
+        if (data.ok) {
+          $route.reload();
+        }
+      });
+    };
+    $scope.importData = {execute: importData, data: undefined};
+
     $scope.copyTeachers = copyConfigElements('teacher');
     $scope.copyTerms = copyConfigElements('term');
     $scope.copyRooms = copyConfigElements('room');
