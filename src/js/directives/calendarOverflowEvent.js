@@ -66,7 +66,10 @@ angular.module('schedulerApp')
         }
 
         // set text
-        if (event.tab !== undefined) {
+        if (event.tab !== undefined && event.timetableObj === undefined) {
+          $event.append('<div><div class="title">' + event.getTitle() + '</div></div>');
+        }
+        if (event.tab !== undefined && event.timetableObj !== undefined) {
           $event.append('<div><div class="title">' + event.getTitle() + '</div><div class="pull-right closeon">x</div></div>');
           $event.append('<div><span>' + event.getLeftSubTitle() + '</span><span class="pull-right">' + event.getRightSubTitle() + '</span></div>');
 

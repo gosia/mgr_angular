@@ -27,6 +27,9 @@ angular.module('schedulerApp')
           recountEventsPositions();
         });
 
+        $scope.$on('recountBase', function() {
+          recountEventsPositions();
+        });
       }
     };
   }]);

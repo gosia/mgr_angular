@@ -26,15 +26,56 @@ angular.module('schedulerApp').factory('Event', [function() {
   };
 
   Event.prototype.getTitle = function() {
+    if (this.timetableObj === undefined) {
+      return this.tab.getPrettyName();
+    }
     return this.timetableObj.group.extra.course + ' (' + this.timetableObj.group.extra.groupType + ')';
   };
 
   Event.prototype.getLeftSubTitle = function() {
+    if (this.timetableObj === undefined) {
+      return '';
+    }
     return _.map(this.timetableObj.group.teachers, function(x) { return x.id; }).join(', ');
   };
 
   Event.prototype.getRightSubTitle = function() {
+    if (this.timetableObj === undefined) {
+      return '';
+    }
     return 's.' + this.timetableObj.room.id;
+  };
+
+  var backgroundColors = {
+    teacher: '#00a65a',
+    group: '#f39c12',
+    room: '#d2d6de',
+    term: '#3c8dbc'
+  };
+
+  var colors = {
+    teacher: 'white',
+    group: 'white',
+    room: 'black',
+    term: 'white'
+  };
+
+  Event.getTermEvent = function(calendar, tab) {
+    var opts = {
+      backgroundColor: backgroundColors[tab.type],
+      borderColor: backgroundColors[tab.type],
+      textColor: colors[tab.type]
+    };
+
+    return new Event(
+      tab.day,
+      tab.start.hour * 60 + tab.start.minute,
+      tab.end.hour * 60 + tab.end.minute,
+      calendar,
+      undefined,
+      tab,
+      opts
+    );
   };
 
   return Event;

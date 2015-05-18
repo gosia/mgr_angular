@@ -13,7 +13,7 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
     $scope.activeTabI = -1;
     $scope.activeView = viewsList[0];
 
-    var configId, taskId, calendar;
+    var configId, taskId, calendar, termCalendar;
 
     var init = function() {
       configId = $routeParams.configId;
@@ -27,12 +27,19 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
       }
 
     };
+    init();
 
     // Calendar handling
     var initCalendar = function() {
       calendar = Calendar.init($scope.config, deletedEventCallback);
       calendar.addTabs($scope.activeTabs);
       $scope.calendar = calendar;
+    };
+    var initTermCalendar = function() {
+      termCalendar = Calendar.init($scope.config, deletedEventCallback);
+      termCalendar.visibleEventsTypes = ['term'];
+      termCalendar.addTabs($scope.config.terms);
+      $scope.termCalendar = termCalendar;
     };
 
     $scope.$watch('activeView', function() {
@@ -264,8 +271,6 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
       });
     };
 
-    init();
-
     var board = {
       openAddModal: openAddModal,
       openEditModal: openEditModal,
@@ -280,15 +285,18 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
       addTab: addTab,
 
       initCalendar: initCalendar,
+      initTermCalendar: initTermCalendar,
       activateOverflow: activateOverflow,
       dropCallback: newEventAddedCallback,
 
-      calendar: calendar
+      calendar: calendar,
+      termCalendar: termCalendar
     };
 
     $scope.board = board;
 
     $scope.busyEvents = [];
     $scope.calendar = calendar;
+    $scope.termCalendar = termCalendar;
   }
 ]);

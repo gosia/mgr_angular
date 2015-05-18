@@ -1,7 +1,7 @@
 'use strict';
 /* global angular, _ */
 
-angular.module('schedulerApp').factory('Calendar', [function() {
+angular.module('schedulerApp').factory('Calendar', ['Event', function(Event) {
 
   function Calendar(config, deletedCallback) {
     this.config = config;
@@ -65,9 +65,13 @@ angular.module('schedulerApp').factory('Calendar', [function() {
   };
 
   Calendar.prototype.addTab = function(tab) {
-    var events;
-    if (_.contains(this.visibleEventsTypes, tab.type)) {
-      events = _.map(tab.timetable, t => t.getEvent(this, tab));
+    var events, calendar = this;
+    if (_.contains(calendar.visibleEventsTypes, tab.type)) {
+      if (tab.type === 'term') {
+        events = [Event.getTermEvent(this, tab)];
+      } else {
+        events = _.map(tab.timetable, t => t.getEvent(this, tab));
+      }
     } else {
       events = [];
     }
