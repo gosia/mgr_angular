@@ -43,6 +43,10 @@ angular.module('schedulerApp').factory('Group', ['Perms', function(Perms) {
       _.map(this.teachers, function(x) { return x.id; }).join(', ');
   };
 
+  Group.prototype.getCourseNameWithTeachersAndId = function() {
+    return this.getCourseNameWithTeachers() + ' (grupa ' + this.id + ')';
+  };
+
   Group.prototype.setTimetable = function(timetable) {
     this.timetable = timetable;
   };
