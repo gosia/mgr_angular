@@ -70,12 +70,14 @@ angular.module('schedulerApp')
           $event.append('<div><div class="title">' + event.getTitle() + '</div></div>');
         }
         if (event.tab !== undefined && event.timetableObj !== undefined) {
-          $event.append('<div><div class="title">' + event.getTitle() + '</div><div class="pull-right closeon">x</div></div>');
+          var closeon = '<div class="pull-right closeon" text="\'Na pewno chcesz to usunąć ?\'" action="event.calendar.deletedCallback(event.tab, event.timetableObj)" data-are-you-sure>x</div>';
+          $event.append('<div><div class="title">' + event.getTitle() + '</div>' + closeon + '</div>');
           $event.append('<div><span>' + event.getLeftSubTitle() + '</span><span class="pull-right">' + event.getRightSubTitle() + '</span></div>');
+
+          $compile($event.contents())($scope);
 
           $event.find('.closeon').click(function(event) {
             event.stopPropagation();
-            event.calendar.deletedCallback($scope.event.tab, $scope.event.timetableObj);
           });
 
           // add popover

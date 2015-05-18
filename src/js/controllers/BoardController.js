@@ -235,16 +235,7 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
       resetForm(form);
     };
 
-    var areYouSureModal = function() {
-      var tab = $scope.activeTab;
-      $scope.areYouSureName = tab.getLongName();
-      $scope.areYouSureCall = function() {
-        return removeElement(tab);
-      };
-      $('#are-you-sure').modal('show');
-    };
     var removeElement = function(elem) {
-      $('#are-you-sure').modal('hide');
       ApiService.removeConfigElement(configId, elem).success(function(data) {
         if (data.ok) {
           $scope.config.removeElement(elem);
@@ -275,7 +266,6 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
       openAddModal: openAddModal,
       openEditModal: openEditModal,
       closeElementModal: closeElementModal,
-      areYouSureModal: areYouSureModal,
 
       saveElement: saveElement,
       removeElement: removeElement,

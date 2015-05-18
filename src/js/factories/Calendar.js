@@ -68,9 +68,9 @@ angular.module('schedulerApp').factory('Calendar', ['Event', function(Event) {
     var events, calendar = this;
     if (_.contains(calendar.visibleEventsTypes, tab.type)) {
       if (tab.type === 'term') {
-        events = [Event.getTermEvent(this, tab)];
+        events = [Event.getTermEvent(calendar, tab)];
       } else {
-        events = _.map(tab.timetable, t => t.getEvent(this, tab));
+        events = _.map(tab.timetable, t => t.getEvent(calendar, tab));
       }
     } else {
       events = [];
