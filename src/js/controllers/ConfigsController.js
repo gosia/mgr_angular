@@ -21,8 +21,13 @@ angular.module('schedulerApp').controller('ConfigsController', ['ApiService', '$
         $scope.numEnd = data.num_end;
         $scope.numAll = data.num_all;
 
-        var pageSize = data.num_end - data.num_start + 1;
-        $scope.pages = _.range(1, Math.ceil(data.num_all / pageSize) + 1);
+        var pageSize = data.num_end - data.num_start + 1, pageNum;
+        if (pageSize === 0) {
+          pageNum = 1;
+        } else {
+          pageNum = Math.ceil(data.num_all / pageSize) + 1;
+        }
+        $scope.pages = _.range(1, pageNum);
         $scope.activePage = Math.floor(data.num_start / pageSize) + 1;
       });
     };

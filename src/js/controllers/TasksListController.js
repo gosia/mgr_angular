@@ -28,8 +28,13 @@ angular.module('schedulerApp').controller('TasksListController', ['ApiService', 
         controller.numEnd = data.num_end;
         controller.numAll = data.num_all;
 
-        var pageSize = data.num_end - data.num_start + 1;
-        controller.pages = _.range(1, Math.ceil(data.num_all / pageSize) + 1);
+        var pageSize = data.num_end - data.num_start + 1, pageNum;
+        if (pageSize === 0) {
+          pageNum = 1;
+        } else {
+          pageNum = Math.ceil(data.num_all / pageSize) + 1;
+        }
+        $scope.pages = _.range(1, pageNum);
         controller.activePage = Math.floor(data.num_start / pageSize) + 1;
       });
     };
