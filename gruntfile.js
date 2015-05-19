@@ -113,7 +113,8 @@ module.exports = function (grunt) {
                 '^/api/files/$ /api/files.json [L]',
                 '^/api/file/$ /api/create_file.json [L]',
                 '^/api/file/[\\w\\d\\-:]+/$ /api/file.json [L]',
-                '^/api/file/[\\w\\d\\-:]+/remove/$ /api/default.json [L]'
+                '^/api/file/[\\w\\d\\-:]+/remove/$ /api/default.json [L]',
+                '^/api/file/[\\w\\d\\-:]+/save/$ /api/default.json [L]'
               ]),
               function(req, res, next) {
                 var regexpes = [
@@ -297,7 +298,8 @@ module.exports = function (grunt) {
           'admin-lte/app.min.js': 'admin-lte/dist/js/app.min.js',
           'moment-with-locales.min.js': 'moment/min/moment-with-locales.min.js',
           'fullcalendar.min.js': 'admin-lte/plugins/fullcalendar/fullcalendar.min.js',
-          'jquery-ui-1.10.3.min.js': 'admin-lte/plugins/jQueryUI/jquery-ui-1.10.3.min.js'
+          'jquery-ui-1.10.3.min.js': 'admin-lte/plugins/jQueryUI/jquery-ui-1.10.3.min.js',
+          'ace.js': 'ace-builds/src-min/ace.js'
         }
       },
       css: {

@@ -24,7 +24,8 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', fun
     removeFile: id => base + 'api/file/' + id + '/',
     createFile: () => base + 'api/file/',
     getFiles: () => base + 'api/files/',
-    getFile: id => base + 'api/file/' + id + '/'
+    getFile: id => base + 'api/file/' + id + '/',
+    saveFile: id => base + 'api/file/' + id + '/save/'
   };
   var service = {urls: urls};
 
@@ -239,6 +240,13 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', fun
   service.removeFile = function(fileId) {
     return $http
       .delete(service.urls.removeFile(fileId))
+      .error(showAlert)
+      .success(checkErrorResponse);
+  };
+
+  service.saveFile = function(fileId, content) {
+    return $http
+      .post(service.urls.saveFile(fileId), content)
       .error(showAlert)
       .success(checkErrorResponse);
   };
