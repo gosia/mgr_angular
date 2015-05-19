@@ -1,5 +1,4 @@
 'use strict';
-/* global angular, $, _ */
 
 angular.module('schedulerApp').controller('BoardController', ['ApiService', '$routeParams', '$scope', 'Config', 'Teacher', 'Group', 'Room', 'Term', '$timeout', 'Event', 'Calendar',
   function (ApiService, $routeParams, $scope, Config, Teacher, Group, Room, Term, $timeout, Event, Calendar) {

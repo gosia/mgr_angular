@@ -1,5 +1,4 @@
 'use strict';
-/* global angular */
 
 angular.module('schedulerApp').factory('TimeTableObj', ['Event', function(Event) {
   function TimeTableObj(group, term, room) {

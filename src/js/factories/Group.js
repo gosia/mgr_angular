@@ -1,5 +1,4 @@
 'use strict';
-/*global angular, _ */
 
 angular.module('schedulerApp').factory('Group', ['Perms', function(Perms) {
   function Group(id, terms, termsNum, studentsNum, sameTermGroupIds, diffTermGroupIds, labels, teachers, extra) {

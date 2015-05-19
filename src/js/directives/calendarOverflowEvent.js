@@ -1,5 +1,4 @@
 'use strict';
-/* global angular, _ */
 
 angular.module('schedulerApp')
   .directive('calendarOverflowEvent', ['$compile', function($compile) {

@@ -1,5 +1,4 @@
 'use strict';
-/*global angular, _ */
 
 angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'Room', 'TimeTableObj', 'Perms', function(Teacher, Term, Group, Room, TimeTableObj, Perms) {
   function Config(id, terms, teachers, groups, rooms, year, term) {

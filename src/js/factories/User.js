@@ -1,5 +1,4 @@
 'use strict';
-/* global angular */
 
 angular.module('schedulerApp').factory('User', [function() {
   function User() {

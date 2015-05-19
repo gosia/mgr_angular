@@ -1,5 +1,4 @@
 'use strict';
-/* global angular, _ */
 
 angular.module('schedulerApp').factory('Event', [function() {
   function Event(day, start, end, calendar, timetableObj, tab, options) {

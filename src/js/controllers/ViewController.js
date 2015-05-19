@@ -1,5 +1,4 @@
 'use strict';
-/* global angular */
 
 angular.module('schedulerApp').controller('ViewController', ['$scope', function ($scope) {
   var COMPRESSED = 'compressed', EXPANDED = 'expanded';

@@ -1,5 +1,4 @@
 'use strict';
-/* global angular, _ */
 
 angular.module('schedulerApp').controller('TasksListController', ['ApiService', '$scope', '$location', 'Task', 'User',
   function (ApiService, $scope, $location, Task, User) {

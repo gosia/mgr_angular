@@ -1,5 +1,4 @@
 'use strict';
-/* global angular */
 
 angular.module('schedulerApp')
   .directive('timetable', [function() {

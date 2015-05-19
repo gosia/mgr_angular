@@ -1,5 +1,4 @@
 'use strict';
-/* global angular */
 
 angular.module('schedulerApp')
   .config(['$routeProvider', '$locationProvider', '$interpolateProvider', '$httpProvider', '$sceDelegateProvider',

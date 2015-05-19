@@ -1,5 +1,4 @@
 'use strict';
-/*global angular, _ */
 
 angular.module('schedulerApp').factory('Term', ['Perms', function(Perms) {
   function Term(id, start, end, day) {

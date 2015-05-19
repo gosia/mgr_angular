@@ -1,5 +1,4 @@
 'use strict';
-/* global angular, document */
 
 angular.module('schedulerApp').controller('ContentController', ['$http', '$scope', '$timeout',
   function ($http, $scope, $timeout) {

@@ -1,5 +1,4 @@
 'use strict';
-/* global angular, _, document */
 
 angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', function($http, $rootScope) {
   var base = document.getElementsByTagName('base')[0].getAttribute('href');

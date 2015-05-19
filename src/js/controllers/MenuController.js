@@ -1,5 +1,4 @@
 'use strict';
-/* global angular, document */
 
 angular.module('schedulerApp').controller('MenuController', ['$http', '$rootScope', '$scope', '$location',
   function ($http, $rootScope, $scope, $location) {

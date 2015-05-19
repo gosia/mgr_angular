@@ -1,5 +1,4 @@
 'use strict';
-/* global angular */
 
 angular.module('schedulerApp').controller('AlertsController', ['$http', '$scope', '$timeout',
   function ($http, $scope) {

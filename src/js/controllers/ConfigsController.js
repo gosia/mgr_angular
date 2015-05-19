@@ -1,5 +1,4 @@
 'use strict';
-/* global angular, _ */
 
 angular.module('schedulerApp').controller('ConfigsController', ['ApiService', '$rootScope', '$scope', '$location', 'User', 'Config',
   function (ApiService, $rootScope, $scope, $location, User, Config) {
