@@ -28,8 +28,12 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', fun
   };
   var checkErrorResponse = function(data){
     if (data.ok === false) {
-      $rootScope.$broadcast('addAlertByMessage', data.message);
+      if (data.message) {
+        $rootScope.$broadcast('addAlertByMessage', data.message);
+        return;
+      }
     }
+    $rootScope.$broadcast('addAlertByCode', '500');
   };
 
   service.getConfigs = function() {
