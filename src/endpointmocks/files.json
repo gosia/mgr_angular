@@ -1,0 +1,17 @@
+{
+  "results": [
+    {
+      "id": "2015_16",
+      "year": 2015,
+      "linked": false
+    },
+    {
+      "id": "2014_15",
+      "year": 2014,
+      "linked": true
+    }
+  ],
+  "num_start": 1,
+  "num_end": 2,
+  "num_all": 2
+}

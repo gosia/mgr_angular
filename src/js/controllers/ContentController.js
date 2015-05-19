@@ -19,7 +19,12 @@ angular.module('schedulerApp').controller('ContentController', ['$http', '$scope
         task: {
           title: 'Zadanie "' + extra.name + '"',
           breadcrumbs: ['Strona główna', 'Zadania', 'Zadanie "' + extra.name + '"']
-        }
+        },
+        files: {title: 'Plany', breadcrumbs: ['Strona główna', 'Plany']},
+        file: {
+          title: 'Plan "' + extra.name + '"',
+          breadcrumbs: ['Strona główna', 'Plany', 'Plan "' + extra.name + '"']
+        },
       };
 
       $timeout(function() {

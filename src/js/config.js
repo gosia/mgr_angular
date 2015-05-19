@@ -31,6 +31,15 @@ angular.module('schedulerApp')
           controller: 'TaskController',
           reloadOnSearch: false
         })
+        .when('/files', {
+          templateUrl: window.STATIC_URL + 'django_scheduler/templates/content/files.html',
+          controller: 'FilesController'
+        })
+        .when('/file/:fileId', {
+          templateUrl: window.STATIC_URL + 'django_scheduler/templates/content/file.html',
+          controller: 'FileController',
+          reloadOnSearch: false
+        })
         .otherwise({
           redirectTo: '/'
         });

@@ -108,7 +108,12 @@ module.exports = function (grunt) {
                 '^/api/config/[\\w\\d\\-:]+/add/$ /api/default.json [L]',
                 '^/api/config/[\\w\\d\\-:]+/remove/$ /api/default.json [L]',
                 '^/api/config/[\\w\\d\\-:]+/copy/$ /api/default.json [L]',
-                '^/api/config/[\\w\\d\\-:]+/import/$ /api/default.json [L]'
+                '^/api/config/[\\w\\d\\-:]+/import/$ /api/default.json [L]',
+
+                '^/api/files/$ /api/files.json [L]',
+                '^/api/file/$ /api/create_file.json [L]',
+                '^/api/file/[\\w\\d\\-:]+/$ /api/file.json [L]',
+                '^/api/file/[\\w\\d\\-:]+/remove/$ /api/default.json [L]'
               ]),
               function(req, res, next) {
                 var regexpes = [
@@ -117,7 +122,10 @@ module.exports = function (grunt) {
 
                   '^/task/([\\w\\d\\-:]+)/?$',
                   '^/task/([\\w\\d\\-:]+)/([\\w\\d\\-:]+)/?$',
-                  '^/tasks/?$'
+                  '^/tasks/?$',
+
+                  '^/file/([\\w\\d\\-:]+)/?$',
+                  '^/files/?$'
                 ];
                 var urlMatches = false;
                 for (var i=0; i<regexpes.length; i++) {

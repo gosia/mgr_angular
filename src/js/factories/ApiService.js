@@ -19,7 +19,12 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', fun
     createTask: () => base + 'api/task/',
     addTaskElement: id => base + 'api/task/' + id + '/add/',
     getBusyTerms: (id, groupId) => base + 'api/task/' + id + '/busy_terms/' + groupId + '/',
-    removeTaskElement: id => base + 'api/task/' + id + '/remove/'
+    removeTaskElement: id => base + 'api/task/' + id + '/remove/',
+
+    removeFile: id => base + 'api/file/' + id + '/',
+    createFile: () => base + 'api/file/',
+    getFiles: () => base + 'api/files/',
+    getFile: id => base + 'api/file/' + id + '/'
   };
   var service = {urls: urls};
 
@@ -212,6 +217,28 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', fun
   service.getBusyTermsForGroup = function(taskId, groupId) {
     return $http
       .get(service.urls.getBusyTerms(taskId, groupId))
+      .error(showAlert)
+      .success(checkErrorResponse);
+  };
+
+  service.getFiles = function() {
+    return $http.get(service.urls.getFiles()).error(showAlert).success(checkErrorResponse);
+  };
+
+  service.getFile = function(fileId) {
+    return $http.get(service.urls.getFile(fileId)).error(showAlert).success(checkErrorResponse);
+  };
+
+  service.createFile = function(fileId, year) {
+    return $http
+      .post(service.urls.createFile(), {file_id: fileId, year: year})
+      .error(showAlert)
+      .success(checkErrorResponse);
+  };
+
+  service.removeFile = function(fileId) {
+    return $http
+      .delete(service.urls.removeFile(fileId))
       .error(showAlert)
       .success(checkErrorResponse);
   };
