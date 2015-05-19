@@ -31,9 +31,10 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', fun
       if (data.message) {
         $rootScope.$broadcast('addAlertByMessage', data.message);
         return;
+      } else {
+        $rootScope.$broadcast('addAlertByCode', '500');
       }
     }
-    $rootScope.$broadcast('addAlertByCode', '500');
   };
 
   service.getConfigs = function() {

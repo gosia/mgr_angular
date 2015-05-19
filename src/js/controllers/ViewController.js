@@ -1,13 +1,12 @@
 'use strict';
 
-angular.module('schedulerApp').controller('ViewController', ['$scope', function ($scope) {
+angular.module('schedulerApp').controller('ViewController', ['$scope', '$route', function ($scope, $route) {
   var COMPRESSED = 'compressed', EXPANDED = 'expanded';
 
   var state = EXPANDED;
 
   function toggleIsOpen() {
     if ($(window).width() > 767) {
-      console.log(!$('body').hasClass('sidebar-collapse'), $('body').hasClass('sidebar-collapse'));
       return !$('body').hasClass('sidebar-collapse');
     }
     else {
@@ -35,6 +34,10 @@ angular.module('schedulerApp').controller('ViewController', ['$scope', function 
     }
 
     state = newState;
+  };
+
+  $scope.refresh = function() {
+    $route.reload();
   };
 
   $scope.changeState = changeState;
