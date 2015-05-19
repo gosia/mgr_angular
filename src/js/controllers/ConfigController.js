@@ -34,7 +34,15 @@ angular.module('schedulerApp').controller('ConfigController', ['ApiService', '$r
         }
       });
     };
+
+    var removeConfig = function() {
+      ApiService.removeConfig($scope.configId).success(function() {
+        $location.url('/configs');
+      });
+    };
+
     $scope.importData = {execute: importData, data: undefined};
+    $scope.removeConfig = removeConfig;
 
     $scope.copyTeachers = copyConfigElements('teacher');
     $scope.copyTerms = copyConfigElements('term');
