@@ -231,10 +231,25 @@ ol.breadcrumb {
 }
 
 #editor {
-  height: 300px;
+  margin: 0;
+  min-height: 300px;
 }
 
 #save-file {
   margin-top: 15px;
   margin-right: 15px;
+}
+
+.ace_highlight-err {
+  position: absolute;
+  background: #47221D;
+  z-index: 1000;
+  color: black;
+}
+
+.ace_highlight-war {
+  position: absolute;
+  background: #7D4114;
+  z-index: 1000;
+  color: black;
 }
