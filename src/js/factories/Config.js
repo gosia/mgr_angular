@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'Room', 'TimeTableObj', 'Perms', function(Teacher, Term, Group, Room, TimeTableObj, Perms) {
-  function Config(id, terms, teachers, groups, rooms, year, term) {
+  function Config(id, terms, teachers, groups, rooms, year, term, file) {
     this.id = id;
+    this.file = file;
     this.terms = terms;
     this.teachers = teachers;
     this.groups = groups;
@@ -56,11 +57,13 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
 
     var rooms = _.map(apiData.rooms, apiRoom => Room.init(apiRoom, termsMap));
 
-    return new Config(apiData.id, terms, teachers, groups, rooms, apiData.year, apiData.term);
+    return new Config(
+      apiData.id, terms, teachers, groups, rooms, apiData.year, apiData.term, apiData.file
+    );
   };
 
   Config.initForList = function(apiData) {
-    return new Config(apiData.id, [], [], [], [], apiData.year, apiData.term);
+    return new Config(apiData.id, [], [], [], [], apiData.year, apiData.term, apiData.file);
   };
 
   Config.prototype.setTimetable = function(apiData) {
