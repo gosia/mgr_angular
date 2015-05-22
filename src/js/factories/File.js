@@ -1,10 +1,11 @@
 'use strict';
 
 angular.module('schedulerApp').factory('File', ['Perms', '$q', function(Perms, $q) {
-  function File(id, year, linked, content) {
+  function File(id, year, linked, content, configs) {
     this.id = id;
     this.year = year;
     this.linked = linked;
+    this.configs = configs || [];
     this.errors = [];
     this.linesNum = 0;
     this.hasErrors = false;
@@ -15,11 +16,11 @@ angular.module('schedulerApp').factory('File', ['Perms', '$q', function(Perms, $
 
 
   File.init = function(apiData) {
-    return new File(apiData.id, apiData.year, apiData.linked, apiData.content);
+    return new File(apiData.id, apiData.year, apiData.linked, apiData.content, apiData.configs);
   };
 
   File.initForList = function(apiData) {
-    return new File(apiData.id, apiData.year, apiData.linked, undefined);
+    return new File(apiData.id, apiData.year, apiData.linked, undefined, apiData.configs);
   };
 
   File.prototype.setContent = function(content) {

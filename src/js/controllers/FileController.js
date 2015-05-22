@@ -22,6 +22,13 @@ angular.module('schedulerApp').controller('FileController', ['ApiService', '$rou
       });
     };
 
+    var linkFile = function() {
+      ApiService.linkFile($scope.fileId).success(function() {
+        $location.url('/files');
+      });
+    };
+
     $scope.removeFile = removeFile;
+    $scope.linkFile = linkFile;
   }
 ]);

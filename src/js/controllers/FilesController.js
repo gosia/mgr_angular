@@ -52,7 +52,14 @@ angular.module('schedulerApp').controller('FilesController', ['ApiService', '$ro
       });
     };
 
+    var linkFile = function(fileId) {
+      ApiService.linkFile(fileId).success(function() {
+        $location.url('/files');
+      });
+    };
+
     $scope.createFile = createFile;
     $scope.removeFile = removeFile;
+    $scope.linkFile = linkFile;
   }
 ]);

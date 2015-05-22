@@ -25,7 +25,8 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', fun
     createFile: () => base + 'api/file/',
     getFiles: () => base + 'api/files/',
     getFile: id => base + 'api/file/' + id + '/',
-    saveFile: id => base + 'api/file/' + id + '/save/'
+    saveFile: id => base + 'api/file/' + id + '/save/',
+    linkFile: id => base + 'api/file/' + id + '/link/'
   };
   var service = {urls: urls};
 
@@ -36,7 +37,6 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', fun
     if (data.ok === false) {
       if (data.message) {
         $rootScope.$broadcast('addAlertByMessage', data.message);
-        return;
       } else {
         $rootScope.$broadcast('addAlertByCode', '500');
       }
@@ -247,6 +247,13 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', fun
   service.saveFile = function(fileId, content) {
     return $http
       .post(service.urls.saveFile(fileId), content)
+      .error(showAlert)
+      .success(checkErrorResponse);
+  };
+
+  service.linkFile = function(fileId) {
+    return $http
+      .post(service.urls.linkFile(fileId))
       .error(showAlert)
       .success(checkErrorResponse);
   };

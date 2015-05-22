@@ -8,7 +8,8 @@
     {
       "id": "2014_15",
       "year": 2014,
-      "linked": true
+      "linked": true,
+      "configs": ["test", "test1"]
     }
   ],
   "num_start": 1,

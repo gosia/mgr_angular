@@ -114,7 +114,8 @@ module.exports = function (grunt) {
                 '^/api/file/$ /api/create_file.json [L]',
                 '^/api/file/[\\w\\d\\-:]+/$ /api/file.json [L]',
                 '^/api/file/[\\w\\d\\-:]+/remove/$ /api/default.json [L]',
-                '^/api/file/[\\w\\d\\-:]+/save/$ /api/default.json [L]'
+                '^/api/file/[\\w\\d\\-:]+/save/$ /api/default.json [L]',
+                '^/api/file/[\\w\\d\\-:]+/link/$ /api/default.json [L]'
               ]),
               function(req, res, next) {
                 var regexpes = [
