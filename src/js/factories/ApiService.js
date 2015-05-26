@@ -10,7 +10,6 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', fun
     addConfigElement: id => base + 'api/config/' + id + '/add/',
     removeConfigElement: (id) => base + 'api/config/' + id + '/remove/',
     copyConfigElements: (id) => base + 'api/config/' + id + '/copy/',
-    importData: (id) => base + 'api/config/' + id + '/import/',
 
     getTasks: () => base + 'api/tasks/',
     getTask: id => base + 'api/task/' + id + '/',
@@ -61,13 +60,6 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', fun
   service.removeConfig = function(configId) {
     return $http
       .delete(service.urls.removeConfig(configId))
-      .error(showAlert)
-      .success(checkErrorResponse);
-  };
-
-  service.importData = function(configId, data) {
-    return $http
-      .post(service.urls.importData(configId), data)
       .error(showAlert)
       .success(checkErrorResponse);
   };
