@@ -191,6 +191,9 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
           } else {
             $scope.config[data.configEditF](tab, $scope.newElement);
           }
+          if (type === 'teacher' || type === 'group') {
+            $scope.$parent.reloadFile();
+          }
           data.reset();
           addTab(tab);
           resetForm(form);

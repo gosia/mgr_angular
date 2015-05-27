@@ -44,6 +44,11 @@ angular.module('schedulerApp').controller('FileEditorController', ['$scope', '$t
       colorEditor();
     };
 
+    $scope.$on('file_loaded', function() {
+      var editor = ace.edit('editor');
+      editor.setValue($scope.file.content);
+    });
+
     var save = function() {
       var editor = ace.edit('editor');
       var newContent = editor.getValue();
