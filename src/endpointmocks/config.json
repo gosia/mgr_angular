@@ -6,11 +6,23 @@
   "teachers": [
     {
       "id": "michaliszyn",
-      "terms": ["term1", "term2"]
+      "terms": ["term1", "term2"],
+      "extra": {
+        "first_name": "Jakub",
+        "last_name": "Michaliszyn",
+        "pensum": 90,
+        "notes": "jmi"
+      }
     },
     {
       "id": "jurkiewicz",
-      "terms": ["term1"]
+      "terms": ["term1"],
+      "extra": {
+        "first_name": "Malgorzata",
+        "last_name": "Jurkiewicz",
+        "pensum": 90,
+        "notes": "mju"
+      }
     }
   ],
   "terms": [
@@ -51,7 +63,8 @@
       "students_num": 18,
       "extra": {
         "course": "Weryfikacja informacji",
-        "group_type": "ćwiczenia"
+        "group_type": "ćwiczenia",
+        "notes": ""
       }
     },
     {
@@ -65,7 +78,8 @@
       "students_num": 18,
       "extra": {
         "course": "Zaawansowany kurs języka Java",
-        "group_type": "wykład"
+        "group_type": "wykład",
+        "notes": ""
       }
     },
     {
@@ -79,7 +93,8 @@
       "students_num": 18,
       "extra": {
         "course": "Kurs Pythona",
-        "group_type": "wykład"
+        "group_type": "wykład",
+        "notes": ""
       }
     }
   ],

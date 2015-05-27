@@ -1,9 +1,13 @@
 'use strict';
 
 angular.module('schedulerApp').factory('Teacher', ['Perms', function(Perms) {
-  function Teacher(id, terms) {
+  function Teacher(id, terms, extra) {
     this.id = id;
     this.terms = terms;
+    this.extra = {
+      firstName: extra.first_name, lastName: extra.last_name, notes: extra.notes,
+      pensum: extra.pensum
+    };
     this.type = 'teacher';
     this.timetable = [];
     this.perms = Perms.init();
@@ -12,7 +16,7 @@ angular.module('schedulerApp').factory('Teacher', ['Perms', function(Perms) {
 
   Teacher.init = function(apiData, termsMap) {
     var terms = _.map(apiData.terms, function(termId) { return termsMap[termId]; });
-    return new Teacher(apiData.id, terms);
+    return new Teacher(apiData.id, terms, apiData.extra);
   };
 
   Teacher.initForModal = function(config, apiData) {
@@ -21,7 +25,7 @@ angular.module('schedulerApp').factory('Teacher', ['Perms', function(Perms) {
       return _.contains(formTermIds, x.id);
     });
     var terms = apiData.allTerms ? config.terms : formTerms;
-    return new Teacher(apiData.id, terms);
+    return new Teacher(apiData.id, terms, apiData.extra);
   };
 
   Teacher.prototype.getShortName = function() {
@@ -56,12 +60,17 @@ angular.module('schedulerApp').factory('Teacher', ['Perms', function(Perms) {
     return {
       id: this.id,
       terms: _.map(this.terms, function(x) { return x.id; }).join(','),
-      allTerms: this.terms.length === config.terms.length
+      allTerms: this.terms.length === config.terms.length,
+      extra: {
+        first_name: this.extra.firstName, last_name: this.extra.lastName, notes: this.extra.notes,
+        pensum: this.extra.pensum
+      }
     };
   };
 
   Teacher.prototype.edit = function(teacher) {
     this.terms = teacher.terms;
+    this.extra = teacher.extra;
   };
 
   Teacher.prototype.setGroups = function(groups) {

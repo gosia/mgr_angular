@@ -10,7 +10,7 @@ angular.module('schedulerApp').factory('Group', ['Perms', function(Perms) {
     this.diffTermGroupIds = diffTermGroupIds;
     this.labels = labels;
     this.teachers = teachers;
-    this.extra = {course: extra.course, groupType: extra.group_type};
+    this.extra = {course: extra.course, groupType: extra.group_type, notes: extra.notes};
     this.type = 'group';
     this.timetable = [];
     this.perms = Perms.init();
@@ -72,7 +72,8 @@ angular.module('schedulerApp').factory('Group', ['Perms', function(Perms) {
       labels: this.labels.join(','),
       teachers: _.map(this.teachers, function(x) { return x.id; }).join(','),
       course: this.extra.course,
-      groupType: this.extra.groupType
+      groupType: this.extra.groupType,
+      notes: this.extra.notes
     };
   };
 
@@ -113,7 +114,7 @@ angular.module('schedulerApp').factory('Group', ['Perms', function(Perms) {
 
     var group = new Group(
       apiData.id, terms, apiData.termsNum, apiData.studentsNum, [], [], labels, formTeachers,
-      {course: apiData.course, group_type: apiData.groupType}
+      {course: apiData.course, group_type: apiData.groupType, notes: apiData.notes}
     );
     group.setGroupObj();
     return group;

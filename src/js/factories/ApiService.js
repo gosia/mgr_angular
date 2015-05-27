@@ -102,8 +102,11 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', fun
         type: 'teacher',
         teacher: {
           id: teacher.id,
-          mode: mode,
-          terms: _.map(teacher.terms, x => x.id)
+          terms: _.map(teacher.terms, x => x.id),
+          first_name: teacher.extra.firstName,
+          last_name: teacher.extra.lastName,
+          notes: teacher.extra.notes || '',
+          pensum: teacher.extra.pensum
         }
       }
     ).error(showAlert).success(checkErrorResponse);
@@ -126,7 +129,8 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', fun
           diff_term_group_ids: _.map(group.diffTermGroupIds, x => x.id),
           labels: group.labels,
           course: group.extra.course,
-          group_type: group.extra.groupType
+          group_type: group.extra.groupType,
+          notes: group.extra.notes || ''
         }
       }
     ).error(showAlert).success(checkErrorResponse);
