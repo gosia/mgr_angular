@@ -91,12 +91,27 @@ angular.module('schedulerApp').factory('File', ['Perms', '$q', function(Perms, $
     teacherMap[teacher].groups.push(data);
   };
 
-  var validateAll = function(teacherMap) {
+  var validateAll = function(teacherMap, lines) {
     var result = [];
+
+    // handle pensum warnings
     _.each(teacherMap, (value, key) => {
       var hours = _.reduce(_.map(value.groups, x => x.hours), (memo, num) => memo + num, 0);
       if (hours * 15 !== value.pensum) {
         result.push(warning('Pensum dla "' + key + '" się nie zgadza: jest ' + hours * 15 + ' godzin zamiast ' + value.pensum, value.line));
+      }
+    });
+
+    // handle wrong groups ids
+    var groupIds = {};
+    _.each(lines, (line, lineNum) => {
+      if (line[0] === '1' || line[0] === '2') {
+        var groupId = line[1];
+        if (groupIds[groupId] !== undefined) {
+          result.push(error('Zduplikowane id grupy ' + groupId + '. Oryginał w lini ' + groupIds[groupId], lineNum));
+        } else {
+          groupIds[groupId] = lineNum;
+        }
       }
     });
     return result;
@@ -137,7 +152,7 @@ angular.module('schedulerApp').factory('File', ['Perms', '$q', function(Perms, $
       });
 
       // handle summary
-      err = validateAll(teacherMap);
+      err = validateAll(teacherMap, lines);
       if (err !== undefined) {
         validationMessages = validationMessages.concat(err);
       }
