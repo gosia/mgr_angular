@@ -43,6 +43,8 @@ angular.module('schedulerApp').controller('TasksListController', ['ApiService', 
         if (data.ok) {
           var url = '/task/' + data.config_id + '/' + data.task_id;
           $location.path(url).hash('basic');
+        } else {
+          $('#create-task-modal').modal('hide');
         }
       });
     };
