@@ -52,7 +52,7 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', fun
 
   service.createConfig = function(configId, year, term) {
     return $http
-      .post(service.urls.createConfig(), {config_id: configId, year: year, term: term})
+      .post(service.urls.createConfig(), {config_id: configId, year: year, term: parseInt(term)})
       .error(showAlert)
       .success(checkErrorResponse);
   };

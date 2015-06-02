@@ -3,7 +3,7 @@
 angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'Room', 'TimeTableObj', 'Perms', function(Teacher, Term, Group, Room, TimeTableObj, Perms) {
   function Config(id, terms, teachers, groups, rooms, year, term, file) {
     this.id = id;
-    this.file = file;
+    this.file = file || undefined;
     this.terms = terms;
     this.teachers = teachers;
     this.groups = groups;
