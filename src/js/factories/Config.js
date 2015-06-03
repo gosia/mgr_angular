@@ -196,8 +196,17 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
   };
 
   Config.prototype.removeGroup = function(group) {
+    var config = this;
     this.groups = _.filter(this.groups, x => x.id !== group.id);
     this.setGroupsMap();
+    _.each(this.groups, g => {
+      g.sameTermGroupIds = _.filter(g.sameTermGroupIds, x => x.id !== group.id);
+      g.diffTermGroupIds = _.filter(g.diffTermGroupIds, x => x.id !== group.id);
+      g.setGroupObj(config.groupsMap);
+    });
+    _.each(this.teachers, t => {
+      t.groups = _.filter(t.groups, x => x.id !== group.id);
+    });
   };
 
   Config.prototype.removeRoom = function(room) {
@@ -212,6 +221,9 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
     });
     _.each(this.teachers, t => {
       t.terms = _.filter(t.terms, x => x.id !== term.id);
+    });
+    _.each(this.rooms, r => {
+      r.terms = _.filter(r.terms, x => x.id !== term.id);
     });
     this.setTermsMap();
   };
