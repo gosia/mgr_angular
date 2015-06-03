@@ -243,6 +243,10 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
           $scope.config.removeElement(elem);
           var i = _.findIndex($scope.activeTabs, function(x) { return x.id === elem.id; });
           removeTab(i);
+
+          if (elem.type === 'teacher' || elem.type === 'group') {
+            $scope.$parent.reloadFile();
+          }
         }
       });
     };
