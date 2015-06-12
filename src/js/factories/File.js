@@ -71,11 +71,13 @@ angular.module('schedulerApp').factory('File', ['Perms', '$q', function(Perms, $
     var course = line[2];
     var group = line[3];
     var hours = parseInt(line[4]);
-    var teacher = line[5];
+    var teachers = line[5].split(',');
 
-    if (teacherMap[teacher] === undefined) {
-      return error('Nieznany prowadzący "' + teacher + '"', lineNum);
+    var nonExistingTeacher = _.find(teachers, teacher => teacherMap[teacher] === undefined);
+    if (nonExistingTeacher !== undefined) {
+      return error('Nieznany prowadzący "' + nonExistingTeacher + '"', lineNum);
     }
+
     if (isNaN(hours)) {
       return error('Godziny muszą być liczbą', lineNum);
     }
@@ -86,9 +88,12 @@ angular.module('schedulerApp').factory('File', ['Perms', '$q', function(Perms, $
     if (groupMap[course][group] === undefined) {
       groupMap[course][group] = [];
     }
-    var data = {teacher: teacher, hours: hours};
-    groupMap[course][group].push(data);
-    teacherMap[teacher].groups.push(data);
+
+    _.each(teachers, teacher => {
+      var data = {teacher: teacher, hours: hours};
+      groupMap[course][group].push(data);
+      teacherMap[teacher].groups.push(data);
+    });
   };
 
   var validateAll = function(teacherMap, lines) {

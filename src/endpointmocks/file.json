@@ -3,5 +3,5 @@
   "year": 2015,
   "linked": true,
   "configs": ["test", "test1"],
-  "content": "o|cahir|Krystian|K|Bacławski|90|0\no|czakey|Marcin|M|Włodarczak|90|0\n\n\n1|48|Algorytmy ewolucyjne|w|2|pwn|2\n1|48|Algorytmy ewolucyjne|r|2|pwn|2\n1|48|Algorytmy ewolucyjne|r|2|pwn|2\n\n\n\n\n#2|36|Haskell dla zaawansowanych|w|2|tomasz|2\n#2|36|Haskell dla zaawansowanych|p|2|tomasz|2"
+  "content": "o|cahir|Krystian|K|Bacławski|90|0\no|pwn|Marcin|M|Włodarczak|90|0\n\n\n1|1|Algorytmy ewolucyjne|w|2|pwn,cahir|2\n1|2|Algorytmy ewolucyjne|r|2|pwn|2\n1|3|Algorytmy ewolucyjne|r|2|pwn|2\n\n\n\n\n#2|36|Haskell dla zaawansowanych|w|2|tomasz|2\n#2|36|Haskell dla zaawansowanych|p|2|tomasz|2"
 }
