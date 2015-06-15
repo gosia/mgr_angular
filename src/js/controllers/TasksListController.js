@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('schedulerApp').controller('TasksListController', ['ApiService', '$scope', '$location', 'Task', 'User',
+angular.module('schedulerApp').controller('TasksListController', [
+  'ApiService', '$scope', '$location', 'Task', 'User',
   function (ApiService, $scope, $location, Task, User) {
     var controller = this;
 
@@ -39,29 +40,26 @@ angular.module('schedulerApp').controller('TasksListController', ['ApiService', 
     };
 
     var createTask = function() {
-      ApiService.createTask($scope.newTask.configId, $scope.newTask.algorithm).success(function(data) {
-        if (data.ok) {
+      ApiService
+        .createTask($scope.newTask.configId, $scope.newTask.algorithm)
+        .success(function(data) {
           var url = '/task/' + data.config_id + '/' + data.task_id;
           $location.path(url).hash('basic');
-        } else {
+        })
+        .error(function() {
           $('#create-task-modal').modal('hide');
-        }
-      });
+        });
     };
 
     var removeTask = function(taskId) {
-      ApiService.removeTask(taskId).success(function(data) {
-        if (data.ok) {
-          controller.items = _.filter(controller.items, x => x.id !== taskId);
-        }
+      ApiService.removeTask(taskId).success(function() {
+        controller.items = _.filter(controller.items, x => x.id !== taskId);
       });
     };
 
     var startTask = function(task) {
-      ApiService.startTask(task.id).success(function(data) {
-        if (data.ok) {
-          task.status = 'processing';
-        }
+      ApiService.startTask(task.id).success(function() {
+        task.status = 'processing';
       });
     };
 

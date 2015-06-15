@@ -50,38 +50,36 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
     });
 
     var modifyTimetable = function(data, mode) {
-      if (data.ok) {
-        $scope.config.modifyTimetable(data.timetable, mode);
+      $scope.config.modifyTimetable(data.timetable, mode);
 
-        var changedRoomIds = _.uniq(_.flatten(
-          _.map(data.timetable.results, function(v) {
-            return _.map(v, function(vv) { return vv.room; });
-          })
-        )).filter(function(y) {
-          return _.findIndex($scope.activeTabs, function(x) { return x.id === y; }) !== -1;
+      var changedRoomIds = _.uniq(_.flatten(
+        _.map(data.timetable.results, function(v) {
+          return _.map(v, function(vv) { return vv.room; });
+        })
+      )).filter(function(y) {
+        return _.findIndex($scope.activeTabs, function(x) { return x.id === y; }) !== -1;
+      });
+      var changedGroupIds = _.map(data.timetable.results, function(v, k) { return k; });
+      var changedTeacherIds = [];
+      _.each(changedGroupIds, function(g) {
+        _.each($scope.config.groupsMap[g].teachers, function(x) {
+          changedTeacherIds.push(x.id);
         });
-        var changedGroupIds = _.map(data.timetable.results, function(v, k) { return k; });
-        var changedTeacherIds = [];
-        _.each(changedGroupIds, function(g) {
-          _.each($scope.config.groupsMap[g].teachers, function(x) {
-            changedTeacherIds.push(x.id);
-          });
-        });
-        changedTeacherIds = _.uniq(changedTeacherIds).filter(function(y) {
-          return _.findIndex($scope.activeTabs, function(x) { return x.id === y; }) !== -1;
-        });
-        changedGroupIds = changedGroupIds.filter(function(y) {
-          return _.findIndex($scope.activeTabs, function(x) { return x.id === y; }) !== -1;
-        });
+      });
+      changedTeacherIds = _.uniq(changedTeacherIds).filter(function(y) {
+        return _.findIndex($scope.activeTabs, function(x) { return x.id === y; }) !== -1;
+      });
+      changedGroupIds = changedGroupIds.filter(function(y) {
+        return _.findIndex($scope.activeTabs, function(x) { return x.id === y; }) !== -1;
+      });
 
-        var tabs = [];
-        _.each(changedGroupIds, function(x) { tabs.push($scope.config.groupsMap[x]); });
-        _.each(changedTeacherIds, function(x) { tabs.push($scope.config.teachersMap[x]); });
-        _.each(changedRoomIds, function(x) { tabs.push($scope.config.roomsMap[x]); });
+      var tabs = [];
+      _.each(changedGroupIds, function(x) { tabs.push($scope.config.groupsMap[x]); });
+      _.each(changedTeacherIds, function(x) { tabs.push($scope.config.teachersMap[x]); });
+      _.each(changedRoomIds, function(x) { tabs.push($scope.config.roomsMap[x]); });
 
-        calendar.reload(tabs);
+      calendar.reload(tabs);
 
-      }
     };
 
     var newEventAddedCallback = function(event, ui) {
@@ -238,15 +236,13 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
     };
 
     var removeElement = function(elem) {
-      ApiService.removeConfigElement(configId, elem).success(function(data) {
-        if (data.ok) {
-          $scope.config.removeElement(elem);
-          var i = _.findIndex($scope.activeTabs, function(x) { return x.id === elem.id; });
-          removeTab(i);
+      ApiService.removeConfigElement(configId, elem).success(function() {
+        $scope.config.removeElement(elem);
+        var i = _.findIndex($scope.activeTabs, function(x) { return x.id === elem.id; });
+        removeTab(i);
 
-          if (elem.type === 'teacher' || elem.type === 'group') {
-            $scope.$parent.reloadFile();
-          }
+        if (elem.type === 'teacher' || elem.type === 'group') {
+          $scope.$parent.reloadFile();
         }
       });
     };
@@ -254,17 +250,15 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
     var activateOverflow = function(groupId) {
 
       ApiService.getBusyTermsForGroup(taskId, groupId).success(function(data) {
-        if (data.ok) {
-          $scope.busyEvents = _.map(data.terms, termId => {
-              var t = $scope.config.termsMap[termId];
-              return new Event(
-                t.day,
-                t.start.hour * 60 + t.start.minute,
-                t.end.hour * 60 + t.end.minute
-              );
-            }
+        $scope.busyEvents = _.map(data.terms, termId => {
+          var t = $scope.config.termsMap[termId];
+          return new Event(
+            t.day,
+            t.start.hour * 60 + t.start.minute,
+            t.end.hour * 60 + t.end.minute
           );
-        }
+          }
+        );
       });
     };
 

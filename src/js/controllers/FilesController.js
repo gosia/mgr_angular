@@ -37,18 +37,14 @@ angular.module('schedulerApp').controller('FilesController', ['ApiService', '$ro
       ApiService
         .createFile($scope.newFile.id, $scope.newFile.year)
         .success(function(data) {
-          if (data.ok) {
-            var url = '/file/' + data.file_id;
-            $location.path(url).hash('basic');
-          }
+          var url = '/file/' + data.file_id;
+          $location.path(url).hash('basic');
         });
     };
 
     var removeFile = function(fileId) {
-      ApiService.removeFile(fileId).success(function(data) {
-        if (data.ok) {
-          $scope.items = _.filter($scope.items, x => x.id !== fileId);
-        }
+      ApiService.removeFile(fileId).success(function() {
+        $scope.items = _.filter($scope.items, x => x.id !== fileId);
       });
     };
 

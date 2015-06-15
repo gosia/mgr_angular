@@ -25,10 +25,8 @@ angular.module('schedulerApp').controller('TaskController', ['ApiService', '$rou
     };
 
     var startTask = function() {
-      ApiService.startTask($scope.task.id).success(function(data) {
-        if (data.ok) {
-          $scope.task.status = 'processing';
-        }
+      ApiService.startTask($scope.task.id).success(function() {
+        $scope.task.status = 'processing';
       });
     };
 

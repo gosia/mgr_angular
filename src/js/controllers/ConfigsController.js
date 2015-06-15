@@ -37,18 +37,14 @@ angular.module('schedulerApp').controller('ConfigsController', ['ApiService', '$
       ApiService
         .createConfig($scope.newConfig.id, $scope.newConfig.year, $scope.newConfig.term)
         .success(function(data) {
-          if (data.ok) {
-            var url = '/config/' + data.config_id;
-            $location.path(url).hash('basic');
-          }
+          var url = '/config/' + data.config_id;
+          $location.path(url).hash('basic');
         });
     };
 
     var removeConfig = function(configId) {
-      ApiService.removeConfig(configId).success(function(data) {
-        if (data.ok) {
-          $scope.items = _.filter($scope.items, x => x.id !== configId);
-        }
+      ApiService.removeConfig(configId).success(function() {
+        $scope.items = _.filter($scope.items, x => x.id !== configId);
       });
     };
 

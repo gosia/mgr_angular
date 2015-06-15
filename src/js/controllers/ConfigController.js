@@ -29,10 +29,8 @@ angular.module('schedulerApp').controller('ConfigController', ['ApiService', '$r
 
     var copyConfigElements = function(type) {
       return function(fromConfigId) {
-        ApiService.copyConfigElements(type, $scope.configId, fromConfigId).success(function(data) {
-          if (data.ok) {
-            $route.reload();
-          }
+        ApiService.copyConfigElements(type, $scope.configId, fromConfigId).success(function() {
+          $route.reload();
         });
       };
     };
