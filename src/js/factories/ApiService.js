@@ -25,7 +25,12 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', '$q
     getFiles: () => base + 'api/files/',
     getFile: id => base + 'api/file/' + id + '/',
     saveFile: id => base + 'api/file/' + id + '/save/',
-    linkFile: id => base + 'api/file/' + id + '/link/'
+    linkFile: id => base + 'api/file/' + id + '/link/',
+
+    getVotes: () => base + 'api/votes/',
+    getVote: id => base + 'api/vote/' + id + '/',
+    removeVote: id => base + 'api/vote/' + id + '/',
+    createVote: () => base + 'api/vote/'
   };
   var service = {urls: urls};
 
@@ -265,6 +270,24 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', '$q
 
   service.linkFile = function(fileId) {
     return httpToQ($http.post(service.urls.linkFile(fileId)));
+  };
+
+  service.getVotes = function() {
+    return httpToQ($http.get(service.urls.getVotes()));
+  };
+
+  service.getVote = function(configId) {
+    return httpToQ($http.get(service.urls.getVote(configId)));
+  };
+
+  service.removeVote = function(configId) {
+    return httpToQ($http.delete(service.urls.removeVote(configId)));
+  };
+
+  service.createVote = function(configId, content) {
+    return httpToQ(
+      $http.post(service.urls.createVote(), {config_id: configId, content: content})
+    );
   };
 
   return service;

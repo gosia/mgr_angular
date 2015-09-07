@@ -115,7 +115,12 @@ module.exports = function (grunt) {
                 '^/api/file/[\\w\\d\\-:]+/$ /api/file.json [L]',
                 '^/api/file/[\\w\\d\\-:]+/remove/$ /api/default.json [L]',
                 '^/api/file/[\\w\\d\\-:]+/save/$ /api/default.json [L]',
-                '^/api/file/[\\w\\d\\-:]+/link/$ /api/default.json [L]'
+                '^/api/file/[\\w\\d\\-:]+/link/$ /api/default.json [L]',
+
+                '^/api/votes/$ /api/votes.json [L]',
+                '^/api/vote/$ /api/default.json [L]',
+                '^/api/vote/[\\w\\d\\-:]+/$ /api/vote.json [L]',
+                '^/api/vote/[\\w\\d\\-:]+/remove/$ /api/default.json [L]'
               ]),
               function(req, res, next) {
                 var regexpes = [
@@ -127,7 +132,10 @@ module.exports = function (grunt) {
                   '^/tasks/?$',
 
                   '^/file/([\\w\\d\\-:]+)/?$',
-                  '^/files/?$'
+                  '^/files/?$',
+
+                  '^/vote/([\\w\\d\\-:]+)/?$',
+                  '^/votes/?$'
                 ];
                 var urlMatches = false;
                 for (var i=0; i<regexpes.length; i++) {
@@ -153,7 +161,9 @@ module.exports = function (grunt) {
                 }
                 else if (
                   req.method === 'DELETE' &&
-                  (req.url === '/api/task.json' || req.url === '/api/config.json')
+                  (req.url === '/api/task.json' ||
+                   req.url === '/api/config.json' ||
+                   req.url === '/api/vote.json')
                 ) {
                   req.method = 'GET';
                   req.url = '/api/default.json';

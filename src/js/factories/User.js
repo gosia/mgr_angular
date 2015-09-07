@@ -5,7 +5,8 @@ angular.module('schedulerApp').factory('User', [function() {
     this.hasPerm = {
       add_task: true,
       add_config: true,
-      add_file: true
+      add_file: true,
+      add_vote: true
     };
   }
 

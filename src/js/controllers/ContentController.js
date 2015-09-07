@@ -25,6 +25,11 @@ angular.module('schedulerApp').controller('ContentController', ['$http', '$scope
           title: 'Plan "' + extra.name + '"',
           breadcrumbs: ['Strona główna', 'Plany', 'Plan "' + extra.name + '"']
         },
+        votes: {title: 'Głosowania', breadcrumbs: ['Strona główna', 'Głosowania']},
+        vote: {
+          title: 'Głosowanie "' + extra.name + '"',
+          breadcrumbs: ['Strona główna', 'Głosowanie', 'Głosowanie "' + extra.name + '"']
+        }
       };
 
       $timeout(function() {

@@ -40,6 +40,15 @@ angular.module('schedulerApp')
           controller: 'FileController',
           reloadOnSearch: false
         })
+        .when('/votes', {
+          templateUrl: window.STATIC_URL + 'django_scheduler/templates/content/votes.html',
+          controller: 'VotesController'
+        })
+        .when('/vote/:configId', {
+          templateUrl: window.STATIC_URL + 'django_scheduler/templates/content/vote.html',
+          controller: 'VoteController',
+          reloadOnSearch: false
+        })
         .otherwise({
           redirectTo: '/'
         });

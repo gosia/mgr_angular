@@ -1,0 +1,16 @@
+{
+  "results": [
+    {
+      "config_id": "test",
+      "votes_num": 54
+    },
+    {
+      "config_id": "test1",
+      "votes_num": 123
+
+    }
+  ],
+  "num_start": 1,
+  "num_end": 2,
+  "num_all": 2
+}
