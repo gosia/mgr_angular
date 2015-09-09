@@ -100,6 +100,7 @@ module.exports = function (grunt) {
                 '^/api/task/[\\w\\d\\-:]+/start/$ /api/default.json [L]',
                 '^/api/task/[\\w\\d\\-:]+/add/$ /api/add_event.json [L]',
                 '^/api/task/[\\w\\d\\-:]+/remove/$ /api/delete_event.json [L]',
+                '^/api/task/[\\w\\d\\-:]+/rating/$ /api/rating.json [L]',
                 '^/api/task/[\\w\\d\\-:]+/busy_terms/[\\w\\d\\-:]+/$ /api/busy_terms.json [L]',
 
                 '^/api/configs/$ /api/configs.json [L]',

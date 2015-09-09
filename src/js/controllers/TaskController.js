@@ -10,6 +10,11 @@ angular.module('schedulerApp').controller('TaskController', ['ApiService', '$rou
         ApiService.getTask($routeParams.taskId).success(function(data) {
           $scope.task = Task.init(data);
           $scope.config.setTimetable(data.timetable);
+
+          ApiService.getTaskRating($routeParams.taskId).success(function(data) {
+            $scope.task.rating = data.rating;
+          });
+
         });
       });
 
