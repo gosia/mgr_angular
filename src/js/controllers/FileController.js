@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('schedulerApp').controller('FileController', ['ApiService', '$routeParams', '$rootScope', '$scope', 'File', '$location',
+angular.module('schedulerApp').controller('FileController', [
+  'ApiService', '$routeParams', '$rootScope', '$scope', 'File', '$location',
   function (ApiService, $routeParams, $rootScope, $scope, File, $location) {
     $scope.fileId = $routeParams.fileId;
 
@@ -23,8 +24,9 @@ angular.module('schedulerApp').controller('FileController', ['ApiService', '$rou
     };
 
     var linkFile = function() {
-      ApiService.linkFile($scope.fileId).success(function() {
-        $location.url('/files');
+      return ApiService.linkFile($scope.file.id).success(function() {
+        $scope.file.linked = true;
+        $rootScope.$broadcast('addAlertByCode', 'ok');
       });
     };
 

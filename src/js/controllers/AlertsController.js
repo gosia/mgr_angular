@@ -6,12 +6,16 @@ angular.module('schedulerApp').controller('AlertsController', ['$http', '$scope'
     var timeouts = [];
 
     var messages = {
-      '500': 'Ups! Something went wrong. Please try again.',
-      default: 'Ups! Something went wrong. Please try again.'
+      '500': 'Ups! Coś poszło nie tak. Spróbuj ponownie.',
+      default: 'Ups! Coś poszło nie tak. Spróbuj ponownie.',
+      ok: 'Yey! Akcja zakończyła się powodzeniem.'
     };
 
-    var showAlert = function(message) {
-      $scope.messages.push(message);
+    var showAlert = function(message, code) {
+      if (code === undefined) {
+        code = 'danger';
+      }
+      $scope.messages.push({text: message, code: code});
       var timeout = $timeout(function() {
         $scope.messages.splice($scope.messages - 1, 1);
       }, 5000);
@@ -23,7 +27,11 @@ angular.module('schedulerApp').controller('AlertsController', ['$http', '$scope'
       if (message === undefined) {
         message = messages.default;
       }
-      showAlert(message);
+      if (code === 'ok') {
+        showAlert(message, 'success');
+      } else {
+        showAlert(message);
+      }
     };
 
     $scope.removeMessage = function(i) {

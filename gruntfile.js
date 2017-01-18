@@ -146,7 +146,7 @@ module.exports = function (grunt) {
                     break;
                   }
                 }
-                
+
                 if (urlMatches) {
                   var index = config.templateDir + '/index.html';
                   fs.readFile(index, function (err, data) {
@@ -164,6 +164,7 @@ module.exports = function (grunt) {
                   req.method === 'DELETE' &&
                   (req.url === '/api/task.json' ||
                    req.url === '/api/config.json' ||
+                   req.url === '/api/file.json' ||
                    req.url === '/api/vote.json')
                 ) {
                   req.method = 'GET';

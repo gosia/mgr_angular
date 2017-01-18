@@ -48,9 +48,11 @@ angular.module('schedulerApp').controller('FilesController', ['ApiService', '$ro
       });
     };
 
-    var linkFile = function(fileId) {
-      ApiService.linkFile(fileId).success(function() {
+    var linkFile = function(file) {
+      return ApiService.linkFile(file.id).success(function() {
+        file.linked = true;
         $location.url('/files');
+        $rootScope.$broadcast('addAlertByCode', 'ok');
       });
     };
 

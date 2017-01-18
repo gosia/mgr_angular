@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('schedulerApp').controller('TasksListController', [
-  'ApiService', '$scope', '$location', 'Task', 'User',
-  function (ApiService, $scope, $location, Task, User) {
+  'ApiService', '$scope', '$location', 'Task', 'User', '$rootScope',
+  function (ApiService, $scope, $location, Task, User, $rootScope) {
     var controller = this;
 
     controller.numStart = 0;
@@ -58,8 +58,9 @@ angular.module('schedulerApp').controller('TasksListController', [
     };
 
     var startTask = function(task) {
-      ApiService.startTask(task.id).success(function() {
+      return ApiService.startTask(task.id).success(function() {
         task.status = 'processing';
+        $rootScope.$broadcast('addAlertByCode', 'ok');
       });
     };
 

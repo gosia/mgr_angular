@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('schedulerApp').controller('TaskController', ['ApiService', '$routeParams', '$rootScope', '$scope', 'Task', '$location', 'Config',
+angular.module('schedulerApp').controller('TaskController', [
+  'ApiService', '$routeParams', '$rootScope', '$scope', 'Task', '$location', 'Config',
   function (ApiService, $routeParams, $rootScope, $scope, Task, $location, Config) {
     $rootScope.$broadcast('changeContent', 'task', {name: $routeParams.taskId});
 
@@ -30,8 +31,9 @@ angular.module('schedulerApp').controller('TaskController', ['ApiService', '$rou
     };
 
     var startTask = function() {
-      ApiService.startTask($scope.task.id).success(function() {
+      return ApiService.startTask($scope.task.id).success(function() {
         $scope.task.status = 'processing';
+        $rootScope.$broadcast('addAlertByCode', 'ok');
       });
     };
 
