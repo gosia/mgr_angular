@@ -3,6 +3,7 @@
 angular.module('schedulerApp').factory('Term', ['Perms', function(Perms) {
   function Term(id, start, end, day) {
     this.id = id;
+    this.numId = parseInt(id);
     this.start = start;
     this.end = end;
     this.day = day;
