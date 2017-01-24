@@ -49,6 +49,15 @@ angular.module('schedulerApp')
           controller: 'VoteController',
           reloadOnSearch: false
         })
+        .when('/ratings', {
+          templateUrl: window.STATIC_URL + 'django_scheduler/templates/content/ratings.html',
+          controller: 'RatingsController'
+        })
+        .when('/rating/:ratingId', {
+          templateUrl: window.STATIC_URL + 'django_scheduler/templates/content/rating.html',
+          controller: 'RatingController',
+          reloadOnSearch: false
+        })
         .otherwise({
           redirectTo: '/'
         });

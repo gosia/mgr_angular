@@ -6,7 +6,8 @@ angular.module('schedulerApp').factory('User', [function() {
       add_task: true,
       add_config: true,
       add_file: true,
-      add_vote: true
+      add_vote: true,
+      add_rating: true
     };
   }
 

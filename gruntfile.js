@@ -118,6 +118,10 @@ module.exports = function (grunt) {
                 '^/api/file/[\\w\\d\\-:]+/save/$ /api/default.json [L]',
                 '^/api/file/[\\w\\d\\-:]+/link/$ /api/default.json [L]',
 
+                '^/api/ratings/$ /api/ratings.json [L]',
+                '^/api/rating/[\\w\\d\\-:]+/$ /api/rating.json [L]',
+                '^/api/rating/[\\w\\d\\-:]+/save/$ /api/default.json [L]',
+
                 '^/api/votes/$ /api/votes.json [L]',
                 '^/api/vote/$ /api/default.json [L]',
                 '^/api/vote/[\\w\\d\\-:]+/$ /api/vote.json [L]',
@@ -134,6 +138,9 @@ module.exports = function (grunt) {
 
                   '^/file/([\\w\\d\\-:]+)/?$',
                   '^/files/?$',
+
+                  '^/rating/([\\w\\d\\-:]+)/?$',
+                  '^/ratings/?$',
 
                   '^/vote/([\\w\\d\\-:]+)/?$',
                   '^/votes/?$'
@@ -165,6 +172,7 @@ module.exports = function (grunt) {
                   (req.url === '/api/task.json' ||
                    req.url === '/api/config.json' ||
                    req.url === '/api/file.json' ||
+                   req.url === '/api/rating.json' ||
                    req.url === '/api/vote.json')
                 ) {
                   req.method = 'GET';

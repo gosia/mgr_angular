@@ -29,7 +29,12 @@ angular.module('schedulerApp').controller('ContentController', ['$http', '$scope
         vote: {
           title: 'Głosowanie "' + extra.name + '"',
           breadcrumbs: ['Strona główna', 'Głosowanie', 'Głosowanie "' + extra.name + '"']
-        }
+        },
+        ratings: {title: 'Schematy oceny', breadcrumbs: ['Strona główna', 'Schematy oceny']},
+        rating: {
+          title: 'Schemat "' + extra.name + '"',
+          breadcrumbs: ['Strona główna', 'Schematy oceny', 'Schemat "' + extra.name + '"']
+        },
       };
 
       $timeout(function() {

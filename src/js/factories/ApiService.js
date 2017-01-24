@@ -1,6 +1,9 @@
 'use strict';
 
-angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', '$q', function($http, $rootScope, $q) {
+angular.module('schedulerApp').factory('ApiService', [
+  '$http', '$rootScope', '$q',
+  function($http, $rootScope, $q) {
+
   var base = document.getElementsByTagName('base')[0].getAttribute('href');
   var urls = {
     getConfigs: () => base + 'api/configs/',
@@ -27,6 +30,11 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', '$q
     getFile: id => base + 'api/file/' + id + '/',
     saveFile: id => base + 'api/file/' + id + '/save/',
     linkFile: id => base + 'api/file/' + id + '/link/',
+
+    getRatings: () => base + 'api/ratings/',
+    getRating: id => base + 'api/rating/' + id + '/',
+    removeRating: id => base + 'api/rating/' + id + '/',
+    saveRating: id => base + 'api/rating/' + id + '/save/',
 
     getVotes: () => base + 'api/votes/',
     getVote: id => base + 'api/vote/' + id + '/',
@@ -293,6 +301,22 @@ angular.module('schedulerApp').factory('ApiService', ['$http', '$rootScope', '$q
     return httpToQ(
       $http.post(service.urls.createVote(), {config_id: configId, content: content})
     );
+  };
+
+  service.getRatings = function() {
+    return httpToQ($http.get(service.urls.getRatings()));
+  };
+
+  service.getRating = function(ratingId) {
+    return httpToQ($http.get(service.urls.getRating(ratingId)));
+  };
+
+  service.removeRating = function(ratingId) {
+    return httpToQ($http.delete(service.urls.removeRating(ratingId)));
+  };
+
+  service.saveRating = function(rating) {
+    return httpToQ($http.post(service.urls.saveRating(rating.id), rating));
   };
 
   return service;

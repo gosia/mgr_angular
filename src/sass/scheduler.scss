@@ -253,3 +253,19 @@ ol.breadcrumb {
   z-index: 1000;
   color: black;
 }
+
+.table-nonfluid {
+  width: auto !important;
+}
+
+#edit-rating-modal {
+  @media (min-width: 768px) {
+    .modal-dialog {
+      width: 900px;
+    }
+  }
+
+  .extra-margin {
+    margin-top: 5px;
+  }
+}
