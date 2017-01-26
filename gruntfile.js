@@ -271,6 +271,7 @@ module.exports = function (grunt) {
           '<%= config.buildDir %>/js/libs/angular/angular.min.js',
           '<%= config.buildDir %>/js/libs/angular/angular-route.min.js',
           '<%= config.buildDir %>/js/libs/underscore-min.js',
+          '<%= config.buildDir %>/js/libs/moment.min.js',
           '<%= config.buildDir %>/js/libs/admin-lte/app.min.js'
         ],
         dest: '<%= config.staticDir %>/js/vendor1.js'
@@ -316,6 +317,7 @@ module.exports = function (grunt) {
           'angular/angular.min.js': 'angular/angular.min.js',
           'angular/angular-route.min.js': 'angular-route/angular-route.min.js',
           'underscore-min.js': 'underscore/underscore-min.js',
+          'moment.min.js': 'moment/min/moment.min.js',
           'admin-lte/app.min.js': 'admin-lte/dist/js/app.min.js',
           'moment-with-locales.min.js': 'moment/min/moment-with-locales.min.js',
           'fullcalendar.min.js': 'admin-lte/plugins/fullcalendar/fullcalendar.min.js',

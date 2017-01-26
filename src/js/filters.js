@@ -1,5 +1,7 @@
 'use strict';
 
+/* global moment */
+
 angular.module('schedulerApp')
   .filter('getEvents', function() {
     return function(activeTabs) {
@@ -18,5 +20,27 @@ angular.module('schedulerApp')
     return function(terms, notInTerms) {
       var notInTermsMap = _.object(_.map(notInTerms, term => [term.id, term]));
       return _.filter(terms, term => notInTermsMap[term.id] === undefined);
+    };
+  })
+  .filter('toHM', function() {
+    return function(minutes) {
+      return moment().startOf('day')
+        .minutes(minutes)
+        .format('H:mm');
+    };
+  })
+  .filter('toD', function() {
+    return function(day) {
+      var m = {
+        0: 'pn',
+        1: 'wt',
+        2: 'śr',
+        3: 'cz',
+        4: 'pt',
+        5: 'sb',
+        6: 'nd'
+      };
+
+      return m[day];
     };
   });

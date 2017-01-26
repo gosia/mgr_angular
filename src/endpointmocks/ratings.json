@@ -1,7 +1,54 @@
 {
   "results": [
     {
-      "id": "default"
+      "id": "default",
+      "weights": {
+        "term_rating": 1,
+        "room_rating": 1,
+        "teacher_rating": 1
+      },
+      "term_rating": {
+        "terms": {
+          "108": 1,
+          "109": 1,
+          "110": 2,
+          "111": 2,
+          "112": 2,
+          "113": 2,
+          "114": 2,
+          "115": 2,
+          "116": 2,
+          "117": 1,
+          "118": 1
+        },
+        "terms_hour_bonus":{
+          "8": 0, "9": 0,
+          "10" : 1, "11" : 1, "12" : 1, "13" : 1, "14" : 1, "15" : 1,
+          "16" : 0, "17" : 0,
+          "18" : -1, "19" : -1, "20" : -1
+        },
+        "terms_day_bonus": {"1": 1, "2": 1, "3": 1, "4": 1, "5": 1, "6": -2, "7": -2},
+        "start_even": 2,
+        "start_odd": 0
+      },
+      "room_rating": {
+        "too_big_capacity": {
+          "0": 2,
+          "11": 1,
+          "21": 0
+        }
+      },
+      "teacher_rating": {
+        "total_hours_in_work": {
+          "0": 2,
+          "9": 0
+        },
+        "no_work_days_num": {
+          "0": 0,
+          "1": 2
+        },
+        "no_work_days_on_mon_fri": 1
+      }
     },
     {
       "id": "teachers_more_important"

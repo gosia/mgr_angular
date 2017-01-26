@@ -8,5 +8,27 @@
       "group1": [{"room": "123", "term": "term1"}],
       "group2": [{"room": "123", "term": "term2"}]
     }
+  },
+  "rating_helper": {
+    "term_rating_helper": {
+      "start_even_groups": ["group1"],
+      "start_odd_groups": ["group2"]
+    },
+    "room_rating_helper": {
+      "empty_chair_groups": {
+        "1": ["group1"],
+        "20": ["group2"]
+      }
+    },
+    "teacher_rating_helper": {
+      "hours_in_work": {
+        "michaliszyn": {
+          "0": 2
+        },
+        "jurkiewicz": {
+          "0": 2
+        }
+      }
+    }
   }
 }

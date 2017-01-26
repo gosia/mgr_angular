@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('schedulerApp').controller('BoardController', ['ApiService', '$routeParams', '$scope', 'Config', 'Teacher', 'Group', 'Room', 'Term', '$timeout', 'Event', 'Calendar',
+angular.module('schedulerApp').controller('BoardController', [
+  'ApiService', '$routeParams', '$scope', 'Config', 'Teacher', 'Group', 'Room', 'Term', '$timeout', 'Event', 'Calendar',
   function (ApiService, $routeParams, $scope, Config, Teacher, Group, Room, Term, $timeout, Event, Calendar) {
     var viewsList = [
       {value: 'tabs', label: 'Zakładki'},
@@ -284,6 +285,7 @@ angular.module('schedulerApp').controller('BoardController', ['ApiService', '$ro
     };
 
     $scope.board = board;
+    $scope.$parent.board = $scope.board;
 
     $scope.busyEvents = [];
     $scope.calendar = calendar;

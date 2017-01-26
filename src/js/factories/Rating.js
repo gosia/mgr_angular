@@ -35,6 +35,12 @@ angular.module('schedulerApp').factory('Rating', [
           no_work_days_num: getSections(teacherRating.no_work_days_num),
           no_work_days_on_mon_fri: teacherRating.no_work_days_on_mon_fri
         };
+      } else {
+        this.teacherRating = {
+          total_hours_in_work: [],
+          no_work_days_num: [],
+          no_work_days_on_mon_fri: 0
+        };
       }
 
       this.perms = Perms.init();
