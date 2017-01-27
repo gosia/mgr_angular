@@ -1,7 +1,12 @@
 'use strict';
 
-angular.module('schedulerApp').controller('ConfigController', ['ApiService', '$routeParams', '$rootScope', '$scope', 'Config', '$location', '$route', 'File',
-  function (ApiService, $routeParams, $rootScope, $scope, Config, $location, $route, File) {
+angular.module('schedulerApp').controller('ConfigController', [
+  'ApiService', '$routeParams', '$rootScope', '$scope', 'Config', '$location', '$route', 'File',
+  'Task', 'Rating', '$q', 'TaskRatingHelper', 'TaskRating',
+  function (
+    ApiService, $routeParams, $rootScope, $scope, Config, $location, $route, File,
+    Task, Rating, $q, TaskRatingHelper, TaskRating
+  ) {
     $scope.configId = $routeParams.configId;
 
     $scope.reloadFile = function() {
@@ -25,6 +30,43 @@ angular.module('schedulerApp').controller('ConfigController', ['ApiService', '$r
       }
     };
 
+    var initRatingData = function() {
+      var p1 = ApiService.getTasks().then(function(data) {
+        var taskIds = _.map(
+          _.filter(data.results, function (x) {
+            return x.config_id === $routeParams.configId && x.status === 'finished';
+          }),
+          x => x.id
+        );
+
+        return $q.all(_.map(taskIds, x => ApiService.getTask(x))).then(function(tasks) {
+          $scope.tasks = _.map(tasks, data => {
+            var task = Task.init(data);
+            task.helper = TaskRatingHelper.init($scope.config, data);
+            return task;
+          });
+        });
+
+      });
+      var p2 = ApiService.getRatings().then(function(data) {
+        $scope.ratings = _.map(data.results, x => Rating.init(x));
+        $scope.ratingsMap = _.object(_.map($scope.ratings, x => [x.id, x]));
+      });
+
+      $scope.taskRatings = {};
+      $q.all([p1, p2]).then(function() {
+        _.each($scope.tasks, task => {
+          $scope.taskRatings[task.id] = {};
+
+          _.each($scope.ratings, rating => {
+            $scope.taskRatings[task.id][rating.id] = new TaskRating(
+              task.helper, rating, $scope.config
+            );
+          });
+        });
+      });
+    };
+
     init();
 
     var copyConfigElements = function(type) {
@@ -46,5 +88,6 @@ angular.module('schedulerApp').controller('ConfigController', ['ApiService', '$r
     $scope.copyTeachers = copyConfigElements('teacher');
     $scope.copyTerms = copyConfigElements('term');
     $scope.copyRooms = copyConfigElements('room');
+    $scope.initRatingData = initRatingData;
   }
 ]);

@@ -6,10 +6,6 @@ angular.module('schedulerApp').factory('TaskRating', ['$timeout', 'Rating',
       this.taskRatingHelper = taskRatingHelper;
       this.rating = rating;
       this.config = config;
-
-      console.log(rating);
-      console.log(taskRatingHelper);
-
       this.teacher = this.countTeacherData();
       this.room = this.countRoomData();
       this.term = this.countTermData();
@@ -21,16 +17,17 @@ angular.module('schedulerApp').factory('TaskRating', ['$timeout', 'Rating',
     }
 
     TaskRating.prototype.countTotals = function() {
-      return {
+      var totals = {
         allSum: this.teacher.totals.allSum + this.room.totals.allSum + this.term.totals.allSum,
-        allMax: this.teacher.totals.allMax + this.room.totals.allMax + this.term.totals.allMax,
-        allWeightedSum: this.rating.weights.teacher_rating * this.teacher.totals.allSum +
-          this.rating.weights.room_rating * this.room.totals.allSum +
-          this.rating.weights.term_rating * this.term.totals.allSum,
-        allWeightedMax: this.rating.weights.teacher_rating * this.teacher.totals.allMax +
-          this.rating.weights.room_rating * this.room.totals.allMax +
-          this.rating.weights.term_rating * this.term.totals.allMax
+        allMax: this.teacher.totals.allMax + this.room.totals.allMax + this.term.totals.allMax
       };
+      totals.allPercent = totals.allSum * 100 / totals.allMax;
+      totals.allWeightedPercent = (this.teacher.totals.allPercent * this.rating.weights.teacher_rating +
+        this.room.totals.allPercent * this.rating.weights.room_rating +
+        this.term.totals.allPercent * this.rating.weights.term_rating) / (
+          this.rating.weights.teacher_rating + this.rating.weights.room_rating + this.rating.weights.term_rating
+        );
+      return totals;
     };
 
     TaskRating.prototype.countTeacherData = function() {
@@ -104,6 +101,7 @@ angular.module('schedulerApp').factory('TaskRating', ['$timeout', 'Rating',
 
       totals.allSum = totals.daysInWorkSum + totals.hoursInWorkSum + totals.monFriSum;
       totals.allMax = totals.daysInWorkMax + totals.hoursInWorkMax + totals.monFriMax;
+      totals.allPercent = totals.allSum * 100 / totals.allMax;
 
       return {
         totalHoursInWork: totalHoursInWork,
@@ -147,6 +145,7 @@ angular.module('schedulerApp').factory('TaskRating', ['$timeout', 'Rating',
 
       totals.allSum = totals.capacitySum;
       totals.allMax = totals.capacityMax;
+      totals.allPercent = totals.allSum * 100 / totals.allMax;
 
       return {
         tooBigCapacity: tooBigCapacity,
@@ -192,6 +191,7 @@ angular.module('schedulerApp').factory('TaskRating', ['$timeout', 'Rating',
       totals.termsMax = maxTermsPoints * termsTable.length;
       totals.allSum = totals.startEvenSum + totals.startOddSum + totals.termsSum;
       totals.allMax = totals.startEvenMax + totals.startOddMax + totals.termsMax;
+      totals.allPercent = totals.allSum * 100 / totals.allMax;
 
       return {
         totals: totals,
