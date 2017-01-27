@@ -2,7 +2,7 @@
   "id": "task1",
   "config_id": "test",
   "algorithm": "random",
-  "status": "not_started",
+  "status": "finished",
   "timetable": {
     "results": {
       "group1": [{"room": "123", "term": "term1"}],

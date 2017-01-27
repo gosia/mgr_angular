@@ -3,22 +3,26 @@
 /* global angular */
 
 angular.module('schedulerApp').controller('EditRatingController', [
-  'ApiService', '$rootScope', '$scope', '$location', '$route',
-  function (ApiService, $rootScope, $scope, $location, $route) {
+  'ApiService', '$rootScope', '$scope', '$location', '$route', 'Rating',
+  function (ApiService, $rootScope, $scope, $location, $route, Rating) {
 
     $scope.too_big_capacity_new_section = 30;
     $scope.total_hours_in_work_new_section = 5;
     $scope.no_work_days_num_new_section = 3;
 
     $scope.hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
-    $scope.days = [1, 2, 3, 4, 5, 6, 7];
+    $scope.days = [0, 1, 2, 3, 4, 5, 6];
+
+    $scope.getTermKey = Rating.getTermKey;
 
     $scope.recalculateTerms = function() {
       if ($scope.editRating === undefined) { return; }
 
+      _.each($scope.editRating.term_rating.terms, (v, k) => delete $scope.editRating.term_rating.terms[k]);
+
       _.each($scope.days, day => {
         _.each($scope.hours, hour => {
-          $scope.editRating.term_rating.terms[day + '' + hour] = _.max(
+          $scope.editRating.term_rating.terms[Rating.getTermKey(day, hour)] = _.max(
             [$scope.editRating.term_rating.terms_day_bonus[day] + $scope.editRating.term_rating.terms_hour_bonus[hour], 0]
           );
         });
@@ -78,8 +82,7 @@ angular.module('schedulerApp').controller('EditRatingController', [
       editRating.teacher_rating.no_work_days_num = getSectionDict(
         editRating.teacher_rating.no_work_days_num
       );
-
-      console.log(editRating);
+      $scope.recalculateTerms();
 
       return ApiService
         .saveRating(editRating)

@@ -29,7 +29,7 @@ angular.module('schedulerApp').controller('RatingsController', [
           16 : 0, 17 : 0,
           18 : -1, 19 : -1, 20 : -1
         },
-        terms_day_bonus: {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: -2, 7: -2}
+        terms_day_bonus: {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: -2, 6: -2}
       },
       room_rating: {
         too_big_capacity: [
@@ -55,7 +55,7 @@ angular.module('schedulerApp').controller('RatingsController', [
     $scope.no_work_days_num_new_section = 3;
 
     $scope.hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
-    $scope.days = [1, 2, 3, 4, 5, 6, 7];
+    $scope.days = [0, 1, 2, 3, 4, 5, 6];
 
     var init = function() {
       $rootScope.$broadcast('changeContent', 'ratings');

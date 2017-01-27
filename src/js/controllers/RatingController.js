@@ -6,9 +6,13 @@ angular.module('schedulerApp').controller('RatingController', [
     $scope.ratingId = $routeParams.ratingId;
 
     $scope.recalculateTerms = function() {
+      if ($scope.editRating === undefined) { return; }
+
+      _.each($scope.editRating.term_rating.terms, (v, k) => delete $scope.editRating.term_rating.terms[k]);
+
       _.each($scope.days, day => {
         _.each($scope.hours, hour => {
-          $scope.editRating.term_rating.terms[day + '' + hour] = _.max(
+          $scope.editRating.term_rating.terms[Rating.getTermKey(day, hour)] = _.max(
             [$scope.editRating.term_rating.terms_day_bonus[day] + $scope.editRating.term_rating.terms_hour_bonus[hour], 0]
           );
         });
@@ -36,7 +40,7 @@ angular.module('schedulerApp').controller('RatingController', [
     };
 
     $scope.hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
-    $scope.days = [1, 2, 3, 4, 5, 6, 7];
+    $scope.days = [0, 1, 2, 3, 4, 5, 6];
 
     var openEditModal = function() {
       $scope.editRating = $scope.rating.getForForm();

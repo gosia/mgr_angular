@@ -1,10 +1,11 @@
 'use strict';
 
-angular.module('schedulerApp').factory('TaskRating', ['$timeout',
-  function($timeout) {
-    function TaskRating(taskRatingHelper, rating) {
+angular.module('schedulerApp').factory('TaskRating', ['$timeout', 'Rating',
+  function($timeout, Rating) {
+    function TaskRating(taskRatingHelper, rating, config) {
       this.taskRatingHelper = taskRatingHelper;
       this.rating = rating;
+      this.config = config;
 
       console.log(rating);
       console.log(taskRatingHelper);
@@ -157,19 +158,44 @@ angular.module('schedulerApp').factory('TaskRating', ['$timeout',
 
       var groupCount = this.taskRatingHelper.term.startEven.length +
         this.taskRatingHelper.term.startOdd.length;
+      var maxTermsPoints = _.max(_.map(this.rating.termRating.terms, v => v));
 
       var totals = {
         startEvenSum: this.taskRatingHelper.term.startEven.length * this.rating.termRating.start_even,
         startEvenMax: groupCount * this.rating.termRating.start_even,
         startOddSum: this.taskRatingHelper.term.startOdd.length * this.rating.termRating.start_odd,
         startOddMax: groupCount * this.rating.termRating.start_odd,
+        termsSum: 0,
+        termsMax: 0
       };
 
-      totals.allSum = totals.startEvenSum + totals.startOddSum;
-      totals.allMax = totals.startEvenMax + totals.startOddMax;
+      var termsTable = [];
+      _.each(this.config.terms, term => {
+
+        var pointsKey = Rating.getTermKey(term.day, term.start.hour);
+        var points = this.rating.termRating.terms[pointsKey];
+        if (points === undefined) {
+          points = 0;
+        }
+
+        _.each(term.timetable, x => {
+          termsTable.push({
+            points: points,
+            term: x.term,
+            group: x.group
+          });
+          totals.termsSum = totals.termsSum + points;
+        });
+
+      });
+
+      totals.termsMax = maxTermsPoints * termsTable.length;
+      totals.allSum = totals.startEvenSum + totals.startOddSum + totals.termsSum;
+      totals.allMax = totals.startEvenMax + totals.startOddMax + totals.termsMax;
 
       return {
-        totals: totals
+        totals: totals,
+        termsTable: termsTable
       };
     };
 

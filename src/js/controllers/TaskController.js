@@ -59,7 +59,7 @@ angular.module('schedulerApp').controller('TaskController', [
 
     var onCurrentRatingChange = function() {
       if ($scope.currentRating) {
-        $scope.taskRating = new TaskRating($scope.taskRatingHelper, $scope.currentRating);
+        $scope.taskRating = new TaskRating($scope.taskRatingHelper, $scope.currentRating, $scope.config);
       } else {
         $scope.taskRating = undefined;
       }

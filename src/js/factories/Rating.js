@@ -67,6 +67,16 @@ angular.module('schedulerApp').factory('Rating', [
       return result;
     };
 
+    function pad(num, size) {
+      var s = '000000000' + num;
+      return s.substr(s.length - size);
+    }
+
+    Rating.getTermKey = function(day, hour) {
+      return pad(day * 100 + hour, 3);
+    };
+    Rating.prototype.getTermKey = Rating.getTermKey;
+
     return Rating;
   }
 ]);
