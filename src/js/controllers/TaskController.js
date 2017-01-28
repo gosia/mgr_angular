@@ -14,7 +14,9 @@ angular.module('schedulerApp').controller('TaskController', [
         $scope.config = Config.init(data);
         ApiService.getTask($routeParams.taskId).success(function(data) {
           $scope.task = Task.init(data);
-          $scope.taskRatingHelper = TaskRatingHelper.init($scope.config, data);
+          if (data.rating_helper) {
+            $scope.taskRatingHelper = TaskRatingHelper.init($scope.config, data);
+          }
 
           $scope.config.setTimetable(data.timetable);
 
