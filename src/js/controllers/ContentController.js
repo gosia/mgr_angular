@@ -9,10 +9,10 @@ angular.module('schedulerApp').controller('ContentController', ['$http', '$scope
     var resetData = function(name, extra) {
       extra = extra || {};
       var mapping = {
-        configs: {title: 'Przydziały', breadcrumbs: ['Strona główna', 'Przydziały']},
+        configs: {title: 'Przydziały semestralne', breadcrumbs: ['Strona główna', 'Przydziały semestralne']},
         config: {
           title: 'Przydział "' + extra.name + '"',
-          breadcrumbs: ['Strona główna', 'Przydziały', 'Przydział "' + extra.name + '"']
+          breadcrumbs: ['Strona główna', 'Przydziały semestralne', 'Przydział "' + extra.name + '"']
         },
         main: {title: 'Strona główna', breadcrumbs: ['Strona główna']},
         tasks: {title: 'Zadania', breadcrumbs: ['Strona główna', 'Zadania']},
@@ -20,10 +20,10 @@ angular.module('schedulerApp').controller('ContentController', ['$http', '$scope
           title: 'Zadanie "' + extra.name + '"',
           breadcrumbs: ['Strona główna', 'Zadania', 'Zadanie "' + extra.name + '"']
         },
-        files: {title: 'Plany', breadcrumbs: ['Strona główna', 'Plany']},
+        files: {title: 'Przydziały roczne', breadcrumbs: ['Strona główna', 'Przydziały roczne']},
         file: {
-          title: 'Plan "' + extra.name + '"',
-          breadcrumbs: ['Strona główna', 'Plany', 'Plan "' + extra.name + '"']
+          title: 'Przydział roczny "' + extra.name + '"',
+          breadcrumbs: ['Strona główna', 'Przydziały roczne', 'Przydział "' + extra.name + '"']
         },
         votes: {title: 'Głosowania', breadcrumbs: ['Strona główna', 'Głosowania']},
         vote: {
