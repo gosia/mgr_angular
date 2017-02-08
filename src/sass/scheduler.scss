@@ -55,6 +55,13 @@ a {
   height: 615px !important;
 }
 
+.glyphicon-refresh-animate {
+  -animation: spin 2.5s infinite linear;
+  -ms-animation: spin 2.5s infinite linear;
+  -webkit-animation: spinw 2.5s infinite linear;
+  -moz-animation: spinm 2.5s infinite linear;
+}
+
 .box {
   .box-loading-icon {
     display: none;
@@ -82,10 +89,6 @@ a {
 
   .glyphicon-refresh-animate {
     display: block;
-    -animation: spin 2.5s infinite linear;
-    -ms-animation: spin 2.5s infinite linear;
-    -webkit-animation: spinw 2.5s infinite linear;
-    -moz-animation: spinm 2.5s infinite linear;
   }
 }
 

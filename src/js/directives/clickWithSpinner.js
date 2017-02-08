@@ -5,7 +5,7 @@ angular.module('schedulerApp')
     var linker = function($scope, $element, $attr) {
 
       var spinnerHtml = angular.element(
-        '<span class="glyphicon glyphicon-refresh" style="margin-left: 5px"></span>'
+        '<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>'
       );
 
       var addSpinner = function() {
