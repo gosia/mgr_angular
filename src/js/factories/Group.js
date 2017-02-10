@@ -1,6 +1,18 @@
 'use strict';
 
 angular.module('schedulerApp').factory('Group', ['Perms', function(Perms) {
+
+  var groupTypeMap = {
+    'w': 'wykład',
+    'c': 'ćwiczenia',
+    'p': 'pracownia',
+    'l': 'pracownia',
+    'e': 'repetytorium',
+    's': 'seminarium',
+    'r': 'ćwicz-prac'
+  };
+
+
   function Group(id, terms, termsNum, studentsNum, sameTermGroupIds, diffTermGroupIds, labels, teachers, extra) {
     this.id = id;
     this.terms = terms;
@@ -10,7 +22,10 @@ angular.module('schedulerApp').factory('Group', ['Perms', function(Perms) {
     this.diffTermGroupIds = diffTermGroupIds;
     this.labels = labels;
     this.teachers = teachers;
-    this.extra = {course: extra.course, groupType: extra.group_type, notes: extra.notes};
+    this.extra = {
+      course: extra.course, groupType: extra.group_type, notes: extra.notes,
+      groupTypeFull: groupTypeMap[extra.group_type]
+    };
     this.type = 'group';
     this.timetable = [];
     this.perms = Perms.init();

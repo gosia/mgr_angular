@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('schedulerApp', ['ngRoute'])
+angular.module('schedulerApp', ['ngRoute', 'ngFileSaver'])
   .config(function ($provide) {
 
     $provide.decorator('$q', function ($delegate) {

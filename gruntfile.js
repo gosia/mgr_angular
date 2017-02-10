@@ -270,6 +270,7 @@ module.exports = function (grunt) {
           '<%= config.buildDir %>/js/libs/bootstrap.min.js',
           '<%= config.buildDir %>/js/libs/angular/angular.min.js',
           '<%= config.buildDir %>/js/libs/angular/angular-route.min.js',
+          '<%= config.buildDir %>/js/libs/angular/angular-file-saver.bundle.min.js',
           '<%= config.buildDir %>/js/libs/underscore-min.js',
           '<%= config.buildDir %>/js/libs/moment.min.js',
           '<%= config.buildDir %>/js/libs/admin-lte/app.min.js'
@@ -316,6 +317,7 @@ module.exports = function (grunt) {
           'bootstrap.min.js': 'admin-lte/bootstrap/js/bootstrap.min.js',
           'angular/angular.min.js': 'angular/angular.min.js',
           'angular/angular-route.min.js': 'angular-route/angular-route.min.js',
+          'angular/angular-file-saver.bundle.min.js': 'angular-file-saver/dist/angular-file-saver.bundle.min.js',
           'underscore-min.js': 'underscore/underscore-min.js',
           'moment.min.js': 'moment/min/moment.min.js',
           'admin-lte/app.min.js': 'admin-lte/dist/js/app.min.js',

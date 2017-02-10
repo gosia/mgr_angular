@@ -7,7 +7,7 @@ angular.module('schedulerApp').factory('TimeTableObj', ['Event', function(Event)
     this.term = term;
   }
 
-  var backgrouundColors = {
+  var backgroundColors = {
     teacher: '#00a65a',
     group: '#f39c12',
     room: '#d2d6de',
@@ -27,8 +27,8 @@ angular.module('schedulerApp').factory('TimeTableObj', ['Event', function(Event)
 
   TimeTableObj.prototype.getEvent = function(calendar, tab) {
     var opts = {
-      backgroundColor: backgrouundColors[tab.type],
-      borderColor: backgrouundColors[tab.type],
+      backgroundColor: backgroundColors[tab.type],
+      borderColor: backgroundColors[tab.type],
       textColor: colors[tab.type]
     };
 

@@ -43,4 +43,9 @@ angular.module('schedulerApp')
 
       return m[day];
     };
-  });
+  })
+  .filter('toTrustedHtml', ['$sce', function ($sce) {
+    return function (text) {
+      return $sce.trustAsHtml(text);
+    };
+  }]);

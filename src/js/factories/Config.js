@@ -10,6 +10,7 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
     this.rooms = rooms;
     this.year = year;
     this.term = term;
+    this.timetable = [];
 
     this.setTermsMap();
     this.setRoomsMap();
@@ -95,6 +96,7 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
     _.each(this.groups, group => group.setTimetable(timetableByGroupId[group.id] || []));
     _.each(this.rooms, room => room.setTimetable(timetableByRoomId[room.id] || []));
     _.each(this.terms, term => term.setTimetable(timetableByTermId[term.id] || []));
+    this.timetable = timetable;
   };
 
   Config.prototype.modifyTimetable = function(apiData, mode) {

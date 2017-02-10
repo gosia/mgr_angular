@@ -39,6 +39,10 @@ angular.module('schedulerApp').factory('Term', ['Perms', function(Perms) {
     );
   };
 
+  Term.prototype.getDayHumanReadable = function() {
+    return dayNames[this.day];
+  };
+
   Term.prototype.getPrettyName = function() {
     return dayNames[this.day] + ' ' + pad2(this.start.hour) + ':' + pad2(this.start.minute) + '-' +
       pad2(this.end.hour) + ':' + pad2(this.end.minute);

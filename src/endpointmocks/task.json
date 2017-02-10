@@ -6,7 +6,7 @@
   "timetable": {
     "results": {
       "group1": [{"room": "123", "term": "term1"}],
-      "group2": [{"room": "123", "term": "term2"}]
+      "group2": [{"room": "123", "term": "term2"}, {"room": "123", "term": "term3"}]
     }
   },
   "rating_helper": {

@@ -60,18 +60,21 @@ angular.module('schedulerApp').factory('ApiService', [
     var deferred = $q.defer();
 
     httpPromise
-      .success(function(data) {
-        checkErrorResponse(data);
-        if (data.ok === false) {
+      .then(
+        function(response) {
+          let data = response.data;
+          checkErrorResponse(data);
+          if (data.ok === false) {
+            deferred.reject();
+          } else {
+            deferred.resolve(data);
+          }
+        },
+        function() {
+          showAlert();
           deferred.reject();
-        } else {
-          deferred.resolve(data);
         }
-      })
-      .error(function() {
-        showAlert();
-        deferred.reject();
-      });
+      );
 
     return deferred.promise;
   };
