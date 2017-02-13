@@ -50,8 +50,10 @@ angular.module('schedulerApp').factory('File', ['Perms', '$q', function(Perms, $
       return error('Linia zawiera ' + line.length + ' elementów zamiast 7', lineNum);
     }
 
-    var id = line[1];
-    var pensum = parseInt(line[5]);
+    let id = line[1];
+    let firstName = line[2];
+    let lastName = line[4];
+    let pensum = parseInt(line[5]);
 
     if (teacherMap[id] !== undefined) {
       return error('Zduplikowany prowadzący (patrz linia ' + teacherMap[id].line + ')', lineNum);
@@ -60,14 +62,17 @@ angular.module('schedulerApp').factory('File', ['Perms', '$q', function(Perms, $
       return error('Pensum musi być liczbą', lineNum);
     }
 
-    teacherMap[id] = {line: lineNum, pensum: pensum, groups: []};
+    teacherMap[id] = {
+      line: lineNum, pensum: pensum, groups: [], firstName: firstName, lastName: lastName
+    };
   };
 
-  var validateGroupLine = function(line, lineNum, teacherMap, groupMap) {
+  var validateGroupLine = function(line, lineNum, teacherMap, groupMap, termMap) {
     if (line.length !== 7) {
       return error('Linia zawiera ' + line.length + ' elementów zamiast 7', lineNum);
     }
 
+    var term = line[0];
     var course = line[2];
     var group = line[3];
     var hours = parseInt(line[4]);
@@ -88,9 +93,14 @@ angular.module('schedulerApp').factory('File', ['Perms', '$q', function(Perms, $
     if (groupMap[course][group] === undefined) {
       groupMap[course][group] = [];
     }
+    if (termMap[term] === undefined) {
+      termMap[term] = new Set();
+    }
+
+    termMap[term].add(course);
 
     _.each(teachers, teacher => {
-      var data = {teacher: teacher, hours: hours};
+      var data = {teacher: teacher, hours: hours, course: course, term: term, groupType: group};
       groupMap[course][group].push(data);
       teacherMap[teacher].groups.push(data);
     });
@@ -113,7 +123,10 @@ angular.module('schedulerApp').factory('File', ['Perms', '$q', function(Perms, $
       if (line[0] === '1' || line[0] === '2') {
         var groupId = line[1];
         if (groupIds[groupId] !== undefined) {
-          result.push(error('Zduplikowane id grupy ' + groupId + '. Oryginał w lini ' + groupIds[groupId], lineNum));
+          result.push(error(
+            `Zduplikowane id grupy ${groupId}. Oryginał w lini ${groupIds[groupId]}`,
+            lineNum
+          ));
         } else {
           groupIds[groupId] = lineNum;
         }
@@ -128,7 +141,7 @@ angular.module('schedulerApp').factory('File', ['Perms', '$q', function(Perms, $
     return $q(function(resolve) {
       var validationMessages = [];
       var lines = file.content.split('\n').map(x => x.split('|'));
-      var teacherMap = {}, err, groupMap = {};
+      var teacherMap = {}, err, groupMap = {}, termMap = {};
 
       // handle teachers
       _.each(lines, (line, lineNum) => {
@@ -149,7 +162,7 @@ angular.module('schedulerApp').factory('File', ['Perms', '$q', function(Perms, $
           return;
         }
         if (line[0] === '1' || line[0] === '2') {
-          err = validateGroupLine(line, lineNum, teacherMap, groupMap);
+          err = validateGroupLine(line, lineNum, teacherMap, groupMap, termMap);
           if (err !== undefined) {
             validationMessages.push(err);
           }
@@ -164,6 +177,11 @@ angular.module('schedulerApp').factory('File', ['Perms', '$q', function(Perms, $
 
       file.errors = validationMessages;
       file.hasErrors = _.some(validationMessages, message => message.type === 'err');
+
+      file.teacherMap = teacherMap;
+      file.groupMap = groupMap;
+      file.termMap = termMap;
+
       resolve();
     });
   };

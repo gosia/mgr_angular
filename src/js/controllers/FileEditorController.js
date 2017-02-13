@@ -24,6 +24,7 @@ angular.module('schedulerApp').controller('FileEditorController', ['$scope', '$t
       $scope.data.changed = true;
       var editor = ace.edit('editor');
       $scope.file.setContent(editor.getValue()).then(function() {
+        $scope.download.recount();
         colorEditor();
       });
       $scope.$apply();
