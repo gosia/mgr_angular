@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('schedulerApp').controller('FilesController', ['ApiService', '$rootScope', '$scope', '$location', 'User', 'File',
-  function (ApiService, $rootScope, $scope, $location, User, File) {
+angular.module('schedulerApp').controller('FilesController', [
+  'ApiService', '$rootScope', '$scope', '$location', 'User', 'File', '$route',
+  function (ApiService, $rootScope, $scope, $location, User, File, $route) {
     $scope.numStart = 0;
     $scope.numEnd = 0;
     $scope.numAll = 0;
@@ -51,8 +52,8 @@ angular.module('schedulerApp').controller('FilesController', ['ApiService', '$ro
     var linkFile = function(file) {
       return ApiService.linkFile(file.id).success(function() {
         file.linked = true;
-        $location.url('/files');
         $rootScope.$broadcast('addAlertByCode', 'ok');
+        $route.reload();
       });
     };
 

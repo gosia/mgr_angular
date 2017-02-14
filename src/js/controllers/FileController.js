@@ -2,9 +2,10 @@
 
 angular.module('schedulerApp').controller('FileController', [
   'ApiService', '$routeParams', '$rootScope', '$scope', 'File', '$location', 'FileDownload',
-  'FileSaver', 'Blob',
+  'FileSaver', 'Blob', '$route',
   function (
-    ApiService, $routeParams, $rootScope, $scope, File, $location, FileDownload, FileSaver, Blob
+    ApiService, $routeParams, $rootScope, $scope, File, $location, FileDownload, FileSaver, Blob,
+    $route
   ) {
     $scope.fileId = $routeParams.fileId;
 
@@ -37,6 +38,7 @@ angular.module('schedulerApp').controller('FileController', [
       return ApiService.linkFile($scope.file.id).success(function() {
         $scope.file.linked = true;
         $rootScope.$broadcast('addAlertByCode', 'ok');
+        $route.reload();
       });
     };
 
