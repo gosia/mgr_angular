@@ -39,12 +39,17 @@ angular.module('schedulerApp').controller('ConfigController', [
           x => x.id
         );
 
-        return $q.all(_.map(taskIds, x => ApiService.getTask(x))).then(function(tasks) {
-          $scope.tasks = _.map(tasks, data => {
-            var task = Task.init(data);
-            task.helper = TaskRatingHelper.init($scope.config, data);
-            return task;
-          });
+        return $q.all(
+          _.map(taskIds, x => ApiService.getTask(x))
+        ).then(function(tasks) {
+          $scope.tasks = _.chain(tasks)
+            .filter(x => x.rating_helper)
+            .map(data => {
+              var task = Task.init(data);
+              task.helper = TaskRatingHelper.init($scope.config, data);
+              return task;
+            })
+            .value();
         });
 
       });
