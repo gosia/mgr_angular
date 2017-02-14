@@ -2,10 +2,10 @@
 
 angular.module('schedulerApp').controller('TaskController', [
   'ApiService', '$routeParams', '$rootScope', '$scope', 'Task', '$location', 'Config',
-  'TaskRatingHelper', 'Rating', 'TaskRating', 'Download', 'FileSaver', 'Blob',
+  'TaskRatingHelper', 'Rating', 'TaskRating', 'Download', 'FileSaver', 'Blob', '$route',
   function (
     ApiService, $routeParams, $rootScope, $scope, Task, $location, Config, TaskRatingHelper, Rating,
-    TaskRating, Download, FileSaver, Blob
+    TaskRating, Download, FileSaver, Blob, $route
   ) {
     $rootScope.$broadcast('changeContent', 'task', {name: $routeParams.taskId});
 
@@ -55,6 +55,7 @@ angular.module('schedulerApp').controller('TaskController', [
       return ApiService.startTask($scope.task.id).success(function() {
         $scope.task.status = 'processing';
         $rootScope.$broadcast('addAlertByCode', 'ok');
+        $route.reload();
       });
     };
 
