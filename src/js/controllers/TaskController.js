@@ -22,7 +22,7 @@ angular.module('schedulerApp').controller('TaskController', [
         $scope.config = Config.init(data);
         ApiService.getTask($routeParams.taskId).success(function(data) {
           $scope.task = Task.init(data);
-          if (data.rating_helper) {
+          if (data.rating_helper && _.size(data.rating_helper) > 0) {
             $scope.taskRatingHelper = TaskRatingHelper.init($scope.config, data);
           }
 

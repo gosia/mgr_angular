@@ -53,7 +53,7 @@ angular.module('schedulerApp').controller('FileEditorController', ['$scope', '$t
     var save = function() {
       var editor = ace.edit('editor');
       var newContent = editor.getValue();
-      ApiService.saveFile($scope.file.id, newContent).success(function() {
+      return ApiService.saveFile($scope.file.id, newContent).success(function() {
         $scope.file.setContent(newContent);
         $scope.data.changed = false;
       });
