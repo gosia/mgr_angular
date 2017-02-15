@@ -70,7 +70,7 @@
       "terms": ["term1", "term2"],
       "same_term_groups": ["group2"],
       "diff_term_groups": ["group2"],
-      "labels": [],
+      "room_labels": [["wyklad", "cwiczenia"], ["cwiczenia"]],
       "terms_num": 2,
       "students_num": 18,
       "extra": {
@@ -85,7 +85,7 @@
       "terms": ["term1", "term2"],
       "same_term_groups": ["group1"],
       "diff_term_groups": ["group1"],
-      "labels": [],
+      "room_labels": [],
       "terms_num": 2,
       "students_num": 18,
       "extra": {
@@ -100,7 +100,7 @@
       "terms": [],
       "same_term_groups": [],
       "diff_term_groups": [],
-      "labels": [],
+      "room_labels": [],
       "terms_num": 2,
       "students_num": 18,
       "extra": {
@@ -115,7 +115,7 @@
       "id": "123",
       "terms": [],
       "capacity": 123,
-      "labels": []
+      "labels": ["wyklad", "cwiczenia"]
     }
   ]
 }

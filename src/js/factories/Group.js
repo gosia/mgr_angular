@@ -13,14 +13,16 @@ angular.module('schedulerApp').factory('Group', ['Perms', function(Perms) {
   };
 
 
-  function Group(id, terms, termsNum, studentsNum, sameTermGroupIds, diffTermGroupIds, labels, teachers, extra) {
+  function Group(
+    id, terms, termsNum, studentsNum, sameTermGroupIds, diffTermGroupIds, labels, teachers, extra
+  ) {
     this.id = id;
     this.terms = terms;
     this.termsNum = termsNum;
     this.studentsNum = studentsNum;
     this.sameTermGroupIds = sameTermGroupIds;
     this.diffTermGroupIds = diffTermGroupIds;
-    this.labels = labels;
+    this.room_labels = labels;
     this.teachers = teachers;
     this.extra = {
       course: extra.course, groupType: extra.group_type, notes: extra.notes,
@@ -84,7 +86,7 @@ angular.module('schedulerApp').factory('Group', ['Perms', function(Perms) {
       allTerms: this.terms.length === config.terms.length,
       termsNum: this.termsNum,
       studentsNum: this.studentsNum,
-      labels: this.labels.join(','),
+      room_labels: _.map(this.room_labels, x => x.join(',')).join(';'),
       teachers: _.map(this.teachers, function(x) { return x.id; }).join(','),
       course: this.extra.course,
       groupType: this.extra.groupType,
@@ -95,7 +97,7 @@ angular.module('schedulerApp').factory('Group', ['Perms', function(Perms) {
   Group.prototype.edit = function(group) {
     this.terms = group.terms;
     this.teachers = group.teachers;
-    this.labels = group.labels;
+    this.room_labels = group.room_labels;
     this.termsNum = group.termsNum;
     this.studentsNum = group.studentsNum;
     this.extra = group.extra;
@@ -113,7 +115,7 @@ angular.module('schedulerApp').factory('Group', ['Perms', function(Perms) {
     var teachers = _.map(apiData.teachers, function(teacherId) { return teachersMap[teacherId]; });
     return new Group(
       apiData.id, terms, apiData.terms_num, apiData.students_num, apiData.same_term_groups,
-      apiData.diff_term_groups, apiData.labels, teachers, apiData.extra
+      apiData.diff_term_groups, apiData.room_labels, teachers, apiData.extra
     );
   };
 
@@ -125,7 +127,7 @@ angular.module('schedulerApp').factory('Group', ['Perms', function(Perms) {
     var formTeachers = _.filter(config.teachers, function(x) { return _.contains(formTeacherIds, x.id); });
 
     var terms = apiData.allTerms ? config.terms : formTerms;
-    var labels = apiData.labels ? apiData.labels.split(',') : [];
+    var labels = apiData.room_labels ? _.map(apiData.room_labels.split(';'), x => x.split(',')) : [];
 
     var group = new Group(
       apiData.id, terms, apiData.termsNum, apiData.studentsNum, [], [], labels, formTeachers,

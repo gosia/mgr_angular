@@ -1,8 +1,11 @@
 'use strict';
 
 angular.module('schedulerApp').controller('BoardController', [
-  'ApiService', '$routeParams', '$scope', 'Config', 'Teacher', 'Group', 'Room', 'Term', '$timeout', 'Event', 'Calendar',
-  function (ApiService, $routeParams, $scope, Config, Teacher, Group, Room, Term, $timeout, Event, Calendar) {
+  'ApiService', '$routeParams', '$scope', 'Config', 'Teacher', 'Group', 'Room', 'Term', '$timeout',
+  'Event', 'Calendar',
+  function (
+    ApiService, $routeParams, $scope, Config, Teacher, Group, Room, Term, $timeout, Event, Calendar
+  ) {
     var viewsList = [
       {value: 'tabs', label: 'Zakładki'},
       {value: 'custom-calendar', label: 'Kalendarz'}
@@ -170,7 +173,10 @@ angular.module('schedulerApp').controller('BoardController', [
 
     var datas = {
       teacher: {modal: '#add-config-teacher', cls: Teacher, reset: resetTeacherForm, apiServiceAddF: ApiService.addConfigTeacher, configAddF: 'addTeacher', configEditF: 'editTeacher'},
-      group: {modal: '#add-config-group', cls: Group, reset: resetGroupForm, apiServiceAddF: ApiService.addConfigGroup, configAddF: 'addGroup', configEditF: 'editGroup'},
+      group: {
+        modal: '#add-config-group', cls: Group, reset: resetGroupForm,
+        apiServiceAddF: ApiService.addConfigGroup, configAddF: 'addGroup', configEditF: 'editGroup'
+      },
       room: {modal: '#add-config-room', cls: Room, reset: resetRoomForm, apiServiceAddF: ApiService.addConfigRoom, configAddF: 'addRoom', configEditF: 'editRoom'},
       term: {modal: '#add-config-term', cls: Term, reset: resetTermForm, apiServiceAddF: ApiService.addConfigTerm, configAddF: 'addTerm', configEditF: 'editTerm'}
     };
@@ -191,7 +197,7 @@ angular.module('schedulerApp').controller('BoardController', [
             $scope.config[data.configEditF](tab, $scope.newElement);
           }
           if (type === 'teacher' || type === 'group') {
-            $scope.$parent.reloadFile();
+            $scope.reloadFile();
           }
           data.reset();
           addTab(tab);

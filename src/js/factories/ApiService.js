@@ -163,7 +163,7 @@ angular.module('schedulerApp').factory('ApiService', [
             teachers: _.map(group.teachers, x => x.id),
             same_term_group_ids: _.map(group.sameTermGroupIds, x => x.id),
             diff_term_group_ids: _.map(group.diffTermGroupIds, x => x.id),
-            labels: group.labels,
+            room_labels: group.room_labels,
             course: group.extra.course,
             group_type: group.extra.groupType,
             notes: group.extra.notes || ''
