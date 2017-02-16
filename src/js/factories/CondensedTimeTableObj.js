@@ -44,17 +44,17 @@ angular.module('schedulerApp').factory('CondensedTimeTableObj', [function() {
               continue;
             }
 
+            added = true;
+            termGroup.objs.push(x);
+
             if (x.term.day === termGroup.day && x.term.end.hour === termGroup.start.hour) {
-              added = true;
               termGroup.start = x.term.start;
-              termGroup.objs.push(x);
             } else if (
               x.term.day === termGroup.day &&  termGroup.end.hour === x.term.start.hour
             ) {
-              added = true;
               termGroup.end = x.term.end;
-              termGroup.objs.push(x);
             }
+            break;
           }
         }
         if (timetable[key] === undefined || !added) {

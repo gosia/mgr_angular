@@ -90,7 +90,7 @@ angular.module('schedulerApp')
             '            </span><br>' +
             'Sala: <a ng-click="board.addTab(event.timetableObj.room)">{[{ event.timetableObj.room.id }]}</a><br>' +
             'Grupa: <a ng-click="board.addTab(event.timetableObj.group)">{[{ event.timetableObj.group.id }]}</a><br>' +
-            'Etykiety: ' + t.group.labels.join(', ');
+            'Etykiety: ' + t.group.room_labels.join(', ');
 
           var compiledContent = $compile(content)($scope);
           var options = {
