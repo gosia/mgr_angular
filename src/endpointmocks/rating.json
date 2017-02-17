@@ -3,7 +3,8 @@
   "weights": {
     "term_rating": 1,
     "room_rating": 1,
-    "teacher_rating": 1
+    "teacher_rating": 1,
+    "student_rating": 1
   },
   "term_rating": {
     "terms": {},
@@ -32,6 +33,10 @@
     "no_work_days_num": {
       "0": 0,
       "1": 2
+    },
+    "gap_hours": {
+      "0": 1,
+      "1": 0
     },
     "no_work_days_on_mon_fri": 1
   }

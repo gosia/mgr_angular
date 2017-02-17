@@ -31,12 +31,18 @@ angular.module('schedulerApp').factory('TaskRating', ['$timeout', 'Rating',
     };
 
     TaskRating.prototype.countTeacherData = function() {
-      var totalHoursInWork = {};
+      var totalHoursInWork = {}, gapHours = {};
 
       var hoursInWorkMaxPoints = 0;
       _.each(this.rating.teacherRating.total_hours_in_work, s => {
         if (hoursInWorkMaxPoints < s.value) {
           hoursInWorkMaxPoints = s.value;
+        }
+      });
+      var gapHoursMaxPoints = 0;
+      _.each(this.rating.teacherRating.gap_hours, s => {
+        if (gapHoursMaxPoints < s.value) {
+          gapHoursMaxPoints = s.value;
         }
       });
       var daysInWorkMaxPoints = 0;
@@ -49,6 +55,8 @@ angular.module('schedulerApp').factory('TaskRating', ['$timeout', 'Rating',
       var totals = {
         hoursInWorkSum: 0,
         hoursInWorkMax: this.taskRatingHelper.teacher.hoursInWorkList.length * hoursInWorkMaxPoints,
+        gapHoursSum: 0,
+        gapHoursMax: this.taskRatingHelper.teacher.gapHoursList.length * gapHoursMaxPoints,
         daysInWorkSum: 0,
         daysInWorkMax: this.taskRatingHelper.teacher.daysInWorkList.length * daysInWorkMaxPoints,
         monFriSum: 0,
@@ -73,6 +81,23 @@ angular.module('schedulerApp').factory('TaskRating', ['$timeout', 'Rating',
         totalHoursInWork[x.teacher][x.day] = points;
         totals.hoursInWorkSum = totals.hoursInWorkSum + points;
 
+      });
+      _.each(this.taskRatingHelper.teacher.gap_hours, (value, teacher) => {
+        _.each(value, (hours, day) => {
+          if (gapHours[teacher] === undefined) {
+            gapHours[teacher] = {};
+          }
+
+          let points = 0;
+          _.each(this.rating.teacherRating.gap_hours, s => {
+            if (s.start <= hours && hours <= s.end) {
+              points = s.value;
+            }
+          });
+
+          gapHours[teacher][day] = points;
+          totals.gapHoursSum = totals.gapHoursSum + points;
+        });
       });
 
       var totalDaysInWork = {};
@@ -99,12 +124,15 @@ angular.module('schedulerApp').factory('TaskRating', ['$timeout', 'Rating',
 
       });
 
-      totals.allSum = totals.daysInWorkSum + totals.hoursInWorkSum + totals.monFriSum;
-      totals.allMax = totals.daysInWorkMax + totals.hoursInWorkMax + totals.monFriMax;
+      totals.allSum = totals.daysInWorkSum + totals.hoursInWorkSum + totals.monFriSum +
+        totals.gapHoursSum;
+      totals.allMax = totals.daysInWorkMax + totals.hoursInWorkMax + totals.monFriMax +
+        totals.gapHoursMax;
       totals.allPercent = totals.allSum * 100 / totals.allMax;
 
       return {
         totalHoursInWork: totalHoursInWork,
+        gapHours: gapHours,
         totalDaysInWork: totalDaysInWork,
         totals: totals
       };

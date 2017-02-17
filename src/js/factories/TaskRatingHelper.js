@@ -8,6 +8,7 @@ angular.module('schedulerApp').factory('TaskRatingHelper', [function() {
     this.teacher = ratingHelper.teacher_rating_helper;
 
     this.teacher.hoursInWorkList = this.getTeacherHours();
+    this.teacher.gapHoursList = this.getGapHours();
     this.teacher.daysInWorkList = this.getTeacherDays();
     this.room.emptyChairGroupsList = this.getRoomEmptyChairs();
     this.term.startEven = _.map(this.term.start_even_groups, x => this.config.groupsMap[x]);
@@ -18,6 +19,20 @@ angular.module('schedulerApp').factory('TaskRatingHelper', [function() {
     return new TaskRatingHelper(config, apiData.rating_helper);
   };
 
+  TaskRatingHelper.prototype.getGapHours = function() {
+    let result = [];
+    _.each(this.teacher.gap_hours, (values, teacher) => {
+      _.each(values, (hours, day) => {
+        result.push({
+          teacher: teacher,
+          hours: hours,
+          day: day,
+          teacherObject: this.config.teachersMap[teacher]
+        });
+      });
+    });
+    return result;
+  };
   TaskRatingHelper.prototype.getTeacherHours = function() {
     var result = [];
     _.each(this.teacher.hours_in_work, (v, teacher) => {

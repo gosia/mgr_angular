@@ -17,7 +17,8 @@ angular.module('schedulerApp').controller('RatingsController', [
       weights: {
         term_rating: 1,
         room_rating: 1,
-        teacher_rating: 1
+        teacher_rating: 1,
+        student_rating: 1
       },
       term_rating: {
         terms: {},
@@ -47,12 +48,17 @@ angular.module('schedulerApp').controller('RatingsController', [
           {start: 0, end: 0, value: 0},
           {start: 1, end: Infinity, value: 2}
         ],
+        gap_hours: [
+          {start: 0, end: 0, value: 1},
+          {start: 1, end: Infinity, value: 0}
+        ],
         no_work_days_on_mon_fri: 1
       }
     };
     $scope.too_big_capacity_new_section = 30;
     $scope.total_hours_in_work_new_section = 5;
     $scope.no_work_days_num_new_section = 3;
+    $scope.gap_hours_new_section = 4;
 
     $scope.hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
     $scope.days = [0, 1, 2, 3, 4, 5, 6];

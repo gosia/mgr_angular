@@ -9,6 +9,7 @@ angular.module('schedulerApp').controller('EditRatingController', [
     $scope.too_big_capacity_new_section = 30;
     $scope.total_hours_in_work_new_section = 5;
     $scope.no_work_days_num_new_section = 3;
+    $scope.gap_hours_new_section = 0;
 
     $scope.hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
     $scope.days = [0, 1, 2, 3, 4, 5, 6];
@@ -38,6 +39,14 @@ angular.module('schedulerApp').controller('EditRatingController', [
       xs.splice(index, 1);
     };
     $scope.addSection = function(xs, value) {
+      if (xs.length == 0) {
+        xs.push({
+          start: 0,
+          end: Infinity,
+          value: 0
+        });
+      }
+
       var newItem;
       for(var i=0; i<xs.length; i++) {
         var x = xs[i];
@@ -78,6 +87,9 @@ angular.module('schedulerApp').controller('EditRatingController', [
       );
       editRating.teacher_rating.total_hours_in_work = getSectionDict(
         editRating.teacher_rating.total_hours_in_work
+      );
+      editRating.teacher_rating.gap_hours = getSectionDict(
+        editRating.teacher_rating.gap_hours
       );
       editRating.teacher_rating.no_work_days_num = getSectionDict(
         editRating.teacher_rating.no_work_days_num

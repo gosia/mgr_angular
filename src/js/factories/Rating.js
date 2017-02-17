@@ -33,6 +33,7 @@ angular.module('schedulerApp').factory('Rating', [
         this.teacherRating = {
           total_hours_in_work: getSections(teacherRating.total_hours_in_work),
           no_work_days_num: getSections(teacherRating.no_work_days_num),
+          gap_hours: getSections(teacherRating.gap_hours),
           no_work_days_on_mon_fri: teacherRating.no_work_days_on_mon_fri
         };
       } else {

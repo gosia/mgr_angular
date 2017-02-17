@@ -28,6 +28,14 @@
         "jurkiewicz": {
           "0": 2
         }
+      },
+      "gap_hours": {
+        "michaliszyn": {
+          "0": 2
+        },
+        "jurkiewicz": {
+          "0": 0
+        }
       }
     }
   }
