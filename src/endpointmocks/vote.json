@@ -1,14 +1,11 @@
 {
   "config_id": "test",
-  "votes_num": 54,
-  "votes": {
-    "u1": {
-      "c1": 2,
-      "c2": 3
-    },
-    "u2": {
-      "c1": 2,
-      "c2": 3
-    }
-  }
+  "students_num": 2,
+  "points_sum": 8,
+  "votes": [
+    {"student": "gosia", "course": "Analiza matematyczna", "points": 3},
+    {"student": "gosia", "course": "Analiza numeryczna", "points": 2},
+    {"student": "gosia", "course": "Logika dla informatyków", "points": 2},
+    {"student": "kuba", "course": "Logika dla informatyków", "points": 1}
+  ]
 }

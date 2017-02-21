@@ -39,7 +39,7 @@ angular.module('schedulerApp').controller('EditRatingController', [
       xs.splice(index, 1);
     };
     $scope.addSection = function(xs, value) {
-      if (xs.length == 0) {
+      if (xs.length === 0) {
         xs.push({
           start: 0,
           end: Infinity,

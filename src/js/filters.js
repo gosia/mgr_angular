@@ -44,6 +44,24 @@ angular.module('schedulerApp')
       return m[day];
     };
   })
+  .filter('toStudentNum', function() {
+    return function(xs) {
+      if (xs === undefined) { return 0; }
+      return _.chain(xs).map(x => x.student).uniq().size();
+    };
+  })
+  .filter('toCourseNum', function() {
+    return function(xs) {
+      if (xs === undefined) { return 0; }
+      return _.chain(xs).map(x => x.course).uniq().size();
+    };
+  })
+  .filter('toPointsSum', function() {
+    return function(xs) {
+      if (xs === undefined) { return 0; }
+      return _.chain(xs).map(x => x.points).reduce((a, b) => a + b, 0);
+    };
+  })
   .filter('toTrustedHtml', ['$sce', function ($sce) {
     return function (text) {
       return $sce.trustAsHtml(text);
