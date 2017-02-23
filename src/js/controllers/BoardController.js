@@ -365,6 +365,28 @@ angular.module('schedulerApp').controller('BoardController', [
       });
     };
 
+    let filterRoom = function(room) {
+      if ($scope.filter === undefined || $scope.filter === '') { return true; }
+      return _.chain(room.labels).some(x => x.includes($scope.filter)).value() ||
+        room.id.includes($scope.filter);
+    };
+    let filterTeacher = function(teacher) {
+      if ($scope.filter === undefined || $scope.filter === '') { return true; }
+
+      return teacher.id.includes($scope.filter) ||
+        teacher.extra.firstName.includes($scope.filter) ||
+        teacher.extra.lastName.includes($scope.filter);
+    };
+
+    let filterGroup = function(group) {
+      if ($scope.filter === undefined || $scope.filter === '') { return true; }
+
+      return group.id.includes($scope.filter) ||
+        group.extra.course.includes($scope.filter) ||
+        _.chain(group.room_labels).some(x => x.includes($scope.filter)).value() ||
+        _.chain(group.teachers).some(filterTeacher).value();
+    };
+
     let board = {
       openAddModal: openAddModal,
       openEditModal: openEditModal,
@@ -384,6 +406,10 @@ angular.module('schedulerApp').controller('BoardController', [
       activateOverflow: activateOverflow,
       activateOverflowStudentConflicts: activateOverflowStudentConflicts,
       deactivateOverflowStudentConflicts: deactivateOverflowStudentConflicts,
+
+      filterRoom: filterRoom,
+      filterTeacher: filterTeacher,
+      filterGroup: filterGroup,
 
       getBgColor: getBgColor,
       bgSections: bgSections,
