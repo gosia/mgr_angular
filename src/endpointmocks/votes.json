@@ -5,12 +5,13 @@
       "students_num": 2,
       "points_sum": 8,
       "votes": [
-        {"student": "gosia", "course": "Analiza matematyczna", "points": 3},
-        {"student": "gosia", "course": "Analiza numeryczna", "points": 2},
-        {"student": "gosia", "course": "Logika dla informatyków", "points": 2},
-        {"student": "kuba", "course": "Logika dla informatyków", "points": 1}
+        {"student": "gosia", "course": "Weryfikacja informacji", "points": 3},
+        {"student": "gosia", "course": "Zaawansowany kurs języka Java", "points": 2},
+        {"student": "gosia", "course": "Kurs Pythona", "points": 2},
+        {"student": "kuba", "course": "Weryfikacja informacji", "points": 1}
       ]
     }
+
   ],
   "num_start": 1,
   "num_end": 2,

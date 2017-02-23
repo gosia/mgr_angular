@@ -3,9 +3,10 @@
 angular.module('schedulerApp').controller('TaskController', [
   'ApiService', '$routeParams', '$rootScope', '$scope', 'Task', '$location', 'Config',
   'TaskRatingHelper', 'Rating', 'TaskRating', 'Download', 'FileSaver', 'Blob', '$route',
+  'Vote',
   function (
     ApiService, $routeParams, $rootScope, $scope, Task, $location, Config, TaskRatingHelper, Rating,
-    TaskRating, Download, FileSaver, Blob, $route
+    TaskRating, Download, FileSaver, Blob, $route, Vote
   ) {
     $rootScope.$broadcast('changeContent', 'task', {name: $routeParams.taskId});
 
@@ -17,7 +18,7 @@ angular.module('schedulerApp').controller('TaskController', [
     ];
     $scope.currentDownloadType = $scope.downloadTypes[0];
 
-    var init = function() {
+    let init = function() {
       ApiService.getConfig($routeParams.configId).success(function(data) {
         $scope.config = Config.init(data);
         ApiService.getTask($routeParams.taskId).success(function(data) {
@@ -36,7 +37,10 @@ angular.module('schedulerApp').controller('TaskController', [
             $scope.ratings = _.map(data.results, x => Rating.init(x));
             $scope.ratingsMap = _.object(_.map($scope.ratings, x => [x.id, x]));
           });
-
+          ApiService.getVote($routeParams.configId).success(function(data) {
+            $scope.vote = Vote.init(data);
+            $scope.vote.setConfig($scope.config);
+          });
         });
       });
 
@@ -45,13 +49,13 @@ angular.module('schedulerApp').controller('TaskController', [
       }
     };
 
-    var removeTask = function() {
+    let removeTask = function() {
       ApiService.removeTask($scope.task.id).success(function() {
         $location.url('/tasks');
       });
     };
 
-    var startTask = function() {
+    let startTask = function() {
       return ApiService.startTask($scope.task.id).success(function() {
         $scope.task.status = 'processing';
         $rootScope.$broadcast('addAlertByCode', 'ok');
@@ -61,7 +65,7 @@ angular.module('schedulerApp').controller('TaskController', [
 
     init();
 
-    var openTab = function(obj) {
+    let openTab = function(obj) {
       $('.nav-tabs a[href="#board"]').tab('show');
 
       if ($scope.board !== undefined) {
@@ -69,7 +73,7 @@ angular.module('schedulerApp').controller('TaskController', [
       }
     };
 
-    var onCurrentRatingChange = function() {
+    let onCurrentRatingChange = function() {
       if ($scope.currentRating) {
         $scope.taskRating = new TaskRating($scope.taskRatingHelper, $scope.currentRating, $scope.config);
       } else {

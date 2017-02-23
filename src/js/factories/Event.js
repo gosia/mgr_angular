@@ -19,7 +19,7 @@ angular.module('schedulerApp').factory('Event', [function() {
   }
 
   Event.prototype.recountBase = function() {
-    var $cell = $('.calendar-day-' + this.day + '.calendar-hour-11');
+    let $cell = $('.calendar-day-' + this.day + '.calendar-hour-11');
     this.baseH = $cell.outerHeight();
     this.baseW = $cell.outerWidth();
   };
@@ -45,14 +45,14 @@ angular.module('schedulerApp').factory('Event', [function() {
     return 's.' + this.timetableObj.room.id;
   };
 
-  var backgroundColors = {
+  let backgroundColors = {
     teacher: '#00a65a',
     group: '#f39c12',
     room: '#d2d6de',
     term: '#3c8dbc'
   };
 
-  var colors = {
+  let colors = {
     teacher: 'white',
     group: 'white',
     room: 'black',
@@ -60,7 +60,7 @@ angular.module('schedulerApp').factory('Event', [function() {
   };
 
   Event.getTermEvent = function(calendar, tab) {
-    var opts = {
+    let opts = {
       backgroundColor: backgroundColors[tab.type],
       borderColor: backgroundColors[tab.type],
       textColor: colors[tab.type]
@@ -73,6 +73,23 @@ angular.module('schedulerApp').factory('Event', [function() {
       calendar,
       undefined,
       tab,
+      opts
+    );
+  };
+
+  Event.getStudentConflictEvent = function(day, hour, color) {
+    let opts = {
+      backgroundColor: color,
+      borderColor: '#ddd'
+    };
+
+    return new Event(
+      day,
+      hour * 60,
+      (hour + 1) * 60,
+      undefined,
+      undefined,
+      undefined,
       opts
     );
   };

@@ -30,6 +30,15 @@ angular.module('schedulerApp').factory('Config', ['Teacher', 'Term', 'Group', 'R
 
   Config.prototype.setGroupsMap = function() {
     this.groupsMap = _.object(_.map(this.groups, group => [group.id, group]));
+    this.groupsByCourse = _.groupBy(this.groups, group => group.extra.course);
+    this.groupCountByCourseType = _.chain(this.groups)
+      .groupBy(group => group.extra.course)
+      .mapObject(value => _.chain(value)
+        .groupBy(x => x.extra.groupType)
+        .mapObject(xs => _.size(xs))
+        .value()
+      )
+      .value();
   };
 
   Config.prototype.setTeachersMap = function() {

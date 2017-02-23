@@ -6,7 +6,7 @@ angular.module('schedulerApp').controller('BoardController', [
   function (
     ApiService, $routeParams, $scope, Config, Teacher, Group, Room, Term, $timeout, Event, Calendar
   ) {
-    var viewsList = [
+    let viewsList = [
       {value: 'tabs', label: 'Zakładki'},
       {value: 'custom-calendar', label: 'Kalendarz'}
     ];
@@ -16,9 +16,9 @@ angular.module('schedulerApp').controller('BoardController', [
     $scope.activeTabI = -1;
     $scope.activeView = viewsList[0];
 
-    var configId, taskId, calendar, termCalendar;
+    let configId, taskId, calendar, termCalendar;
 
-    var init = function() {
+    let init = function() {
       configId = $routeParams.configId;
       taskId = $routeParams.taskId;
 
@@ -33,12 +33,53 @@ angular.module('schedulerApp').controller('BoardController', [
     init();
 
     // Calendar handling
-    var initCalendar = function() {
+    let modifyTimetable = function(data, mode) {
+      $scope.config.modifyTimetable(data.timetable, mode);
+
+      let changedRoomIds = _.uniq(_.flatten(
+        _.map(data.timetable.results, function(v) {
+          return _.map(v, function(vv) { return vv.room; });
+        })
+      )).filter(function(y) {
+        return _.findIndex($scope.activeTabs, function(x) { return x.id === y; }) !== -1;
+      });
+      let changedGroupIds = _.map(data.timetable.results, function(v, k) { return k; });
+      let changedTeacherIds = [];
+      _.each(changedGroupIds, function(g) {
+        _.each($scope.config.groupsMap[g].teachers, function(x) {
+          changedTeacherIds.push(x.id);
+        });
+      });
+      changedTeacherIds = _.uniq(changedTeacherIds).filter(function(y) {
+        return _.findIndex($scope.activeTabs, function(x) { return x.id === y; }) !== -1;
+      });
+      changedGroupIds = changedGroupIds.filter(function(y) {
+        return _.findIndex($scope.activeTabs, function(x) { return x.id === y; }) !== -1;
+      });
+
+      let tabs = [];
+      _.each(changedGroupIds, function(x) { tabs.push($scope.config.groupsMap[x]); });
+      _.each(changedTeacherIds, function(x) { tabs.push($scope.config.teachersMap[x]); });
+      _.each(changedRoomIds, function(x) { tabs.push($scope.config.roomsMap[x]); });
+
+      calendar.reload(tabs);
+
+    };
+
+    let deletedEventCallback = function(tab, timetableObj) {
+      return ApiService
+        .removeEvent(taskId, timetableObj)
+        .success(function(data) {
+          modifyTimetable(data, 'delete');
+        });
+    };
+
+    let initCalendar = function() {
       calendar = Calendar.init($scope.config, deletedEventCallback);
       calendar.addTabs($scope.activeTabs);
       $scope.calendar = calendar;
     };
-    var initTermCalendar = function() {
+    let initTermCalendar = function() {
       termCalendar = Calendar.init($scope.config, deletedEventCallback);
       termCalendar.visibleEventsTypes = ['term'];
       termCalendar.addTabs($scope.config.terms);
@@ -53,53 +94,20 @@ angular.module('schedulerApp').controller('BoardController', [
       }
     });
 
-    var modifyTimetable = function(data, mode) {
-      $scope.config.modifyTimetable(data.timetable, mode);
+    let newEventAddedCallback = function(event, ui) {
+      let $target = $(event.target);
+      let hour = $target.data('hour');
+      let day = $target.data('day');
 
-      var changedRoomIds = _.uniq(_.flatten(
-        _.map(data.timetable.results, function(v) {
-          return _.map(v, function(vv) { return vv.room; });
-        })
-      )).filter(function(y) {
-        return _.findIndex($scope.activeTabs, function(x) { return x.id === y; }) !== -1;
-      });
-      var changedGroupIds = _.map(data.timetable.results, function(v, k) { return k; });
-      var changedTeacherIds = [];
-      _.each(changedGroupIds, function(g) {
-        _.each($scope.config.groupsMap[g].teachers, function(x) {
-          changedTeacherIds.push(x.id);
-        });
-      });
-      changedTeacherIds = _.uniq(changedTeacherIds).filter(function(y) {
-        return _.findIndex($scope.activeTabs, function(x) { return x.id === y; }) !== -1;
-      });
-      changedGroupIds = changedGroupIds.filter(function(y) {
-        return _.findIndex($scope.activeTabs, function(x) { return x.id === y; }) !== -1;
-      });
-
-      var tabs = [];
-      _.each(changedGroupIds, function(x) { tabs.push($scope.config.groupsMap[x]); });
-      _.each(changedTeacherIds, function(x) { tabs.push($scope.config.teachersMap[x]); });
-      _.each(changedRoomIds, function(x) { tabs.push($scope.config.roomsMap[x]); });
-
-      calendar.reload(tabs);
-
-    };
-
-    var newEventAddedCallback = function(event, ui) {
-      var $target = $(event.target);
-      var hour = $target.data('hour');
-      var day = $target.data('day');
-
-      var $newPosY = ui.offset.top - $target.offset().top;
+      let $newPosY = ui.offset.top - $target.offset().top;
       if ($newPosY < 0) {
         hour--;
         $newPosY = (40 + $newPosY);
       }
 
-      var minute = Math.floor(($newPosY * 60) / 40.0);
+      let minute = Math.floor(($newPosY * 60) / 40.0);
 
-      var groupId = $(event.toElement).attr('data-id');
+      let groupId = $(event.toElement).attr('data-id');
 
       ApiService
         .addEvent(taskId, groupId, day, hour, minute)
@@ -108,22 +116,14 @@ angular.module('schedulerApp').controller('BoardController', [
         });
     };
 
-    var deletedEventCallback = function(tab, timetableObj) {
-      return ApiService
-        .removeEvent(taskId, timetableObj)
-        .success(function(data) {
-          modifyTimetable(data, 'delete');
-        });
-    };
-
     // Tab handling
-    var changeTab = function(i) {
+    let changeTab = function(i) {
       $scope.activeTabI = i;
       $scope.activeTab = $scope.activeTabs[$scope.activeTabI];
     };
 
-    var removeTab = function(i) {
-      var removed = $scope.activeTabs[i];
+    let removeTab = function(i) {
+      let removed = $scope.activeTabs[i];
 
       $scope.activeTabs.splice(i, 1);
 
@@ -140,8 +140,8 @@ angular.module('schedulerApp').controller('BoardController', [
       }
     };
 
-    var addTab = function(obj) {
-      var i = _.findIndex($scope.activeTabs, function(x) { return x.type === obj.type && x.id === obj.id;  });
+    let addTab = function(obj) {
+      let i = _.findIndex($scope.activeTabs, function(x) { return x.type === obj.type && x.id === obj.id;  });
       if (i === -1) {
         $scope.activeTabs.push(obj);
         i = $scope.activeTabs.length - 1;
@@ -155,39 +155,56 @@ angular.module('schedulerApp').controller('BoardController', [
     };
 
     // Changing config
-    var resetTeacherForm = function() {
+    let resetTeacherForm = function() {
       $scope.newElement = {allTerms: true};
     };
 
-    var resetGroupForm = function() {
+    let resetGroupForm = function() {
       $scope.newElement = {allTerms: true};
     };
 
-    var resetRoomForm = function() {
+    let resetRoomForm = function() {
       $scope.newElement = {allTerms: true};
     };
 
-    var resetTermForm = function() {
+    let resetTermForm = function() {
       $scope.newElement = {addForAll: true, dayNames: Term.dayNames};
     };
 
-    var datas = {
-      teacher: {modal: '#add-config-teacher', cls: Teacher, reset: resetTeacherForm, apiServiceAddF: ApiService.addConfigTeacher, configAddF: 'addTeacher', configEditF: 'editTeacher'},
+    let datas = {
+      teacher: {
+        modal: '#add-config-teacher', cls: Teacher, reset: resetTeacherForm,
+        apiServiceAddF: ApiService.addConfigTeacher, configAddF: 'addTeacher',
+        configEditF: 'editTeacher'
+      },
       group: {
         modal: '#add-config-group', cls: Group, reset: resetGroupForm,
         apiServiceAddF: ApiService.addConfigGroup, configAddF: 'addGroup', configEditF: 'editGroup'
       },
-      room: {modal: '#add-config-room', cls: Room, reset: resetRoomForm, apiServiceAddF: ApiService.addConfigRoom, configAddF: 'addRoom', configEditF: 'editRoom'},
-      term: {modal: '#add-config-term', cls: Term, reset: resetTermForm, apiServiceAddF: ApiService.addConfigTerm, configAddF: 'addTerm', configEditF: 'editTerm'}
+      room: {
+        modal: '#add-config-room', cls: Room, reset: resetRoomForm,
+        apiServiceAddF: ApiService.addConfigRoom, configAddF: 'addRoom', configEditF: 'editRoom'
+      },
+      term: {
+        modal: '#add-config-term', cls: Term, reset: resetTermForm,
+        apiServiceAddF: ApiService.addConfigTerm, configAddF: 'addTerm', configEditF: 'editTerm'
+      }
     };
 
-    var saveElement = function(type, form) {
-      var data = datas[type];
+    let resetForm = function(form) {
+      if (form) {
+        form.$setPristine();
+        form.$setUntouched();
+      }
+    };
+
+    let saveElement = function(type, form) {
+      let data = datas[type];
 
       $(data.modal).modal('hide');
-      var mode = $scope.modalModeEdit ? 'edit' : 'add';
+      let mode = $scope.modalModeEdit ? 'edit' : 'add';
 
-      var tab = data.cls.initForModal($scope.config, $scope.newElement);
+      let tab = data.cls.initForModal($scope.config, $scope.newElement);
 
       data.apiServiceAddF(configId, tab, mode, $scope.newElement).success(function (result) {
         if (result.ok) {
@@ -207,45 +224,38 @@ angular.module('schedulerApp').controller('BoardController', [
 
     };
 
-    var openAddModal = function(type) {
+    let openAddModal = function(type) {
       $scope.modalModeAdd = true;
       $scope.modalModeEdit = false;
 
-      var modal = datas[type].modal;
+      let modal = datas[type].modal;
       datas[type].reset();
       $(modal).modal('show');
     };
 
-    var openEditModal = function() {
+    let openEditModal = function() {
       $scope.modalModeAdd = false;
       $scope.modalModeEdit = true;
 
-      var elem = $scope.activeTab;
-      var data = datas[elem.type];
+      let elem = $scope.activeTab;
+      let data = datas[elem.type];
 
       $scope.newElement = elem.getForModal($scope.config);
       $(data.modal).modal('show');
 
     };
 
-    var resetForm = function(form) {
-      if (form) {
-        form.$setPristine();
-        form.$setUntouched();
-      }
-    };
-
-    var closeElementModal = function(type, form) {
-      var data = datas[type];
+    let closeElementModal = function(type, form) {
+      let data = datas[type];
       $(data.modal).modal('hide');
       data.reset();
       resetForm(form);
     };
 
-    var removeElement = function(elem) {
+    let removeElement = function(elem) {
       ApiService.removeConfigElement(configId, elem).success(function() {
         $scope.config.removeElement(elem);
-        var i = _.findIndex($scope.activeTabs, function(x) { return x.id === elem.id; });
+        let i = _.findIndex($scope.activeTabs, function(x) { return x.id === elem.id; });
         removeTab(i);
 
         if (elem.type === 'teacher' || elem.type === 'group') {
@@ -254,11 +264,11 @@ angular.module('schedulerApp').controller('BoardController', [
       });
     };
 
-    var activateOverflow = function(groupId) {
+    let activateOverflow = function(groupId) {
 
       ApiService.getBusyTermsForGroup(taskId, groupId).success(function(data) {
         $scope.busyEvents = _.map(data.terms, termId => {
-          var t = $scope.config.termsMap[termId];
+          let t = $scope.config.termsMap[termId];
           return new Event(
             t.day,
             t.start.hour * 60 + t.start.minute,
@@ -269,7 +279,93 @@ angular.module('schedulerApp').controller('BoardController', [
       });
     };
 
-    var board = {
+    let bgSections = [
+      {start: 0, end: 0, color: '#446a12'},
+      {start: 1, end: 5, color: '#83bd1a'},
+      {start: 6, end: 10, color: '#b2d649'},
+      {start: 11, end: 20, color: '#bdd986'},
+      {start: 21, end: 30, color: '#ecbfc2'},
+      {start: 31, end: 40, color: '#c10000'},
+      {start: 41, end: 50, color: '#910010'},
+      {start: 51, end: 60, color: '#65000e'},
+      {start: 61, end: Infinity, color: '#3c000a'},
+    ];
+
+    let getBgColor = function(value) {
+      if (value === undefined) {
+        return undefined;
+      }
+      value = Math.round(value);
+
+      let section;
+
+      for (let i=0; i<bgSections.length; i++) {
+        section = bgSections[i];
+        if (section.start <= value && value <= section.end) {
+          return section.color;
+        }
+      }
+
+      return undefined;
+    };
+
+    let openConflictDetails = function(course, day, hour, statsType) {
+      let list;
+      if (statsType === 'one') {
+        list = $scope.vote.stats[course][day * 100 + hour].one_group_list;
+      } else {
+        list = $scope.vote.stats[course][day * 100 + hour].all_groups_list;
+      }
+
+      $scope.conflictDetails = {
+        day: day,
+        hour: hour,
+        list: list
+      };
+      $('#student-conflict-modal').modal('show');
+    };
+
+    let deactivateOverflowStudentConflicts = function() {
+      $scope.board.activated.course = undefined;
+      $scope.board.activated.statsType = undefined;
+      $scope.board.studentConflictsEvents = [];
+    };
+
+    let activateOverflowStudentConflicts = function(group, statsType) {
+      let course = group.extra.course, points;
+
+      let statsTypeKey;
+      if (statsType === 'one') {
+        statsTypeKey = 'one_group';
+      } else {
+        statsTypeKey = 'all_groups';
+      }
+
+      $scope.board.activated = {
+        course: course,
+        statsType: statsType
+      };
+      $scope.board.studentConflictsEvents = [];
+      _.each([0, 1, 2, 3, 4], day => {
+        _.each([8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], hour => {
+
+          if ($scope.vote.stats[course][day * 100 + hour] === undefined) {
+            points = 0;
+          } else {
+            points = $scope.vote.stats[course][day * 100 + hour][statsTypeKey];
+          }
+          $scope.board.studentConflictsEvents.push(
+            Event.getStudentConflictEvent(
+              day,
+              hour,
+              getBgColor(points)
+            )
+          );
+        });
+      });
+    };
+
+    let board = {
       openAddModal: openAddModal,
       openEditModal: openEditModal,
       closeElementModal: closeElementModal,
@@ -283,8 +379,18 @@ angular.module('schedulerApp').controller('BoardController', [
 
       initCalendar: initCalendar,
       initTermCalendar: initTermCalendar,
-      activateOverflow: activateOverflow,
       dropCallback: newEventAddedCallback,
+
+      activateOverflow: activateOverflow,
+      activateOverflowStudentConflicts: activateOverflowStudentConflicts,
+      deactivateOverflowStudentConflicts: deactivateOverflowStudentConflicts,
+
+      getBgColor: getBgColor,
+      bgSections: bgSections,
+
+      openConflictDetails: openConflictDetails,
+
+      studentConflictsEvents: [],
 
       calendar: calendar,
       termCalendar: termCalendar
