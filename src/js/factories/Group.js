@@ -111,8 +111,8 @@ angular.module('schedulerApp').factory('Group', ['Perms', function(Perms) {
   };
 
   Group.init = function(apiData, termsMap, teachersMap) {
-    var terms = _.map(apiData.terms, function(termId) { return termsMap[termId]; });
-    var teachers = _.map(apiData.teachers, function(teacherId) { return teachersMap[teacherId]; });
+    let terms = _.map(apiData.terms, function(termId) { return termsMap[termId]; });
+    let teachers = _.map(apiData.teachers, function(teacherId) { return teachersMap[teacherId]; });
     return new Group(
       apiData.id, terms, apiData.terms_num, apiData.students_num, apiData.same_term_groups,
       apiData.diff_term_groups, apiData.room_labels, teachers, apiData.extra
@@ -120,21 +120,41 @@ angular.module('schedulerApp').factory('Group', ['Perms', function(Perms) {
   };
 
   Group.initForModal = function(config, apiData) {
-    var formTermIds = apiData.terms ? apiData.terms.split(',') : [];
-    var formTerms = _.filter(config.terms, function(x) { return _.contains(formTermIds, x.id); });
+    let formTermIds = apiData.terms ? apiData.terms.split(',') : [];
+    let formTerms = _.filter(config.terms, x => _.contains(formTermIds, x.id));
 
-    var formTeacherIds = apiData.teachers ? apiData.teachers.split(',') : [];
-    var formTeachers = _.filter(config.teachers, function(x) { return _.contains(formTeacherIds, x.id); });
+    let formTeacherIds = apiData.teachers ? apiData.teachers.split(',') : [];
+    let formTeachers = _.filter(config.teachers, x => _.contains(formTeacherIds, x.id));
 
-    var terms = apiData.allTerms ? config.terms : formTerms;
-    var labels = apiData.room_labels ? _.map(apiData.room_labels.split(';'), x => x.split(',')) : [];
+    let terms = apiData.allTerms ? config.terms : formTerms;
+    let labels = apiData.room_labels ? _.map(apiData.room_labels.split(';'), x => x.split(',')) : [];
 
-    var group = new Group(
+    let group = new Group(
       apiData.id, terms, apiData.termsNum, apiData.studentsNum, [], [], labels, formTeachers,
       {course: apiData.course, group_type: apiData.groupType, notes: apiData.notes}
     );
     group.setGroupObj();
     return group;
+  };
+
+  Group.initFromMultipleModal = function(config, value, groupId) {
+    let old = config.groupsMap[groupId];
+
+    return new Group(
+      groupId,
+      value.terms !== undefined ? _.map(value.terms, x => config.termsMap[x]) : old.terms,
+      value.terms_num !== undefined ? value.terms_num : old.termsNum,
+      value.students_num !== undefined ? value.students_num : old.studentsNum,
+      old.sameTermGroupIds,
+      old.diffTermGroupIds,
+      value.room_labels !== undefined ? value.room_labels : old.room_labels,
+      value.teachers !== undefined ? _.map(value.teachers, x => config.teachersMap[x]): old.teachers,
+      {
+        course: value.course !== undefined ? value.course : old.extra.course,
+        group_type: value.group_type !== undefined ? value.group_type : old.extra.groupType,
+        notes: value.notes !== undefined ? value.notes : old.extra.notes
+      }
+    );
   };
 
   return Group;

@@ -107,6 +107,7 @@ module.exports = function (grunt) {
                 '^/api/config/$ /api/create_config.json [L]',
                 '^/api/config/[\\w\\d\\-:]+/$ /api/config.json [L]',
                 '^/api/config/[\\w\\d\\-:]+/add/$ /api/default.json [L]',
+                '^/api/config/[\\w\\d\\-:]+/bulk-edit/$ /api/default.json [L]',
                 '^/api/config/[\\w\\d\\-:]+/remove/$ /api/default.json [L]',
                 '^/api/config/[\\w\\d\\-:]+/copy/$ /api/default.json [L]',
                 '^/api/config/[\\w\\d\\-:]+/import/$ /api/default.json [L]',

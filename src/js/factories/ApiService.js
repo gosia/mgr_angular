@@ -4,8 +4,8 @@ angular.module('schedulerApp').factory('ApiService', [
   '$http', '$rootScope', '$q',
   function($http, $rootScope, $q) {
 
-  var base = document.getElementsByTagName('base')[0].getAttribute('href');
-  var urls = {
+  let base = document.getElementsByTagName('base')[0].getAttribute('href');
+  let urls = {
     getConfigs: () => base + 'api/configs/',
     getConfig: id => base + 'api/config/' + id + '/',
     removeConfig: id => base + 'api/config/' + id + '/',
@@ -13,6 +13,7 @@ angular.module('schedulerApp').factory('ApiService', [
     addConfigElement: id => base + 'api/config/' + id + '/add/',
     removeConfigElement: (id) => base + 'api/config/' + id + '/remove/',
     copyConfigElements: (id) => base + 'api/config/' + id + '/copy/',
+    bulkEditConfigElements: id => base + 'api/config/' + id + '/bulk-edit/',
 
     getTasks: () => base + 'api/tasks/',
     getTask: id => base + 'api/task/' + id + '/',
@@ -41,12 +42,12 @@ angular.module('schedulerApp').factory('ApiService', [
     removeVote: id => base + 'api/vote/' + id + '/',
     createVote: () => base + 'api/vote/'
   };
-  var service = {urls: urls};
+  let service = {urls: urls};
 
-  var showAlert = function() {
+  let showAlert = function() {
     $rootScope.$broadcast('addAlertByCode', '500');
   };
-  var checkErrorResponse = function(data){
+  let checkErrorResponse = function(data){
     if (data.ok === false) {
       if (data.message) {
         $rootScope.$broadcast('addAlertByMessage', data.message);
@@ -56,8 +57,8 @@ angular.module('schedulerApp').factory('ApiService', [
     }
   };
 
-  var httpToQ = function(httpPromise) {
-    var deferred = $q.defer();
+  let httpToQ = function(httpPromise) {
+    let deferred = $q.defer();
 
     httpPromise
       .then(
@@ -117,7 +118,7 @@ angular.module('schedulerApp').factory('ApiService', [
   };
 
   service.startTask = function(taskId) {
-    return httpToQ($http.post(service.urls.startTask(taskId)));
+    return httpToQ($http.post(service.urls.startTask(taskId), {}));
   };
 
   service.createTask = function(configId, algorithm) {
@@ -172,6 +173,20 @@ angular.module('schedulerApp').factory('ApiService', [
       )
     );
   };
+
+    service.modifyConfigGroups = function(configId, groupIds, value) {
+      return httpToQ(
+        $http.post(
+          service.urls.bulkEditConfigElements(configId),
+          {
+            config_id: configId,
+            type: 'group',
+            group_ids: groupIds,
+            value: value
+          }
+        )
+      );
+    };
 
   service.addConfigRoom = function(configId, room, mode) {
     return httpToQ(
@@ -285,7 +300,7 @@ angular.module('schedulerApp').factory('ApiService', [
   };
 
   service.linkFile = function(fileId) {
-    return httpToQ($http.post(service.urls.linkFile(fileId)));
+    return httpToQ($http.post(service.urls.linkFile(fileId), {}));
   };
 
   service.getVotes = function() {

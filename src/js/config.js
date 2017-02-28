@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('schedulerApp')
-  .config(['$routeProvider', '$locationProvider', '$interpolateProvider', '$httpProvider', '$sceDelegateProvider',
+  .config([
+    '$routeProvider', '$locationProvider', '$interpolateProvider', '$httpProvider', '$sceDelegateProvider',
     function($routeProvider, $locationProvider, $interpolateProvider, $httpProvider, $sceDelegateProvider) {
       $locationProvider.html5Mode(true);
       $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
