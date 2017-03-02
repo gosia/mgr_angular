@@ -6,6 +6,7 @@ angular.module('schedulerApp').factory('TaskRatingHelper', [function() {
     this.term = ratingHelper.term_rating_helper;
     this.room = ratingHelper.room_rating_helper;
     this.teacher = ratingHelper.teacher_rating_helper;
+    this.student = {};
 
     this.teacher.hoursInWorkList = this.getTeacherHours();
     this.teacher.gapHoursList = this.getGapHours();
@@ -34,7 +35,7 @@ angular.module('schedulerApp').factory('TaskRatingHelper', [function() {
     return result;
   };
   TaskRatingHelper.prototype.getTeacherHours = function() {
-    var result = [];
+    let result = [];
     _.each(this.teacher.hours_in_work, (v, teacher) => {
       _.each(v, (minutes, day) => {
         result.push({
@@ -46,7 +47,7 @@ angular.module('schedulerApp').factory('TaskRatingHelper', [function() {
     return result;
   };
   TaskRatingHelper.prototype.getTeacherDays = function() {
-    var result = [];
+    let result = [];
     _.each(this.teacher.hours_in_work, (v, teacher) => {
       result.push({
         teacher: teacher,
@@ -57,7 +58,7 @@ angular.module('schedulerApp').factory('TaskRatingHelper', [function() {
     return result;
   };
   TaskRatingHelper.prototype.getRoomEmptyChairs = function() {
-    var result = [], empty;
+    let result = [], empty;
 
     _.each(this.room.empty_chair_groups, (v, emptyChair) => {
       empty = parseInt(emptyChair);
@@ -67,6 +68,14 @@ angular.module('schedulerApp').factory('TaskRatingHelper', [function() {
     });
 
     return result;
+  };
+  TaskRatingHelper.prototype.setVote = function(vote) {
+    this.vote = vote;
+    this.student.conflictsList = vote.getAllConflicts();
+    this.student.conflictsSum = _.chain(this.student.conflictsList)
+      .map(x => x.points)
+      .reduce((a, b) => a + b, 0)
+      .value();
   };
 
   return TaskRatingHelper;

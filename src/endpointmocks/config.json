@@ -5,23 +5,33 @@
   "file": "2015-16",
   "teachers": [
     {
-      "id": "michaliszyn",
+      "id": "jma",
       "terms": ["term1", "term2", "term3"],
       "extra": {
-        "first_name": "Jakub",
-        "last_name": "Michaliszyn",
+        "first_name": "Jerzy",
+        "last_name": "Marcinkowski",
         "pensum": 90,
-        "notes": "jmi"
+        "notes": "jma"
       }
     },
     {
-      "id": "jurkiewicz",
+      "id": "aje",
       "terms": ["term1"],
       "extra": {
-        "first_name": "Malgorzata",
-        "last_name": "Jurkiewicz",
+        "first_name": "Artur",
+        "last_name": "Jeż",
         "pensum": 90,
-        "notes": "mju"
+        "notes": "aje"
+      }
+    },
+    {
+      "id": "wch",
+      "terms": ["term1", "term2", "term3"],
+      "extra": {
+        "first_name": "Witold",
+        "last_name": "Charatonik",
+        "pensum": 90,
+        "notes": "wch"
       }
     }
   ],
@@ -66,7 +76,7 @@
   "groups": [
     {
       "id": "group1",
-      "teachers": ["michaliszyn", "jurkiewicz"],
+      "teachers": ["aje", "jma"],
       "terms": ["term1", "term2"],
       "same_term_groups": ["group2"],
       "diff_term_groups": ["group2"],
@@ -81,7 +91,7 @@
     },
     {
       "id": "group2",
-      "teachers": ["michaliszyn", "jurkiewicz"],
+      "teachers": ["aje", "jma"],
       "terms": ["term1", "term2"],
       "same_term_groups": ["group1"],
       "diff_term_groups": ["group1"],
@@ -96,7 +106,7 @@
     },
     {
       "id": "group3",
-      "teachers": ["jurkiewicz"],
+      "teachers": ["wch"],
       "terms": [],
       "same_term_groups": [],
       "diff_term_groups": [],
@@ -113,6 +123,12 @@
   "rooms": [
     {
       "id": "123",
+      "terms": [],
+      "capacity": 123,
+      "labels": ["wyklad", "cwiczenia"]
+    },
+    {
+      "id": "124",
       "terms": [],
       "capacity": 123,
       "labels": ["wyklad", "cwiczenia"]

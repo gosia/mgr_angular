@@ -12,7 +12,7 @@ angular.module('schedulerApp').factory('Term', ['Perms', function(Perms) {
     this.perms = Perms.init();
   }
 
-  var dayNames = {
+  let dayNames = {
     0: 'pn',
     1: 'wt',
     2: 'sr',

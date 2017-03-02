@@ -23,6 +23,8 @@ angular.module('schedulerApp').controller('TaskController', [
         $scope.config = Config.init(data);
         ApiService.getTask($routeParams.taskId).success(function(data) {
           $scope.task = Task.init(data);
+          $scope.task.setConfig($scope.config);
+
           if (data.rating_helper && _.size(data.rating_helper) > 0) {
             $scope.taskRatingHelper = TaskRatingHelper.init($scope.config, data);
           }
@@ -39,7 +41,8 @@ angular.module('schedulerApp').controller('TaskController', [
           });
           ApiService.getVote($routeParams.configId).success(function(data) {
             $scope.vote = Vote.init(data);
-            $scope.vote.setConfig($scope.config);
+            $scope.vote.setTask($scope.task);
+            $scope.taskRatingHelper.setVote($scope.vote);
           });
         });
       });

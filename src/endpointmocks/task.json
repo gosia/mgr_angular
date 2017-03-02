@@ -6,7 +6,12 @@
   "timetable": {
     "results": {
       "group1": [{"room": "123", "term": "term1"}],
-      "group2": [{"room": "123", "term": "term2"}, {"room": "123", "term": "term3"}]
+      "group2": [{"room": "123", "term": "term2"}, {"room": "123", "term": "term3"}],
+      "group3": [
+        {"room": "124", "term": "term1"},
+        {"room": "124", "term": "term2"},
+        {"room": "124", "term": "term3"}
+      ]
     }
   },
   "rating_helper": {
@@ -22,18 +27,18 @@
     },
     "teacher_rating_helper": {
       "hours_in_work": {
-        "michaliszyn": {
+        "aje": {
           "0": 2
         },
-        "jurkiewicz": {
+        "jma": {
           "0": 2
         }
       },
       "gap_hours": {
-        "michaliszyn": {
+        "aje": {
           "0": 2
         },
-        "jurkiewicz": {
+        "jma": {
           "0": 0
         }
       }

@@ -10,14 +10,14 @@ angular.module('schedulerApp').factory('TaskRating', ['$timeout', 'Rating',
       this.room = this.countRoomData();
       this.term = this.countTermData();
 
-      var taskRating = this;
+      let taskRating = this;
       $timeout(function() {
         taskRating.totals = taskRating.countTotals();
       }, 1000);
     }
 
     TaskRating.prototype.countTotals = function() {
-      var totals = {
+      let totals = {
         allSum: this.teacher.totals.allSum + this.room.totals.allSum + this.term.totals.allSum,
         allMax: this.teacher.totals.allMax + this.room.totals.allMax + this.term.totals.allMax
       };
@@ -31,28 +31,28 @@ angular.module('schedulerApp').factory('TaskRating', ['$timeout', 'Rating',
     };
 
     TaskRating.prototype.countTeacherData = function() {
-      var totalHoursInWork = {}, gapHours = {};
+      let totalHoursInWork = {}, gapHours = {};
 
-      var hoursInWorkMaxPoints = 0;
+      let hoursInWorkMaxPoints = 0;
       _.each(this.rating.teacherRating.total_hours_in_work, s => {
         if (hoursInWorkMaxPoints < s.value) {
           hoursInWorkMaxPoints = s.value;
         }
       });
-      var gapHoursMaxPoints = 0;
+      let gapHoursMaxPoints = 0;
       _.each(this.rating.teacherRating.gap_hours, s => {
         if (gapHoursMaxPoints < s.value) {
           gapHoursMaxPoints = s.value;
         }
       });
-      var daysInWorkMaxPoints = 0;
+      let daysInWorkMaxPoints = 0;
       _.each(this.rating.teacherRating.no_work_days_num, s => {
         if (daysInWorkMaxPoints < s.value) {
           daysInWorkMaxPoints = s.value;
         }
       });
 
-      var totals = {
+      let totals = {
         hoursInWorkSum: 0,
         hoursInWorkMax: this.taskRatingHelper.teacher.hoursInWorkList.length * hoursInWorkMaxPoints,
         gapHoursSum: 0,
@@ -63,7 +63,7 @@ angular.module('schedulerApp').factory('TaskRating', ['$timeout', 'Rating',
         monFriMax: this.taskRatingHelper.teacher.daysInWorkList.length *
         this.rating.teacherRating.no_work_days_on_mon_fri
       };
-      var points, hours;
+      let points, hours;
 
       _.each(this.taskRatingHelper.teacher.hoursInWorkList, x => {
         if (totalHoursInWork[x.teacher] === undefined) {
@@ -100,7 +100,7 @@ angular.module('schedulerApp').factory('TaskRating', ['$timeout', 'Rating',
         });
       });
 
-      var totalDaysInWork = {};
+      let totalDaysInWork = {};
 
       _.each(this.taskRatingHelper.teacher.daysInWorkList, x => {
 
@@ -111,9 +111,9 @@ angular.module('schedulerApp').factory('TaskRating', ['$timeout', 'Rating',
           }
         });
 
-        var isMonFriFree = this.taskRatingHelper.teacher.hours_in_work[x.teacher]['0'] === undefined ||
+        let isMonFriFree = this.taskRatingHelper.teacher.hours_in_work[x.teacher]['0'] === undefined ||
           this.taskRatingHelper.teacher.hours_in_work[x.teacher]['4'] === undefined;
-        var monFriPoints = isMonFriFree ? this.rating.teacherRating.no_work_days_on_mon_fri : 0;
+        let monFriPoints = isMonFriFree ? this.rating.teacherRating.no_work_days_on_mon_fri : 0;
 
         totalDaysInWork[x.teacher] = {
           days: points,
@@ -139,20 +139,20 @@ angular.module('schedulerApp').factory('TaskRating', ['$timeout', 'Rating',
     };
 
     TaskRating.prototype.countRoomData = function() {
-      var tooBigCapacity = {};
+      let tooBigCapacity = {};
 
-      var capacityMaxPoints = 0;
+      let capacityMaxPoints = 0;
       _.each(this.rating.roomRating.too_big_capacity, s => {
         if (capacityMaxPoints < s.value) {
           capacityMaxPoints = s.value;
         }
       });
 
-      var totals = {
+      let totals = {
         capacitySum: 0,
         capacityMax: this.taskRatingHelper.room.emptyChairGroupsList.length * capacityMaxPoints
       };
-      var points;
+      let points;
 
       _.each(this.taskRatingHelper.room.emptyChairGroupsList, x => {
         if (tooBigCapacity[x.group] === undefined) {
@@ -183,11 +183,11 @@ angular.module('schedulerApp').factory('TaskRating', ['$timeout', 'Rating',
 
     TaskRating.prototype.countTermData = function() {
 
-      var groupCount = this.taskRatingHelper.term.startEven.length +
+      let groupCount = this.taskRatingHelper.term.startEven.length +
         this.taskRatingHelper.term.startOdd.length;
-      var maxTermsPoints = _.max(_.map(this.rating.termRating.terms, v => v));
+      let maxTermsPoints = _.max(_.map(this.rating.termRating.terms, v => v));
 
-      var totals = {
+      let totals = {
         startEvenSum: this.taskRatingHelper.term.startEven.length * this.rating.termRating.start_even,
         startEvenMax: groupCount * this.rating.termRating.start_even,
         startOddSum: this.taskRatingHelper.term.startOdd.length * this.rating.termRating.start_odd,
@@ -196,11 +196,11 @@ angular.module('schedulerApp').factory('TaskRating', ['$timeout', 'Rating',
         termsMax: 0
       };
 
-      var termsTable = [];
+      let termsTable = [];
       _.each(this.config.terms, term => {
 
-        var pointsKey = Rating.getTermKey(term.day, term.start.hour);
-        var points = this.rating.termRating.terms[pointsKey];
+        let pointsKey = Rating.getTermKey(term.day, term.start.hour);
+        let points = this.rating.termRating.terms[pointsKey];
         if (points === undefined) {
           points = 0;
         }

@@ -19,8 +19,9 @@ angular.module('schedulerApp').factory('Vote', ['Perms', function(Perms) {
       return new Vote(apiData.config_id, apiData.students_num, apiData.points_sum, apiData.votes);
     }
 
-    setConfig(config){
-      this.config = config;
+    setTask(task) {
+      this.config = task.config;
+      this.task = task;
       this.initStats();
     }
 
@@ -87,6 +88,83 @@ angular.module('schedulerApp').factory('Vote', ['Perms', function(Perms) {
 
       });
 
+      return result;
+    }
+
+    getVotesByCoursePairs() {
+      let result = {}, sVotes, i, j, key, sVotesLength;
+      let students = _.keys(this.votesByStudents);
+
+      _.each(students, student => {
+        sVotes = this.votesByStudents[student];
+        sVotesLength = sVotes.length;
+
+        for (i = 0; i < sVotesLength; i++) {
+          for (j = i+1; j < sVotesLength; j++) {
+            key = _.sortBy([sVotes[i].course, sVotes[j].course], x => x).join(';');
+            if (result[key] === undefined) {
+              result[key] = {
+                elems: [],
+                points: 0
+              };
+            }
+            result[key].elems.push({
+              student: student,
+              points: sVotes[i].points + sVotes[j].points,
+              votes: [sVotes[i], sVotes[j]]
+            });
+            result[key].points = result[key].points + sVotes[i].points + sVotes[j].points;
+          }
+        }
+
+      });
+      return result;
+    }
+
+    getAllConflicts() {
+      let conflictsByCoursePairs = this.getVotesByCoursePairs();
+
+      let result = [], termGroups, i, j, termGroupsLength, key, group1, group2, that = this,
+        groupNumScaler;
+      _.each(this.config.terms, term => {
+        if (this.task.timetableByTerms[term.id] === undefined) {
+          return;
+        }
+
+        termGroups = _.chain(this.task.timetableByTerms[term.id])
+          .map(x => x.group.id).uniq().value();
+        termGroupsLength = termGroups.length;
+
+        for (i = 0; i < termGroupsLength; i++) {
+          for (j = i+1; j < termGroupsLength; j++) {
+            group1 = that.config.groupsMap[termGroups[i]];
+            group2 = that.config.groupsMap[termGroups[j]];
+            key = _.sortBy([group1.extra.course, group2.extra.course], x => x).join(';');
+            if (conflictsByCoursePairs[key] === undefined) {
+              continue;
+            }
+
+            groupNumScaler = (
+                1 / that.config.groupCountByCourseType[group1.extra.course][group1.extra.groupType]
+              ) * (
+                1 / that.config.groupCountByCourseType[group2.extra.course][group2.extra.groupType]
+              );
+
+            result.push({
+              term: term,
+              termSort: term.day * 100 + term.start.hour,
+              group1: group1,
+              group2: group2,
+              points: conflictsByCoursePairs[key].points * groupNumScaler,
+              students: _.chain(conflictsByCoursePairs[key].elems)
+                .map(x => x.student)
+                .uniq()
+                .value()
+            });
+          }
+        }
+
+      });
       return result;
     }
   }
