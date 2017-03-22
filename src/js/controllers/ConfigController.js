@@ -34,7 +34,8 @@ angular.module('schedulerApp').controller('ConfigController', [
       let p1 = ApiService.getTasks().then(function(data) {
         let taskIds = _.map(
           _.filter(data.results, function (x) {
-            return x.config_id === $routeParams.configId && x.status === 'finished';
+            return x.config_id === $routeParams.configId &&
+              (x.status === 'finished' || x.algorithm === 'manual');
           }),
           x => x.id
         );
