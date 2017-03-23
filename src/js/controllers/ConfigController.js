@@ -72,7 +72,7 @@ angular.module('schedulerApp').controller('ConfigController', [
 
           _.each($scope.ratings, rating => {
             $scope.taskRatings[task.id][rating.id] = new TaskRating(
-              task.helper, rating, $scope.config
+              task.helper, rating, task
             );
           });
         });

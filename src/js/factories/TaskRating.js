@@ -2,10 +2,10 @@
 
 angular.module('schedulerApp').factory('TaskRating', ['$timeout', 'Rating',
   function($timeout, Rating) {
-    function TaskRating(taskRatingHelper, rating, config) {
+    function TaskRating(taskRatingHelper, rating, task) {
       this.taskRatingHelper = taskRatingHelper;
       this.rating = rating;
-      this.config = config;
+      this.task = task;
       this.teacher = this.countTeacherData();
       this.room = this.countRoomData();
       this.term = this.countTermData();
@@ -196,8 +196,10 @@ angular.module('schedulerApp').factory('TaskRating', ['$timeout', 'Rating',
         termsMax: 0
       };
 
-      let termsTable = [];
-      _.each(this.config.terms, term => {
+      let termsTable = [], term;
+      console.log(this.task);
+      _.each(_.keys(this.task.timetableByTerms), termId => {
+        term = this.task.config.termsMap[termId];
 
         let pointsKey = Rating.getTermKey(term.day, term.start.hour);
         let points = this.rating.termRating.terms[pointsKey];
@@ -205,7 +207,7 @@ angular.module('schedulerApp').factory('TaskRating', ['$timeout', 'Rating',
           points = 0;
         }
 
-        _.each(term.timetable, x => {
+        _.each(this.task.timetableByTerms[termId], x => {
           termsTable.push({
             points: points,
             term: x.term,
