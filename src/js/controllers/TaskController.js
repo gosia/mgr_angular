@@ -66,6 +66,12 @@ angular.module('schedulerApp').controller('TaskController', [
       });
     };
 
+    let recountTaskRatingHelper = function() {
+      return ApiService.recountTaskRatingHelper($scope.task.id).success(function() {
+        $route.reload();
+      });
+    };
+
     init();
 
     let openTab = function(obj) {
@@ -100,6 +106,7 @@ angular.module('schedulerApp').controller('TaskController', [
 
     $scope.removeTask = removeTask;
     $scope.startTask = startTask;
+    $scope.recountTaskRatingHelper = recountTaskRatingHelper;
     $scope.openTab = openTab;
     $scope.onCurrentRatingChange = onCurrentRatingChange;
     $scope.downloadOne = downloadOne;

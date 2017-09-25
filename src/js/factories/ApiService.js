@@ -19,6 +19,7 @@ angular.module('schedulerApp').factory('ApiService', [
     getTask: id => base + 'api/task/' + id + '/',
     removeTask: id => base + 'api/task/' + id + '/',
     startTask: id => base + 'api/task/' + id + '/start/',
+    recountTaskRatingHelper: id => base + 'api/task/' + id + '/rating/recount',
     taskRating: id => base + 'api/task/' + id + '/rating/',
     createTask: () => base + 'api/task/',
     addTaskElement: id => base + 'api/task/' + id + '/add/',
@@ -119,6 +120,10 @@ angular.module('schedulerApp').factory('ApiService', [
 
   service.startTask = function(taskId) {
     return httpToQ($http.post(service.urls.startTask(taskId), {}));
+  };
+
+  service.recountTaskRatingHelper = function(taskId) {
+    return httpToQ($http.post(service.urls.recountTaskRatingHelper(taskId), {}));
   };
 
   service.createTask = function(configId, algorithm) {
