@@ -78,10 +78,10 @@ module.exports = function (grunt) {
 
     connect: {
       options: {
-        port: 9002,
+        port: 9601,
         open: true,
         livereload: 35729,
-        hostname: 'localhost',
+        hostname: '0.0.0.0',
         options: {
           base: {
             keepalive: true
@@ -366,7 +366,7 @@ module.exports = function (grunt) {
             return content
               .replace(/{% load staticfiles %}\n/g, '')
               .replace(/{% static '(.*)' %}/g, '/static/$1')
-              .replace(/{{ SCHEDULER_BASE_HREF }}/g, 'http://localhost:9002/')
+              .replace(/{{ SCHEDULER_BASE_HREF }}/g, 'http://localhost:9601/')
               .replace(/{{ STATIC_URL }}/g, '/static/');
           }
         }
